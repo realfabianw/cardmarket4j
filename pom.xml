@@ -85,5 +85,5 @@
 	</build>
 	<name>cardmarket4j</name>
 	<artifactId>cardmarket4j</artifactId>
-	<version>0.0.0</version>
+	<version>0.0.1</version>
 </project>

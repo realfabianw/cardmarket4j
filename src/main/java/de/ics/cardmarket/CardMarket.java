@@ -1,6 +1,8 @@
 package de.ics.cardmarket;
 
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
@@ -22,6 +24,8 @@ import javafx.util.Pair;
 public class CardMarket {
 	private static Logger LOGGER = LoggerFactory.getLogger("CardMarket");
 
+	private static final String URI_BASE = "https://www.mkmapi.eu/ws/v2.0/output.json/";
+
 	private static final String oAuthVersion = "1.0";
 	private static final String oAuthSignatureMethod = "HMAC-SHA1";
 	private static final String oAuthTimeStamp = Long.toString(System.currentTimeMillis() / 1000);
@@ -31,10 +35,6 @@ public class CardMarket {
 	private final String appSecret;
 	private final String accessToken;
 	private final String accessTokenSecret;
-
-	private Throwable lastError;
-	private int lastCode;
-	private String lastContent;
 
 	/**
 	 * Constructor. Fill parameters according to given MKM profile app parameters.
@@ -49,33 +49,22 @@ public class CardMarket {
 		this.appSecret = appSecret;
 		this.accessToken = accessToken;
 		this.accessTokenSecret = accessSecret;
-
-		this.lastError = null;
 	}
 
 	/**
 	 * Encoding function. To avoid deprecated version, the encoding used is UTF-8.
 	 * 
-	 * @param str
+	 * @param urlToEncode
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
-	private String encode(String str) throws UnsupportedEncodingException {
-		return URLEncoder.encode(str, "UTF-8");
+	private String encode(String urlToEncode) throws UnsupportedEncodingException {
+		return URLEncoder.encode(urlToEncode, "UTF-8");
 	}
 
-	/**
-	 * Get last Error exception.
-	 * 
-	 * @return null if no errors; instead the raised exception.
-	 */
-	public Throwable lastError() {
-		return lastError;
-	}
-
-	private String createOAuthSignature(String requestURL)
+	private String createOAuthSignature(String url)
 			throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
-		String encodedRequestURL = encode(requestURL);
+		String encodedRequestURL = encode(url);
 		String baseString = "GET&" + encodedRequestURL + "&";
 		String paramString = "oauth_consumer_key=" + encode(appToken) + "&" + "oauth_nonce=" + encode(oAuthNonce) + "&"
 				+ "oauth_signature_method=" + encode(oAuthSignatureMethod) + "&" + "oauth_timestamp="
@@ -93,13 +82,27 @@ public class CardMarket {
 		return DatatypeConverter.printBase64Binary(digest); // Base64.encode(digest) ;
 	}
 
-	private String createAuthorizationProperty(String requestURL)
+	private String createAuthorizationProperty(String url)
 			throws InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException {
-		return "OAuth " + "realm=\"" + requestURL + "\", " + "oauth_version=\"" + oAuthVersion + "\", "
-				+ "oauth_timestamp=\"" + oAuthTimeStamp + "\", " + "oauth_nonce=\"" + oAuthNonce + "\", "
-				+ "oauth_consumer_key=\"" + appToken + "\", " + "oauth_token=\"" + accessToken + "\", "
-				+ "oauth_signature_method=\"" + oAuthSignatureMethod + "\", " + "oauth_signature=\""
-				+ createOAuthSignature(requestURL) + "\"";
+		return "OAuth " + "realm=\"" + url + "\", " + "oauth_version=\"" + oAuthVersion + "\", " + "oauth_timestamp=\""
+				+ oAuthTimeStamp + "\", " + "oauth_nonce=\"" + oAuthNonce + "\", " + "oauth_consumer_key=\"" + appToken
+				+ "\", " + "oauth_token=\"" + accessToken + "\", " + "oauth_signature_method=\"" + oAuthSignatureMethod
+				+ "\", " + "oauth_signature=\"" + createOAuthSignature(url) + "\"";
+	}
+
+	private String readStream(InputStream is) {
+		try {
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+			StringBuffer stringBuffer = new StringBuffer();
+			String errorLine;
+			while ((errorLine = bufferedReader.readLine()) != null) {
+				stringBuffer.append(errorLine);
+			}
+			bufferedReader.close();
+			return stringBuffer.toString();
+		} catch (NullPointerException | IOException e) {
+			return "";
+		}
 	}
 
 	/**
@@ -110,44 +113,46 @@ public class CardMarket {
 	 * @return true if request was successfully executed. You can retrieve the
 	 *         content with responseContent();
 	 */
-	public Pair<Integer, String> request(String requestURL) {
-		lastError = null;
-		lastCode = 0;
-		lastContent = "";
-		try {
-			LOGGER.info("Requesting " + requestURL);
+	public String request(String request) {
+		String fullRequestUrl = URI_BASE + request;
+		int responseCode = -2;
+		String header = "";
+		String content = "";
+		String error = "";
+		LOGGER.info("Requesting " + fullRequestUrl);
 
-			HttpURLConnection connection = (HttpURLConnection) new URL(requestURL).openConnection();
-			connection.addRequestProperty("Authorization", createAuthorizationProperty(requestURL));
+		HttpURLConnection connection;
+		try {
+			connection = (HttpURLConnection) new URL(fullRequestUrl).openConnection();
+
+			connection.addRequestProperty("Authorization", createAuthorizationProperty(fullRequestUrl));
 			connection.connect();
 
 			// from here standard actions...
 			// read response code... read input stream.... close connection...
-
-			lastCode = connection.getResponseCode();
-			
-			LOGGER.info(connection.getHeaderFields().toString());
-
-			LOGGER.info("Response Code is " + lastCode);
-
-			if (200 == lastCode || 401 == lastCode || 404 == lastCode) {
-				BufferedReader rd = new BufferedReader(new InputStreamReader(
-						lastCode == 200 ? connection.getInputStream() : connection.getErrorStream()));
-				StringBuffer sb = new StringBuffer();
-				String line;
-				while ((line = rd.readLine()) != null) {
-					sb.append(line);
-				}
-				rd.close();
-				lastContent = sb.toString();
+			try {
+				responseCode = connection.getResponseCode();
+			} catch (IOException e) {
+				responseCode = -1;
 			}
 
-			return new Pair<Integer, String>(lastCode, lastContent);
+			header = connection.getHeaderFields().toString();
 
-		} catch (Exception e) {
-			LOGGER.info("(!) Error while requesting " + requestURL);
-			lastError = e;
+			try {
+				content = readStream(connection.getInputStream());
+			} catch (IOException e1) {
+				content = "";
+			}
+			readStream(connection.getErrorStream());
+		} catch (IOException | InvalidKeyException | NoSuchAlgorithmException e2) {
+			e2.printStackTrace();
 		}
-		return new Pair<Integer, String>(lastCode, lastContent);
+
+		LOGGER.info("Code: {}", responseCode);
+		LOGGER.info("Header: {}", header);
+		LOGGER.info("Content: {}", content);
+		LOGGER.info("Error: {}", error);
+
+		return "";
 	}
 }

@@ -12,15 +12,7 @@ public class Main {
 	private static final String accessTokenSecret = "bajBeBYsv5B4O1UA1MjGOG3AaZiAJpWM";
 	
 	public static void main(String[] args) {
-		String request = "https://www.mkmapi.eu/ws/v1.1/account";
-		String requestNew ="https://api.cardmarket.com/ws/v2.0/output.json/account";
-		
-		ConnectionExample app = new ConnectionExample(appToken, appSecret, accessToken, accessTokenSecret);
-		if (app.request(requestNew)) {
-			System.out.println(app.responseContent());
-		}
-		
-		LOGGER.info("Neue version");
+		String requestNew ="account";
 		
 		CardMarket appNew = new CardMarket(appToken, appSecret, accessToken, accessTokenSecret);	
 		LOGGER.info(appNew.request(requestNew).toString());
