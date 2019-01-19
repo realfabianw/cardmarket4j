@@ -1,50 +1,43 @@
 package de.ics.cardmarket4j.service;
 
 import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-
 import org.javatuples.Pair;
 
 import com.google.gson.JsonElement;
 
+import de.ics.cardmarket4j.AbstractService;
 import de.ics.cardmarket4j.CardMarket;
-import de.ics.cardmarket4j.CardMarketService;
 import de.ics.cardmarket4j.enums.HTTPMethod;
 import de.ics.cardmarket4j.structs.Account;
 
-public class AccountService implements CardMarketService {
-	private final CardMarket cardMarket;
-
-	@Override
-	public CardMarket getCardMarket() {
-		return cardMarket;
-	}
-
+public class AccountService extends AbstractService {
 	public AccountService(CardMarket cardMarket) {
-		this.cardMarket = cardMarket;
+		super(cardMarket);
+
 	}
 
-	
-	public Account getAccountInformation() {
-		try {
-			return new Account(request("account", HTTPMethod.GET).getValue1());
-		} catch (InvalidKeyException | NoSuchAlgorithmException | IOException e) {
-			return null;
-		}
+	public Account getAccountInformation() throws IOException {
+		return new Account(request("account", HTTPMethod.GET).getValue1());
 	}
 
-	public boolean setVacationStatus(boolean vacation) {
+	/**
+	 * TODO Gibt offensichtlich gesamte Userprofile im Verbund mit den Nachrichten
+	 * zurück. User müssen zuerst implementiert werden.
+	 * 
+	 * @throws IOException
+	 */
+	public void getMessages() throws IOException {
+		Pair<Integer, JsonElement> response = request("account/messages", HTTPMethod.GET);
+	}
+
+	public boolean setVacationStatus(boolean vacation) throws IOException {
 		String vacationParameter = vacation == true ? "true" : "false";
-		try {
-			Pair<Integer, JsonElement> result = request("account/vacation?onVacation=" + vacationParameter,
-					HTTPMethod.PUT);
+		Pair<Integer, JsonElement> response = request("account/vacation?onVacation=" + vacationParameter,
+				HTTPMethod.PUT);
+		if (response.getValue0() == 200) {
 			return true;
-		} catch (InvalidKeyException | NoSuchAlgorithmException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} else {
 			return false;
 		}
-
 	}
 }

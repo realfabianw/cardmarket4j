@@ -5,25 +5,6 @@ public enum Reputation {
 	VERY_GOOD_SELLER(2, "very good seller"), GOOD_SELLER(3, "good seller"), AVERAGE_SELLER(4, "average seller"),
 	BAD_SELLER(5, "bad seller");
 
-	/**
-	 * Speichert den Anzeigenamen.
-	 */
-	private final String displayValue;
-	private final int id;
-
-	private Reputation(int id, String displayValue) {
-		this.displayValue = displayValue;
-		this.id = id;
-	}
-
-	private String getDisplayValue() {
-		return displayValue;
-	}
-
-	private int getId() {
-		return id;
-	}
-
 	public static Reputation parseId(int id) {
 		for (Reputation e : Reputation.values()) {
 			if (e.getId() == id) {
@@ -40,6 +21,26 @@ public enum Reputation {
 			}
 		}
 		throw new IllegalArgumentException("Couldn't find an enum matching this value: " + value);
+	}
+
+	/**
+	 * Speichert den Anzeigenamen.
+	 */
+	private final String displayValue;
+
+	private final int id;
+
+	private Reputation(int id, String displayValue) {
+		this.displayValue = displayValue;
+		this.id = id;
+	}
+
+	private String getDisplayValue() {
+		return displayValue;
+	}
+
+	private int getId() {
+		return id;
 	}
 
 	@Override

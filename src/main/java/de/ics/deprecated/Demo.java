@@ -9,21 +9,47 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Base64;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 public class Demo {
 
+	public static void main(String[] args) {
+		// USAGE EXAMPLE
+
+		String mkmAppToken = "Cr0yANU52r7iDhlQ";
+		String mkmAppSecret = "EWIRcYdR7pnHWdLys8uJQr3aPgLZFXgx";
+		String mkmAccessToken = "SnR9w5ZMT0kQwyfT2ahjqNZr7I0vKJcl";
+		String mkmAccessTokenSecret = "bajBeBYsv5B4O1UA1MjGOG3AaZiAJpWM";
+
+		Demo app = new Demo(mkmAppToken, mkmAppSecret, mkmAccessToken, mkmAccessTokenSecret);
+
+		if (app.request("https://api.cardmarket.com/ws/v2.0/account")) {
+			System.out.println(app.responseContent());
+		}
+
+		// test with active console debug
+		app.setDebug(true);
+		if (app.request("https://api.cardmarket.com/ws/v1.1/products/island/1/1/false")) {
+			// .. process(app.responseContent());
+		}
+
+		if (app.request("https://api.cardmarket.com/ws/v1.1/products/serra_angel/1/1/false")) {
+			// .. process(app.responseContent());
+		}
+
+		// etc....
+	}
+
 	private String _mkmAppToken;
 	private String _mkmAppSecret;
 	private String _mkmAccessToken;
-	private String _mkmAccessTokenSecret;
 
+	private String _mkmAccessTokenSecret;
 	private Throwable _lastError;
 	private int _lastCode;
 	private String _lastContent;
+
 	private boolean _debug;
 
 	/**
@@ -44,27 +70,6 @@ public class Demo {
 		_debug = false;
 	}
 
-	/**
-	 * Activates the console debug messages
-	 * 
-	 * @param flag true if you want to enable console messages; false to disable any
-	 *             notification.
-	 */
-	public void setDebug(boolean flag) {
-		_debug = flag;
-	}
-
-	/**
-	 * Encoding function. To avoid deprecated version, the encoding used is UTF-8.
-	 * 
-	 * @param str
-	 * @return
-	 * @throws UnsupportedEncodingException
-	 */
-	private String rawurlencode(String str) throws UnsupportedEncodingException {
-		return URLEncoder.encode(str, "UTF-8");
-	}
-
 	private void _debug(String msg) {
 		if (_debug) {
 			System.out.print(Calendar.getInstance().getTime());
@@ -80,6 +85,17 @@ public class Demo {
 	 */
 	public Throwable lastError() {
 		return _lastError;
+	}
+
+	/**
+	 * Encoding function. To avoid deprecated version, the encoding used is UTF-8.
+	 * 
+	 * @param str
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	private String rawurlencode(String str) throws UnsupportedEncodingException {
+		return URLEncoder.encode(str, "UTF-8");
 	}
 
 	/**
@@ -184,31 +200,14 @@ public class Demo {
 		return _lastContent;
 	}
 
-	public static void main(String[] args) {
-		// USAGE EXAMPLE
-
-		String mkmAppToken = "Cr0yANU52r7iDhlQ";
-		String mkmAppSecret = "EWIRcYdR7pnHWdLys8uJQr3aPgLZFXgx";
-		String mkmAccessToken = "SnR9w5ZMT0kQwyfT2ahjqNZr7I0vKJcl";
-		String mkmAccessTokenSecret = "bajBeBYsv5B4O1UA1MjGOG3AaZiAJpWM";
-
-		Demo app = new Demo(mkmAppToken, mkmAppSecret, mkmAccessToken, mkmAccessTokenSecret);
-
-		if (app.request("https://api.cardmarket.com/ws/v2.0/account")) {
-			System.out.println(app.responseContent());
-		}
-
-		// test with active console debug
-		app.setDebug(true);
-		if (app.request("https://api.cardmarket.com/ws/v1.1/products/island/1/1/false")) {
-			// .. process(app.responseContent());
-		}
-
-		if (app.request("https://api.cardmarket.com/ws/v1.1/products/serra_angel/1/1/false")) {
-			// .. process(app.responseContent());
-		}
-
-		// etc....
+	/**
+	 * Activates the console debug messages
+	 * 
+	 * @param flag true if you want to enable console messages; false to disable any
+	 *             notification.
+	 */
+	public void setDebug(boolean flag) {
+		_debug = flag;
 	}
 
 }
