@@ -1,4 +1,5 @@
-package de.ics.cardmarket;
+
+package de.ics.deprecated;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -6,23 +7,24 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Base64;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
 
-public class ConnectionExample {
+public class Demo {
 
-	private String appToken;
-	private String appSecret;
-	private String accessToken;
-	private String accessTokenSecret;
+	private String _mkmAppToken;
+	private String _mkmAppSecret;
+	private String _mkmAccessToken;
+	private String _mkmAccessTokenSecret;
 
-	private Throwable lastError;
-	private int lastCode;
-	private String lastContent;
-	private boolean debug;
+	private Throwable _lastError;
+	private int _lastCode;
+	private String _lastContent;
+	private boolean _debug;
 
 	/**
 	 * Constructor. Fill parameters according to given MKM profile app parameters.
@@ -32,14 +34,14 @@ public class ConnectionExample {
 	 * @param accessToken
 	 * @param accessSecret
 	 */
-	public ConnectionExample(String appToken, String appSecret, String accessToken, String accessSecret) {
-		this.appToken = appToken;
-		this.appSecret = appSecret;
-		this.accessToken = accessToken;
-		this.accessTokenSecret = accessSecret;
+	public Demo(String appToken, String appSecret, String accessToken, String accessSecret) {
+		_mkmAppToken = appToken;
+		_mkmAppSecret = appSecret;
+		_mkmAccessToken = accessToken;
+		_mkmAccessTokenSecret = accessSecret;
 
-		this.lastError = null;
-		this.debug = true;
+		_lastError = null;
+		_debug = false;
 	}
 
 	/**
@@ -49,7 +51,7 @@ public class ConnectionExample {
 	 *             notification.
 	 */
 	public void setDebug(boolean flag) {
-		debug = flag;
+		_debug = flag;
 	}
 
 	/**
@@ -64,8 +66,8 @@ public class ConnectionExample {
 	}
 
 	private void _debug(String msg) {
-		if (debug) {
-			System.out.print(GregorianCalendar.getInstance().getTime());
+		if (_debug) {
+			System.out.print(Calendar.getInstance().getTime());
 			System.out.print(" > ");
 			System.out.println(msg);
 		}
@@ -77,34 +79,34 @@ public class ConnectionExample {
 	 * @return null if no errors; instead the raised exception.
 	 */
 	public Throwable lastError() {
-		return lastError;
+		return _lastError;
 	}
 
 	/**
 	 * Perform the request to given url with OAuth 1.0a API.
 	 * 
 	 * @param requestURL url to be requested. Ex.
-	 *                   https://www.mkmapi.eu/ws/v1.1/products/island/1/1/false
+	 *                   https://api.cardmarket.com/ws/v1.1/products/island/1/1/false
 	 * @return true if request was successfully executed. You can retrieve the
 	 *         content with responseContent();
 	 */
 	public boolean request(String requestURL) {
-		lastError = null;
-		lastCode = 0;
-		lastContent = "";
+		_lastError = null;
+		_lastCode = 0;
+		_lastContent = "";
 		try {
 
 			_debug("Requesting " + requestURL);
 
 			String realm = requestURL;
 			String oauth_version = "1.0";
-			String oauth_consumer_key = appToken;
-			String oauth_token = accessToken;
+			String oauth_consumer_key = _mkmAppToken;
+			String oauth_token = _mkmAccessToken;
 			String oauth_signature_method = "HMAC-SHA1";
-			// String oauth_timestamp = "" + (System.currentTimeMillis()/1000) ;
-			String oauth_timestamp = "1407917892";
-			// String oauth_nonce = "" + System.currentTimeMillis() ;
-			String oauth_nonce = "53eb1f44909d6";
+			String oauth_timestamp = "" + (System.currentTimeMillis() / 1000);
+			// String oauth_timestamp = "1407917892";
+			String oauth_nonce = "" + System.currentTimeMillis();
+			// String oauth_nonce = "53eb1f44909d6";
 
 			String encodedRequestURL = rawurlencode(requestURL);
 
@@ -117,13 +119,13 @@ public class ConnectionExample {
 
 			baseString = baseString + rawurlencode(paramString);
 
-			String signingKey = rawurlencode(appSecret) + "&" + rawurlencode(accessTokenSecret);
+			String signingKey = rawurlencode(_mkmAppSecret) + "&" + rawurlencode(_mkmAccessTokenSecret);
 
 			Mac mac = Mac.getInstance("HmacSHA1");
 			SecretKeySpec secret = new SecretKeySpec(signingKey.getBytes(), mac.getAlgorithm());
 			mac.init(secret);
 			byte[] digest = mac.doFinal(baseString.getBytes());
-			String oauth_signature = DatatypeConverter.printBase64Binary(digest); // Base64.encode(digest) ;
+			String oauth_signature = Base64.getEncoder().encodeToString(digest);
 
 			String authorizationProperty = "OAuth " + "realm=\"" + realm + "\", " + "oauth_version=\"" + oauth_version
 					+ "\", " + "oauth_timestamp=\"" + oauth_timestamp + "\", " + "oauth_nonce=\"" + oauth_nonce + "\", "
@@ -138,27 +140,28 @@ public class ConnectionExample {
 			// from here standard actions...
 			// read response code... read input stream.... close connection...
 
-			lastCode = connection.getResponseCode();
+			_lastCode = connection.getResponseCode();
 
-			_debug("Response Code is " + lastCode);
+			_debug("Response Code is " + _lastCode);
 
-			if (200 == lastCode || 401 == lastCode || 404 == lastCode) {
+			if (200 == _lastCode || 401 == _lastCode || 404 == _lastCode) {
 				BufferedReader rd = new BufferedReader(new InputStreamReader(
-						lastCode == 200 ? connection.getInputStream() : connection.getErrorStream()));
+						_lastCode == 200 ? connection.getInputStream() : connection.getErrorStream()));
 				StringBuffer sb = new StringBuffer();
 				String line;
 				while ((line = rd.readLine()) != null) {
 					sb.append(line);
 				}
 				rd.close();
-				lastContent = sb.toString();
+				_lastContent = sb.toString();
+				_debug("Response Content is \n" + _lastContent);
 			}
 
-			return (lastCode == 200);
+			return (_lastCode == 200);
 
 		} catch (Exception e) {
 			_debug("(!) Error while requesting " + requestURL);
-			lastError = e;
+			_lastError = e;
 		}
 		return false;
 	}
@@ -169,7 +172,7 @@ public class ConnectionExample {
 	 * @return
 	 */
 	public int responseCode() {
-		return lastCode;
+		return _lastCode;
 	}
 
 	/**
@@ -178,6 +181,34 @@ public class ConnectionExample {
 	 * @return
 	 */
 	public String responseContent() {
-		return lastContent;
+		return _lastContent;
 	}
+
+	public static void main(String[] args) {
+		// USAGE EXAMPLE
+
+		String mkmAppToken = "Cr0yANU52r7iDhlQ";
+		String mkmAppSecret = "EWIRcYdR7pnHWdLys8uJQr3aPgLZFXgx";
+		String mkmAccessToken = "SnR9w5ZMT0kQwyfT2ahjqNZr7I0vKJcl";
+		String mkmAccessTokenSecret = "bajBeBYsv5B4O1UA1MjGOG3AaZiAJpWM";
+
+		Demo app = new Demo(mkmAppToken, mkmAppSecret, mkmAccessToken, mkmAccessTokenSecret);
+
+		if (app.request("https://api.cardmarket.com/ws/v2.0/account")) {
+			System.out.println(app.responseContent());
+		}
+
+		// test with active console debug
+		app.setDebug(true);
+		if (app.request("https://api.cardmarket.com/ws/v1.1/products/island/1/1/false")) {
+			// .. process(app.responseContent());
+		}
+
+		if (app.request("https://api.cardmarket.com/ws/v1.1/products/serra_angel/1/1/false")) {
+			// .. process(app.responseContent());
+		}
+
+		// etc....
+	}
+
 }

@@ -2,29 +2,28 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>de.ics.cardmarket</groupId>
+	<groupId>de.ics.cardmarket4j</groupId>
+	<artifactId>cardmarket4j</artifactId>
+	<version>0.0.1</version>
+	<name>cardmarket4j</name>
+
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		
 		<version.gson>2.8.5</version.gson>
-		<version.slf4j>1.7.25</version.slf4j>
-		<version.logback>1.0.7</version.logback>
-		
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<version.logback>1.2.3</version.logback>
+		<version.javatuples>1.2</version.javatuples>
+		<version.nv-i18n>1.22</version.nv-i18n>
+
+
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>10</maven.compiler.source>
+		<maven.compiler.target>10</maven.compiler.target>
 	</properties>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>${version.gson}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${version.slf4j}</version>
-			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
@@ -32,10 +31,28 @@
 			<artifactId>logback-classic</artifactId>
 			<version>${version.logback}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.javatuples</groupId>
+			<artifactId>javatuples</artifactId>
+			<version>${version.javatuples}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.neovisionaries</groupId>
+			<artifactId>nv-i18n</artifactId>
+			<version>${version.nv-i18n}</version>
+		</dependency>
 	</dependencies>
+
 	<build>
 		<plugins>
-			<!-- Maven Shade Plugin -->
+
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.0</version>
+			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
@@ -52,13 +69,14 @@
 								<!-- add main class to manifest file -->
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>de.ics.cardmarket.Main</mainClass>
+									<mainClass>de.ics.ouroboros.Main</mainClass>
 								</transformer>
 							</transformers>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>3.0.2</version>
@@ -83,7 +101,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	<name>cardmarket4j</name>
-	<artifactId>cardmarket4j</artifactId>
-	<version>0.0.1</version>
 </project>
