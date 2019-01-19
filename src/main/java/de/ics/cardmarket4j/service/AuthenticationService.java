@@ -1,4 +1,4 @@
-package de.ics.cardmarket4j.service.authentication;
+package de.ics.cardmarket4j.service;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

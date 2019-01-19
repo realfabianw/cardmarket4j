@@ -16,20 +16,23 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 import de.ics.cardmarket4j.enums.HTTPMethod;
-import de.ics.cardmarket4j.service.authentication.AuthenticationService;
+import de.ics.cardmarket4j.service.AccountService;
+import de.ics.cardmarket4j.service.AuthenticationService;
 import de.ics.cardmarket4j.structs.Account;
 
 public class CardMarket {
 	private static final String URI = "https://api.cardmarket.com/ws/v2.0/output.json/";
 	private static Logger LOGGER = LoggerFactory.getLogger("CardMarket");
 	private Pair<Integer, JsonElement> lastResponse;
-	private AuthenticationService authenticationService;
+	private final AuthenticationService authenticationService;
+	private final AccountService accountService;
 
 	public CardMarket(String appToken, String appSecret, String accessToken, String accessTokenSecret) {
 		this.authenticationService = new AuthenticationService(appToken, appSecret, accessToken, accessTokenSecret);
+		this.accountService = new AccountService(this);
 	}
 
-	private Pair<Integer, JsonElement> request(String URL, HTTPMethod httpMethod)
+	Pair<Integer, JsonElement> request(String URL, HTTPMethod httpMethod)
 			throws MalformedURLException, IOException, InvalidKeyException, NoSuchAlgorithmException {
 		int responseCode = 0;
 		JsonElement responseContent = null;
@@ -64,26 +67,7 @@ public class CardMarket {
 		return response;
 	}
 
-	public Account getAccountInformation() {
-		try {
-			return new Account(request("account", HTTPMethod.GET).getValue1());
-		} catch (InvalidKeyException | NoSuchAlgorithmException | IOException e) {
-			return null;
-		}
+	public AccountService getAccountService() {
+		return accountService;
 	}
-
-	public boolean setVacationStatus(boolean vacation) {
-		String vacationParameter = vacation == true ? "true" : "false";
-		try {
-			Pair<Integer, JsonElement> result = request("account/vacation?onVacation=" + vacationParameter,
-					HTTPMethod.PUT);
-			return true;
-		} catch (InvalidKeyException | NoSuchAlgorithmException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		}
-
-	}
-
 }
