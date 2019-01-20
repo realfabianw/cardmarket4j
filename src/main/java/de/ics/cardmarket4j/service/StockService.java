@@ -13,13 +13,13 @@ import de.ics.cardmarket4j.CardMarket;
 import de.ics.cardmarket4j.enums.HTTPMethod;
 import de.ics.cardmarket4j.structs.Article;
 
-public class StockService extends AbstractService{
+public class StockService extends AbstractService {
 
 	public StockService(CardMarket cardMarket) {
 		super(cardMarket);
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public List<Article> getStock() throws IOException {
 		List<Article> listArticle = new ArrayList<>();
 		Pair<Integer, JsonElement> response = request("stock", HTTPMethod.GET);
@@ -28,9 +28,10 @@ public class StockService extends AbstractService{
 		}
 		return listArticle;
 	}
-	
+
 	public void insertArticle() {
-		//TODO zum inserieren muss die ProductId angegeben werden. Diese muss vorher irgendwie herausgefunden werden
+		// TODO zum inserieren muss die ProductId angegeben werden. Diese muss vorher
+		// irgendwie herausgefunden werden
 	}
 
 }

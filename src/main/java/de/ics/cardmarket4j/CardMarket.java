@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.stream.MalformedJsonException;
 
 import de.ics.cardmarket4j.enums.HTTPMethod;
 import de.ics.cardmarket4j.service.AccountService;
@@ -51,13 +53,15 @@ public class CardMarket {
 		String responseString = "";
 		try {
 			JsonElement responseContent = null;
-			String fullUrl = URI + URL;
+			// Whitespaces are not allowed in urls, so they have to be removed before trying
+			// to open a connection.
+			String fullUrl = URI + URL.replaceAll("\\s", "%20");
 			HttpURLConnection connection = (HttpURLConnection) new URL(fullUrl).openConnection();
 			connection.addRequestProperty("Authorization",
 					authenticationService.createOAuthSignature(fullUrl, httpMethod));
 			connection.setDoInput(true);
 			connection.setDoOutput(true);
-			LOGGER.trace("Request:\t{} {}", httpMethod.toString(), URI + URL);
+			LOGGER.trace("Request:\t{} {}", httpMethod.toString(), fullUrl);
 			connection.setRequestMethod(httpMethod.toString());
 			connection.connect();
 			responseCode = connection.getResponseCode();
@@ -78,7 +82,7 @@ public class CardMarket {
 			lastResponse = response;
 			return response;
 		} catch (InvalidKeyException | UnsupportedEncodingException | NoSuchAlgorithmException | ProtocolException
-				| NullPointerException e) {
+				| NullPointerException | JsonSyntaxException | MalformedJsonException e) {
 			LOGGER.error("Response: {}, {}", responseCode, responseString);
 			LOGGER.error("Fatal error. Exiting...", e);
 			System.exit(-1);
