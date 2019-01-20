@@ -1,16 +1,26 @@
 package de.ics.cardmarket4j.structs;
 
+import com.google.gson.JsonObject;
+
+import de.ics.cardmarket4j.JsonHelper;
 import de.ics.cardmarket4j.enums.Game;
 
 public class Product {
+	// Essential Data for Identification & Display
 	private final int productId;
+	private final String englishName;
+	private final String expansion;
+
+	// Aditional Data - Marketplace Information
+	private int availableArticles;
+	private int availableFoils;
+
+	// Additional Data - Card Information - TODO do i need those?
 	private int metaProductId;
 	private int amountOfReprints;
 	private Game game;
-	private String englishName;
 	private String localizedName;
 	private String imageUrl;
-	private String expansion;
 	private String nr;
 	private String expIcon;
 	private String rarity;
@@ -28,20 +38,82 @@ public class Product {
 		this.rarity = rarity;
 	}
 
+	/**
+	 * { "idProduct": 17111, "idMetaproduct": 3291, "countReprints": 27, "enName":
+	 * "Lightning Bolt", "locName": "Lightning Bolt", "localization": [ { "name":
+	 * "Lightning Bolt", "idLanguage": "1", "languageName": "English" }, { "name":
+	 * "Foudre", "idLanguage": "2", "languageName": "French" }, { "name":
+	 * "Blitzschlag", "idLanguage": "3", "languageName": "German" }, { "name":
+	 * "Relámpago", "idLanguage": "4", "languageName": "Spanish" }, { "name":
+	 * "Fulmine", "idLanguage": "5", "languageName": "Italian" } ], "website":
+	 * "/en/Magic/Products/Singles/Collectors-Edition/Lightning-Bolt", "image":
+	 * "./img/items/1/CED/17111.jpg", "gameName": "Magic the Gathering",
+	 * "categoryName": "Magic Single", "idGame": "1", "number": null, "rarity":
+	 * "Common", "expansionName": "Collectors' Edition", "expansionIcon": 59,
+	 * "countArticles": 18, "countFoils": 0, "links": [ { "rel": "product", "href":
+	 * "/products/17111", "method": "GET" } ] }
+	 * 
+	 * @param jProductSearch
+	 */
+	public Product(JsonObject jProductSearch) {
+		this.productId = JsonHelper.parseInteger(jProductSearch, "idProduct");
+		this.englishName = JsonHelper.parseString(jProductSearch, "enName");
+		this.expansion = JsonHelper.parseString(jProductSearch, "expansionName");
+		this.availableArticles = JsonHelper.parseInteger(jProductSearch, "countArticles");
+		this.availableFoils = JsonHelper.parseInteger(jProductSearch, "countFoils");
+	}
+
+	@Override
+	public String toString() {
+		return "Product [productId=" + productId + ", "
+				+ (englishName != null ? "englishName=" + englishName + ", " : "")
+				+ (expansion != null ? "expansion=" + expansion + ", " : "") + "availableArticles=" + availableArticles
+				+ ", availableFoils=" + availableFoils + ", metaProductId=" + metaProductId + ", amountOfReprints="
+				+ amountOfReprints + ", " + (game != null ? "game=" + game + ", " : "")
+				+ (localizedName != null ? "localizedName=" + localizedName + ", " : "")
+				+ (imageUrl != null ? "imageUrl=" + imageUrl + ", " : "") + (nr != null ? "nr=" + nr + ", " : "")
+				+ (expIcon != null ? "expIcon=" + expIcon + ", " : "") + (rarity != null ? "rarity=" + rarity : "")
+				+ "]";
+	}
+
+	public int getAvailableArticles() {
+		return availableArticles;
+	}
+
+	public void setAvailableArticles(int availableArticles) {
+		this.availableArticles = availableArticles;
+	}
+
+	public int getAvailableFoils() {
+		return availableFoils;
+	}
+
+	public void setAvailableFoils(int availableFoils) {
+		this.availableFoils = availableFoils;
+	}
+
+	public int getMetaProductId() {
+		return metaProductId;
+	}
+
+	public void setMetaProductId(int metaProductId) {
+		this.metaProductId = metaProductId;
+	}
+
+	public int getAmountOfReprints() {
+		return amountOfReprints;
+	}
+
+	public void setAmountOfReprints(int amountOfReprints) {
+		this.amountOfReprints = amountOfReprints;
+	}
+
 	public Game getGame() {
 		return game;
 	}
 
 	public void setGame(Game game) {
 		this.game = game;
-	}
-
-	public String getEnglishName() {
-		return englishName;
-	}
-
-	public void setEnglishName(String englishName) {
-		this.englishName = englishName;
 	}
 
 	public String getLocalizedName() {
@@ -58,14 +130,6 @@ public class Product {
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
-	}
-
-	public String getExpansion() {
-		return expansion;
-	}
-
-	public void setExpansion(String expansion) {
-		this.expansion = expansion;
 	}
 
 	public String getNr() {
@@ -96,15 +160,11 @@ public class Product {
 		return productId;
 	}
 
-	@Override
-	public String toString() {
-		return "Product [productId=" + productId + ", " + (game != null ? "game=" + game + ", " : "")
-				+ (englishName != null ? "englishName=" + englishName + ", " : "")
-				+ (localizedName != null ? "localizedName=" + localizedName + ", " : "")
-				+ (imageUrl != null ? "imageUrl=" + imageUrl + ", " : "")
-				+ (expansion != null ? "expansion=" + expansion + ", " : "") + (nr != null ? "nr=" + nr + ", " : "")
-				+ (expIcon != null ? "expIcon=" + expIcon + ", " : "") + (rarity != null ? "rarity=" + rarity : "")
-				+ "]";
+	public String getEnglishName() {
+		return englishName;
 	}
 
+	public String getExpansion() {
+		return expansion;
+	}
 }

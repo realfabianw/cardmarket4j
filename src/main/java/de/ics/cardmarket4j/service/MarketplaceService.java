@@ -1,6 +1,9 @@
 package de.ics.cardmarket4j.service;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.javatuples.Pair;
 
 import com.google.gson.JsonElement;
@@ -8,6 +11,7 @@ import de.ics.cardmarket4j.AbstractService;
 import de.ics.cardmarket4j.CardMarket;
 import de.ics.cardmarket4j.enums.Game;
 import de.ics.cardmarket4j.enums.HTTPMethod;
+import de.ics.cardmarket4j.structs.Product;
 
 public class MarketplaceService extends AbstractService {
 
@@ -20,12 +24,13 @@ public class MarketplaceService extends AbstractService {
 		Pair<Integer, JsonElement> response = request("games/" + game.getId() + "/expansions", HTTPMethod.GET);
 	}
 
-	public void getProduct(String searchQuery) throws IOException {
+	public Set<Product> getProduct(String searchQuery) throws IOException {
+		Set<Product> setProducts = new HashSet<>();
 		String query = "search=" + searchQuery;
-		String encodedQuery = AuthenticationService.rawUrlEncode(query);
 		Pair<Integer, JsonElement> response = request("products/find?" + query, HTTPMethod.GET);
-		// Pair<Integer, JsonElement> response =
-		// request("products/find?search=Springleaf", HTTPMethod.GET);
+		for (JsonElement jEle : response.getValue1().getAsJsonObject().get("product").getAsJsonArray()) {
+			setProducts.add(new Product(jEle.getAsJsonObject()));
+		}
+		return setProducts;
 	}
-
 }

@@ -18,4 +18,8 @@ public abstract class AbstractService {
 	protected Pair<Integer, JsonElement> request(String URL, HTTPMethod httpMethod) throws IOException {
 		return cardMarket.request(URL, httpMethod);
 	}
+	
+	protected Pair<Integer, JsonElement> requestWithOutput(String URL, HTTPMethod httpMethod, String output) throws IOException {
+		return cardMarket.requestWithOutput(URL, httpMethod, output);
+	}
 }
