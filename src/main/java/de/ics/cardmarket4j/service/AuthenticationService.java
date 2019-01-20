@@ -16,9 +16,13 @@ import java.util.Map.Entry;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.ics.cardmarket4j.enums.HTTPMethod;
 
 public class AuthenticationService {
+	private static Logger LOGGER = LoggerFactory.getLogger("AuthenticationService");
 	public static String join(Collection<?> s, String delimiter) {
 		StringBuilder builder = new StringBuilder();
 		Iterator<?> iter = s.iterator();
@@ -70,15 +74,16 @@ public class AuthenticationService {
 
 		String baseString = method + "&" + URLEncoder.encode(baseUri, encode) + "&";
 
-		if (index > 0) {
-			String urlParams = url.substring(index + 1);
-			Map<String, String> args = parseQueryString(urlParams);
-
-			for (Entry<String, String> k : args.entrySet()) {
-				headerParams.put(k.getKey(), k.getValue());
-
-			}
-		}
+//		if (index > 0) {
+//			String urlParams = url.substring(index + 1);
+//			LOGGER.trace("url params: {}", urlParams);
+//			Map<String, String> args = parseQueryString(urlParams);
+//
+//			for (Entry<String, String> k : args.entrySet()) {
+//				headerParams.put(k.getKey(), k.getValue());
+//
+//			}
+//		}
 
 		for (Entry<String, String> k : headerParams.entrySet())
 			if (!k.getKey().equalsIgnoreCase("realm")) {
@@ -94,7 +99,10 @@ public class AuthenticationService {
 		}
 
 		String paramString = URLEncoder.encode(join(paramStrings, "&"), encode).replaceAll("'", "%27");
-
+		
+		if (index > 0) {
+			paramString += url.substring(index+1);
+		}
 		baseString += paramString;
 
 		Mac mac = Mac.getInstance("HmacSHA1");
@@ -165,7 +173,9 @@ public class AuthenticationService {
 		Map<String, String> queryParameters = new TreeMap<>();
 		String[] querySegments = query.split("&");
 		for (String segment : querySegments) {
+			LOGGER.trace(segment);
 			String[] parts = segment.split("=");
+			LOGGER.trace("{}", parts.length);
 			if (parts.length > 0) {
 				String key = parts[0].replaceAll("\\?", " ").trim();
 				String val = parts[1].trim();
@@ -175,7 +185,12 @@ public class AuthenticationService {
 		return queryParameters;
 	}
 
-	private String rawUrlEncode(String str) throws UnsupportedEncodingException {
-		return URLEncoder.encode(str, "UTF-8");
+	public static String rawUrlEncode(String str) {
+		try {
+			return URLEncoder.encode(str, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			LOGGER.warn("The given String ({}) couldn't be encoded.\n{}", str, e);
+			return str;
+		}
 	}
 }
