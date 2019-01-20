@@ -8,6 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.ics.cardmarket4j.CardMarket;
+import de.ics.cardmarket4j.enums.Condition;
+import de.ics.cardmarket4j.enums.Language;
+import de.ics.cardmarket4j.structs.Article;
 import de.ics.cardmarket4j.structs.Product;
 
 public class Main {
@@ -16,9 +19,7 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		CardMarket market = new CardMarket("Cr0yANU52r7iDhlQ", "EWIRcYdR7pnHWdLys8uJQr3aPgLZFXgx",
 				"SnR9w5ZMT0kQwyfT2ahjqNZr7I0vKJcl", "bajBeBYsv5B4O1UA1MjGOG3AaZiAJpWM");
-		
-		LOGGER.info(market.getStockService().getStock().toString());
-		market.getStockService().insertArticle(20778, 1, 1, BigDecimal.valueOf(0.15), "GD", "Test", false, false, false, false);
+
 		LOGGER.info(market.getStockService().getStock().toString());
 	}
 }

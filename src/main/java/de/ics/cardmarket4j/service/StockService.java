@@ -31,10 +31,25 @@ public class StockService extends AbstractService {
 		}
 		return listArticle;
 	}
-
-	public List<Article> insertArticle(int productId, int languageId, int quantity, BigDecimal price, String condition,
+	
+	/**
+	 * @deprecated
+	 * @param productId
+	 * @param languageId
+	 * @param quantity
+	 * @param price
+	 * @param condition
+	 * @param comment
+	 * @param isFoil
+	 * @param isSigned
+	 * @param isAltered
+	 * @param isPlayset
+	 * @return
+	 * @throws IOException
+	 */
+	private List<Article> insertArticle(int productId, int languageId, int quantity, BigDecimal price, String condition,
 			String comment, boolean isFoil, boolean isSigned, boolean isAltered, boolean isPlayset) throws IOException {
-		StringBuilder xml= new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
+		StringBuilder xml = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 		xml.append("<request>");
 		xml.append("<article>");
 		xml.append("<idProduct>" + productId + "</idProduct>");
@@ -51,14 +66,46 @@ public class StockService extends AbstractService {
 		xml.append("</request>");
 		LOGGER.trace("XML: {}", xml);
 		Pair<Integer, JsonElement> response = requestWithOutput("stock", HTTPMethod.POST, xml.toString());
-		
+
 		List<Article> listArticle = new ArrayList<>();
 		for (JsonElement jEle : response.getValue1().getAsJsonObject().get("article").getAsJsonArray()) {
 			listArticle.add(new Article(jEle.getAsJsonObject()));
 		}
 		return listArticle;
 	}
-	
-	
+
+	public List<Article> insertArticle(Article article) throws IOException {
+		List<Article> listArticles = new ArrayList<>();
+		listArticles.add(article);
+		return insertListArticles(listArticles);
+	}
+
+	public List<Article> insertListArticles(List<Article> listArticles) throws IOException {
+		StringBuilder xml = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
+		xml.append("<request>");
+		for (Article a : listArticles) {
+			xml.append("<article>");
+			xml.append("<idProduct>" + a.getProduct().getProductId() + "</idProduct>");
+			xml.append("<idLanguage>" + a.getLanguage().getId() + "</idLanguage>");
+			xml.append("<comments>" + a.getComment() + "</comments>");
+			xml.append("<count>" + a.getQuantity() + "</count>");
+			xml.append("<price>" + a.getPrice() + "</price>");
+			xml.append("<condition>" + a.getCondition().getId() + "</condition>");
+			xml.append("<isFoil>" + a.isFoil() + "</isFoil>");
+			xml.append("<isSigned>" + a.isSigned() + "</isSigned>");
+			xml.append("<isAltered>" + a.isAltered() + "</isAltered>");
+			xml.append("<isPlayset>" + a.isPlayset() + "</isPlayset>");
+			xml.append("</article>");
+		}
+		xml.append("</request>");
+		LOGGER.trace("XML: {}", xml);
+		Pair<Integer, JsonElement> response = requestWithOutput("stock", HTTPMethod.POST, xml.toString());
+
+		List<Article> listArticle = new ArrayList<>();
+		for (JsonElement jEle : response.getValue1().getAsJsonObject().get("inserted").getAsJsonArray()) {
+			listArticle.add(new Article(jEle.getAsJsonObject()));
+		}
+		return listArticle;
+	}
 
 }

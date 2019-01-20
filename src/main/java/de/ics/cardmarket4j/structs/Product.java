@@ -8,8 +8,8 @@ import de.ics.cardmarket4j.enums.Game;
 public class Product {
 	// Essential Data for Identification & Display
 	private final int productId;
-	private final String englishName;
-	private final String expansion;
+	private String englishName;
+	private String expansion;
 
 	// Aditional Data - Marketplace Information
 	private int availableArticles;
@@ -25,6 +25,10 @@ public class Product {
 	private String expIcon;
 	private String rarity;
 
+	public Product(int productId) {
+		this.productId = productId;
+	}
+	
 	public Product(int productId, Game game, String englishName, String localizedName, String imageUrl,
 			String expansion, String nr, String expIcon, String rarity) {
 		this.productId = productId;
