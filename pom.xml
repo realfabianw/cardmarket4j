@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.ics.cardmarket4j</groupId>
 	<artifactId>cardmarket4j</artifactId>
-	<version>0.1.0</version>
+	<version>0.1.1</version>
 	<name>cardmarket4j</name>
 
 	<properties>
@@ -69,7 +69,7 @@
 								<!-- add main class to manifest file -->
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>de.ics.ouroboros.Main</mainClass>
+									<mainClass>de.ics.cardmarket4j.Main</mainClass>
 								</transformer>
 							</transformers>
 						</configuration>

@@ -6,12 +6,12 @@ import org.javatuples.Pair;
 import com.google.gson.JsonElement;
 
 import de.ics.cardmarket4j.AbstractService;
-import de.ics.cardmarket4j.CardMarket;
+import de.ics.cardmarket4j.CardMarketService;
 import de.ics.cardmarket4j.enums.HTTPMethod;
 import de.ics.cardmarket4j.structs.Account;
 
 public class AccountService extends AbstractService {
-	public AccountService(CardMarket cardMarket) {
+	public AccountService(CardMarketService cardMarket) {
 		super(cardMarket);
 
 	}

@@ -9,9 +9,9 @@ import com.google.gson.JsonElement;
 import de.ics.cardmarket4j.enums.HTTPMethod;
 
 public abstract class AbstractService {
-	final CardMarket cardMarket;
+	final CardMarketService cardMarket;
 
-	public AbstractService(CardMarket cardMarket) {
+	public AbstractService(CardMarketService cardMarket) {
 		this.cardMarket = cardMarket;
 	}
 

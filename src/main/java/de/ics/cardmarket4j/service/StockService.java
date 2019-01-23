@@ -11,14 +11,14 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonElement;
 import de.ics.cardmarket4j.AbstractService;
-import de.ics.cardmarket4j.CardMarket;
+import de.ics.cardmarket4j.CardMarketService;
 import de.ics.cardmarket4j.enums.HTTPMethod;
 import de.ics.cardmarket4j.structs.Article;
 
 public class StockService extends AbstractService {
 	private static Logger LOGGER = LoggerFactory.getLogger("StockService");
 
-	public StockService(CardMarket cardMarket) {
+	public StockService(CardMarketService cardMarket) {
 		super(cardMarket);
 		// TODO Auto-generated constructor stub
 	}

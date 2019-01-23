@@ -8,14 +8,14 @@ import org.javatuples.Pair;
 
 import com.google.gson.JsonElement;
 import de.ics.cardmarket4j.AbstractService;
-import de.ics.cardmarket4j.CardMarket;
+import de.ics.cardmarket4j.CardMarketService;
 import de.ics.cardmarket4j.enums.Game;
 import de.ics.cardmarket4j.enums.HTTPMethod;
 import de.ics.cardmarket4j.structs.Product;
 
 public class MarketplaceService extends AbstractService {
 
-	public MarketplaceService(CardMarket cardMarket) {
+	public MarketplaceService(CardMarketService cardMarket) {
 		super(cardMarket);
 
 	}

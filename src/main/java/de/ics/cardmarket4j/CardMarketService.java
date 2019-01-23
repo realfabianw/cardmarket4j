@@ -25,7 +25,7 @@ import de.ics.cardmarket4j.service.AuthenticationService;
 import de.ics.cardmarket4j.service.MarketplaceService;
 import de.ics.cardmarket4j.service.StockService;
 
-public class CardMarket {
+public class CardMarketService {
 	private static final String URI = "https://api.cardmarket.com/ws/v2.0/output.json/";
 	private static Logger LOGGER = LoggerFactory.getLogger("CardMarket");
 	private Pair<Integer, JsonElement> lastResponse;
@@ -34,7 +34,7 @@ public class CardMarket {
 	private final MarketplaceService marketplaceService;
 	private final StockService stockService;
 
-	public CardMarket(String appToken, String appSecret, String accessToken, String accessTokenSecret) {
+	public CardMarketService(String appToken, String appSecret, String accessToken, String accessTokenSecret) {
 		this.authenticationService = new AuthenticationService(appToken, appSecret, accessToken, accessTokenSecret);
 		this.accountService = new AccountService(this);
 		this.marketplaceService = new MarketplaceService(this);
