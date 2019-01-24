@@ -6,17 +6,9 @@ package de.ics.cardmarket4j.enums;
  * @version 19.01.2018 - complete list at this date
  */
 public enum Language {
-	ENGLISH(1, "English"),
-	FRENCH(2, "French"),
-	GERMAN(3, "German"),
-	SPANISH(4, "Spanish"),
-	ITALIAN(5, "Italian"),
-	SIMPLIFIED_CHINESE(6, "Simplified Chinese"),
-	JAPANESE(7, "Japanese"),
-	PORTUGUESE(8, "Portuguese"),
-	RUSSIAN(9, "Russian"),
-	KOREAN(10, "Korean"),
-	TRADITIONAL_CHINESE(11, "Traditional Chinese");
+	ENGLISH(1, "English"), FRENCH(2, "French"), GERMAN(3, "German"), SPANISH(4, "Spanish"), ITALIAN(5, "Italian"),
+	SIMPLIFIED_CHINESE(6, "Simplified Chinese"), JAPANESE(7, "Japanese"), PORTUGUESE(8, "Portuguese"),
+	RUSSIAN(9, "Russian"), KOREAN(10, "Korean"), TRADITIONAL_CHINESE(11, "Traditional Chinese");
 
 	public static Language parseId(int id) {
 		for (Language e : Language.values()) {

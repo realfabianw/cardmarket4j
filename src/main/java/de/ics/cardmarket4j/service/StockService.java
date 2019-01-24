@@ -31,7 +31,13 @@ public class StockService extends AbstractService {
 		}
 		return listArticle;
 	}
-	
+
+	public List<Article> insertArticle(Article article) throws IOException {
+		List<Article> listArticles = new ArrayList<>();
+		listArticles.add(article);
+		return insertListArticles(listArticles);
+	}
+
 	/**
 	 * @deprecated
 	 * @param productId
@@ -47,6 +53,7 @@ public class StockService extends AbstractService {
 	 * @return
 	 * @throws IOException
 	 */
+	@Deprecated
 	private List<Article> insertArticle(int productId, int languageId, int quantity, BigDecimal price, String condition,
 			String comment, boolean isFoil, boolean isSigned, boolean isAltered, boolean isPlayset) throws IOException {
 		StringBuilder xml = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
@@ -72,12 +79,6 @@ public class StockService extends AbstractService {
 			listArticle.add(new Article(jEle.getAsJsonObject()));
 		}
 		return listArticle;
-	}
-
-	public List<Article> insertArticle(Article article) throws IOException {
-		List<Article> listArticles = new ArrayList<>();
-		listArticles.add(article);
-		return insertListArticles(listArticles);
 	}
 
 	public List<Article> insertListArticles(List<Article> listArticles) throws IOException {

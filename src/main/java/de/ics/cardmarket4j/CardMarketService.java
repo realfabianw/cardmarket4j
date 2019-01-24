@@ -49,6 +49,10 @@ public class CardMarketService {
 		return marketplaceService;
 	}
 
+	public StockService getStockService() {
+		return stockService;
+	}
+
 	Pair<Integer, JsonElement> request(String URL, HTTPMethod httpMethod) throws IOException {
 		int responseCode = 0;
 		String responseString = "";
@@ -60,9 +64,9 @@ public class CardMarketService {
 			HttpURLConnection connection = (HttpURLConnection) new URL(fullUrl).openConnection();
 			connection.addRequestProperty("Authorization",
 					authenticationService.createOAuthSignature(fullUrl, httpMethod));
-			//I dont think these are needed here.
-			//connection.setDoInput(true);
-			//connection.setDoOutput(true);
+			// I dont think these are needed here.
+			// connection.setDoInput(true);
+			// connection.setDoOutput(true);
 			LOGGER.trace("Request:\t{} {}", httpMethod.toString(), fullUrl);
 			connection.setRequestMethod(httpMethod.toString());
 			connection.connect();
@@ -91,7 +95,7 @@ public class CardMarketService {
 			return null;
 		}
 	}
-	
+
 	Pair<Integer, JsonElement> requestWithOutput(String URL, HTTPMethod httpMethod, String output) throws IOException {
 		int responseCode = 0;
 		String responseString = "";
@@ -107,7 +111,7 @@ public class CardMarketService {
 			LOGGER.trace("Request:\t{} {}", httpMethod.toString(), fullUrl);
 			connection.setRequestMethod(httpMethod.toString());
 			connection.connect();
-			
+
 			OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
 			out.write(output);
 			out.close();
@@ -135,9 +139,5 @@ public class CardMarketService {
 			System.exit(-1);
 			return null;
 		}
-	}
-
-	public StockService getStockService() {
-		return stockService;
 	}
 }

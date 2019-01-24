@@ -37,8 +37,18 @@ public class AuthenticationService {
 		return builder.toString();
 	}
 
+	public static String rawUrlEncode(String str) {
+		try {
+			return URLEncoder.encode(str, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			LOGGER.warn("The given String ({}) couldn't be encoded.\n{}", str, e);
+			return str;
+		}
+	}
+
 	private final String appToken;
 	private final String appSecret;
+
 	private final String accessToken;
 
 	private final String accessTokenSecret;
@@ -178,14 +188,5 @@ public class AuthenticationService {
 			}
 		}
 		return queryParameters;
-	}
-
-	public static String rawUrlEncode(String str) {
-		try {
-			return URLEncoder.encode(str, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			LOGGER.warn("The given String ({}) couldn't be encoded.\n{}", str, e);
-			return str;
-		}
 	}
 }

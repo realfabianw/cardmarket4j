@@ -16,10 +16,10 @@ public class Product {
 	private int availableFoils;
 
 	// Additional Data - Card Information - TODO do i need those?
+	private String localizedName; // needs an List<String>
 	private int metaProductId;
 	private int amountOfReprints;
 	private Game game;
-	private String localizedName;
 	private String imageUrl;
 	private String nr;
 	private String expIcon;
@@ -28,7 +28,7 @@ public class Product {
 	public Product(int productId) {
 		this.productId = productId;
 	}
-	
+
 	public Product(int productId, Game game, String englishName, String localizedName, String imageUrl,
 			String expansion, String nr, String expIcon, String rarity) {
 		this.productId = productId;
@@ -67,6 +67,98 @@ public class Product {
 		this.availableFoils = JsonHelper.parseInteger(jProductSearch, "countFoils");
 	}
 
+	public int getAmountOfReprints() {
+		return amountOfReprints;
+	}
+
+	public int getAvailableArticles() {
+		return availableArticles;
+	}
+
+	public int getAvailableFoils() {
+		return availableFoils;
+	}
+
+	public String getEnglishName() {
+		return englishName;
+	}
+
+	public String getExpansion() {
+		return expansion;
+	}
+
+	public String getExpIcon() {
+		return expIcon;
+	}
+
+	public Game getGame() {
+		return game;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public String getLocalizedName() {
+		return localizedName;
+	}
+
+	public int getMetaProductId() {
+		return metaProductId;
+	}
+
+	public String getNr() {
+		return nr;
+	}
+
+	public int getProductId() {
+		return productId;
+	}
+
+	public String getRarity() {
+		return rarity;
+	}
+
+	public void setAmountOfReprints(int amountOfReprints) {
+		this.amountOfReprints = amountOfReprints;
+	}
+
+	public void setAvailableArticles(int availableArticles) {
+		this.availableArticles = availableArticles;
+	}
+
+	public void setAvailableFoils(int availableFoils) {
+		this.availableFoils = availableFoils;
+	}
+
+	public void setExpIcon(String expIcon) {
+		this.expIcon = expIcon;
+	}
+
+	public void setGame(Game game) {
+		this.game = game;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
+	public void setLocalizedName(String localizedName) {
+		this.localizedName = localizedName;
+	}
+
+	public void setMetaProductId(int metaProductId) {
+		this.metaProductId = metaProductId;
+	}
+
+	public void setNr(String nr) {
+		this.nr = nr;
+	}
+
+	public void setRarity(String rarity) {
+		this.rarity = rarity;
+	}
+
 	@Override
 	public String toString() {
 		return "Product [productId=" + productId + ", "
@@ -78,97 +170,5 @@ public class Product {
 				+ (imageUrl != null ? "imageUrl=" + imageUrl + ", " : "") + (nr != null ? "nr=" + nr + ", " : "")
 				+ (expIcon != null ? "expIcon=" + expIcon + ", " : "") + (rarity != null ? "rarity=" + rarity : "")
 				+ "]";
-	}
-
-	public int getAvailableArticles() {
-		return availableArticles;
-	}
-
-	public void setAvailableArticles(int availableArticles) {
-		this.availableArticles = availableArticles;
-	}
-
-	public int getAvailableFoils() {
-		return availableFoils;
-	}
-
-	public void setAvailableFoils(int availableFoils) {
-		this.availableFoils = availableFoils;
-	}
-
-	public int getMetaProductId() {
-		return metaProductId;
-	}
-
-	public void setMetaProductId(int metaProductId) {
-		this.metaProductId = metaProductId;
-	}
-
-	public int getAmountOfReprints() {
-		return amountOfReprints;
-	}
-
-	public void setAmountOfReprints(int amountOfReprints) {
-		this.amountOfReprints = amountOfReprints;
-	}
-
-	public Game getGame() {
-		return game;
-	}
-
-	public void setGame(Game game) {
-		this.game = game;
-	}
-
-	public String getLocalizedName() {
-		return localizedName;
-	}
-
-	public void setLocalizedName(String localizedName) {
-		this.localizedName = localizedName;
-	}
-
-	public String getImageUrl() {
-		return imageUrl;
-	}
-
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
-
-	public String getNr() {
-		return nr;
-	}
-
-	public void setNr(String nr) {
-		this.nr = nr;
-	}
-
-	public String getExpIcon() {
-		return expIcon;
-	}
-
-	public void setExpIcon(String expIcon) {
-		this.expIcon = expIcon;
-	}
-
-	public String getRarity() {
-		return rarity;
-	}
-
-	public void setRarity(String rarity) {
-		this.rarity = rarity;
-	}
-
-	public int getProductId() {
-		return productId;
-	}
-
-	public String getEnglishName() {
-		return englishName;
-	}
-
-	public String getExpansion() {
-		return expansion;
 	}
 }
