@@ -16,16 +16,16 @@ public class Article {
 	private final int articleId;
 
 	// Essential Data to add an Article/Product to the stock
-	private final Product product;
-	private final Language language;
-	private final int quantity;
-	private final BigDecimal price;
-	private final Condition condition;
-	private final String comment;
-	private final boolean foil;
-	private final boolean signed;
-	private final boolean altered;
-	private final boolean playset;
+	private Product product;
+	private Language language;
+	private int quantity;
+	private BigDecimal price;
+	private Condition condition;
+	private String comment;
+	private boolean foil;
+	private boolean signed;
+	private boolean altered;
+	private boolean playset;
 
 	// Additional Data
 	private boolean inShoppingCart;
@@ -61,31 +61,40 @@ public class Article {
 	}
 
 	public Article(JsonObject jObject) {
-		jObject = jObject.get("idArticle").getAsJsonObject();
+		// Das wird nur benötigt, wenn man Artikel zum Stock hinzufügt. Wird ausgelagert
+		// jObject = jObject.get("idArticle").getAsJsonObject();
 
 		this.articleId = JsonHelper.parseInteger(jObject, "idArticle");
-
-		this.language = Language
-				.parseId(JsonHelper.parseInteger(jObject.get("language").getAsJsonObject(), "idLanguage"));
+		try {
+			this.language = Language
+					.parseId(JsonHelper.parseInteger(jObject.get("language").getAsJsonObject(), "idLanguage"));
+		} catch (NullPointerException e) {
+			this.language = null;
+		}
 
 		this.comment = JsonHelper.parseString(jObject, "comments");
 		this.price = JsonHelper.parseBigDecimal(jObject, "price");
 		this.quantity = JsonHelper.parseInteger(jObject, "count");
 		this.inShoppingCart = JsonHelper.parseBoolean(jObject, "inShoppingCart");
-
-		this.product = new Product(JsonHelper.parseInteger(jObject, "idProduct"),
-				Game.parseId(JsonHelper.parseInteger(jObject.get("product").getAsJsonObject(), "idGame")),
-				JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "enName"),
-				JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "locName"),
-				JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "image"),
-				JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "expansion"),
-				JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "nr"),
-				JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "expIcon"),
-				JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "rarity"));
-
+		try {
+			this.product = new Product(JsonHelper.parseInteger(jObject, "idProduct"),
+					Game.parseId(JsonHelper.parseInteger(jObject.get("product").getAsJsonObject(), "idGame")),
+					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "enName"),
+					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "locName"),
+					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "image"),
+					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "expansion"),
+					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "nr"),
+					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "expIcon"),
+					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "rarity"));
+		} catch (NullPointerException e) {
+			this.product = null;
+		}
 		this.lastEdited = JsonHelper.parseLocalDateTime(jObject, "lastEdited", DateTimeFormatter.ISO_DATE_TIME);
-
-		this.condition = Condition.parseId(JsonHelper.parseString(jObject, "condition"));
+		try {
+			this.condition = Condition.parseId(JsonHelper.parseString(jObject, "condition"));
+		} catch (IllegalArgumentException e) {
+			this.condition = null;
+		}
 		this.foil = JsonHelper.parseBoolean(jObject, "isFoil");
 		this.signed = JsonHelper.parseBoolean(jObject, "isSigned");
 		this.playset = JsonHelper.parseBoolean(jObject, "isPlayset");
@@ -144,12 +153,52 @@ public class Article {
 		return signed;
 	}
 
+	public void setAltered(boolean altered) {
+		this.altered = altered;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public void setCondition(Condition condition) {
+		this.condition = condition;
+	}
+
+	public void setFoil(boolean foil) {
+		this.foil = foil;
+	}
+
 	public void setInShoppingCart(boolean inShoppingCart) {
 		this.inShoppingCart = inShoppingCart;
 	}
 
+	public void setLanguage(Language language) {
+		this.language = language;
+	}
+
 	public void setLastEdited(LocalDateTime lastEdited) {
 		this.lastEdited = lastEdited;
+	}
+
+	public void setPlayset(boolean playset) {
+		this.playset = playset;
+	}
+
+	public void setPrice(BigDecimal price) {
+		this.price = price;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public void setSigned(boolean signed) {
+		this.signed = signed;
 	}
 
 	@Override

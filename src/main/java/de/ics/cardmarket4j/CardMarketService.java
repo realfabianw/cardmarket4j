@@ -53,7 +53,8 @@ public class CardMarketService {
 		return stockService;
 	}
 
-	Pair<Integer, JsonElement> request(String URL, HTTPMethod httpMethod) throws IOException {
+	Pair<Integer, JsonElement> request(String URL, HTTPMethod httpMethod, boolean doOutput, String output)
+			throws IOException {
 		int responseCode = 0;
 		String responseString = "";
 		try {
@@ -66,10 +67,19 @@ public class CardMarketService {
 					authenticationService.createOAuthSignature(fullUrl, httpMethod));
 			// I dont think these are needed here.
 			// connection.setDoInput(true);
-			// connection.setDoOutput(true);
+			if (doOutput) {
+				connection.setDoOutput(true);
+			}
 			LOGGER.trace("Request:\t{} {}", httpMethod.toString(), fullUrl);
 			connection.setRequestMethod(httpMethod.toString());
 			connection.connect();
+
+			if (doOutput) {
+				OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
+				out.write(output);
+				out.close();
+			}
+
 			responseCode = connection.getResponseCode();
 
 			BufferedReader rd = new BufferedReader(new InputStreamReader(
@@ -96,6 +106,15 @@ public class CardMarketService {
 		}
 	}
 
+	/**
+	 * @deprecated
+	 * @param URL
+	 * @param httpMethod
+	 * @param output
+	 * @return
+	 * @throws IOException
+	 */
+	@Deprecated
 	Pair<Integer, JsonElement> requestWithOutput(String URL, HTTPMethod httpMethod, String output) throws IOException {
 		int responseCode = 0;
 		String responseString = "";
