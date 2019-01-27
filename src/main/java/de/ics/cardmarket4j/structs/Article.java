@@ -8,7 +8,6 @@ import com.google.gson.JsonObject;
 
 import de.ics.cardmarket4j.JsonHelper;
 import de.ics.cardmarket4j.enums.Condition;
-import de.ics.cardmarket4j.enums.Game;
 import de.ics.cardmarket4j.enums.Language;
 
 public class Article {
@@ -61,9 +60,6 @@ public class Article {
 	}
 
 	public Article(JsonObject jObject) {
-		// Das wird nur benötigt, wenn man Artikel zum Stock hinzufügt. Wird ausgelagert
-		// jObject = jObject.get("idArticle").getAsJsonObject();
-
 		this.articleId = JsonHelper.parseInteger(jObject, "idArticle");
 		try {
 			this.language = Language
@@ -76,19 +72,22 @@ public class Article {
 		this.price = JsonHelper.parseBigDecimal(jObject, "price");
 		this.quantity = JsonHelper.parseInteger(jObject, "count");
 		this.inShoppingCart = JsonHelper.parseBoolean(jObject, "inShoppingCart");
-		try {
-			this.product = new Product(JsonHelper.parseInteger(jObject, "idProduct"),
-					Game.parseId(JsonHelper.parseInteger(jObject.get("product").getAsJsonObject(), "idGame")),
-					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "enName"),
-					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "locName"),
-					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "image"),
-					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "expansion"),
-					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "nr"),
-					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "expIcon"),
-					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "rarity"));
-		} catch (NullPointerException e) {
-			this.product = null;
-		}
+
+		this.product = new Product(jObject);
+
+//		try {
+//			this.product = new Product(JsonHelper.parseInteger(jObject, "idProduct"),
+//					Game.parseId(JsonHelper.parseInteger(jObject.get("product").getAsJsonObject(), "idGame")),
+//					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "enName"),
+//					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "locName"),
+//					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "image"),
+//					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "expansion"),
+//					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "nr"),
+//					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "expIcon"),
+//					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "rarity"));
+//		} catch (NullPointerException e) {
+//			this.product = null;
+//		}
 		this.lastEdited = JsonHelper.parseLocalDateTime(jObject, "lastEdited", DateTimeFormatter.ISO_DATE_TIME);
 		try {
 			this.condition = Condition.parseId(JsonHelper.parseString(jObject, "condition"));

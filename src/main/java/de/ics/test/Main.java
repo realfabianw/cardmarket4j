@@ -12,6 +12,9 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		CardMarketService market = new CardMarketService("Cr0yANU52r7iDhlQ", "EWIRcYdR7pnHWdLys8uJQr3aPgLZFXgx",
 				"SnR9w5ZMT0kQwyfT2ahjqNZr7I0vKJcl", "bajBeBYsv5B4O1UA1MjGOG3AaZiAJpWM");
+//		market.getMarketplaceService().getProduct("Bone Saw");
+//		market.getMarketplaceService().getProductDetailed(20778);
+
 		// market.getStockService().insertArticle(new Article(20778, Language.ENGLISH,
 		// 1, BigDecimal.valueOf(5), Condition.POOR, "API Test", false, false, false,
 		// false));

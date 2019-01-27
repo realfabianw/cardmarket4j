@@ -33,4 +33,15 @@ public class MarketplaceService extends AbstractService {
 		}
 		return setProducts;
 	}
+
+	public Product getProductDetailed(int productId) throws IOException {
+		Pair<Integer, JsonElement> response = request("products/" + productId, HTTPMethod.GET);
+		return new Product(response.getValue1().getAsJsonObject().get("product").getAsJsonObject());
+	}
+
+//	Only for Powersellers
+//	public void getPriceGuide(Game game) throws IOException {
+//		Pair<Integer, JsonElement> response = request("priceguide", HTTPMethod.GET);
+//		//Pair<Integer, JsonElement> response = request("priceguide?idGame=" + game.getId(), HTTPMethod.GET);
+//	}
 }
