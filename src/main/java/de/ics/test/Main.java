@@ -12,7 +12,7 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		CardMarketService market = new CardMarketService("Cr0yANU52r7iDhlQ", "EWIRcYdR7pnHWdLys8uJQr3aPgLZFXgx",
 				"SnR9w5ZMT0kQwyfT2ahjqNZr7I0vKJcl", "bajBeBYsv5B4O1UA1MjGOG3AaZiAJpWM");
-//		market.getStockService().getStock();
+		market.getStockService().getStock();
 //		market.getMarketplaceService().getProduct("Bone Saw");
 //		market.getMarketplaceService().getProductDetailed(20778);
 

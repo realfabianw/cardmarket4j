@@ -32,7 +32,7 @@ public class Product {
 	public Product(int productId, JsonObject jProductSearch) {
 		this.productId = productId;
 		this.englishName = JsonHelper.parseString(jProductSearch, "enName");
-		this.expansion = JsonHelper.parseString(jProductSearch, "expansionName");
+		this.expansion = JsonHelper.parseString(jProductSearch, "expansion");
 		this.availableArticles = JsonHelper.parseInteger(jProductSearch, "countArticles");
 		this.availableFoils = JsonHelper.parseInteger(jProductSearch, "countFoils");
 		try {
