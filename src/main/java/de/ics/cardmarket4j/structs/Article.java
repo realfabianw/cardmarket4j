@@ -60,6 +60,7 @@ public class Article {
 	}
 
 	public Article(JsonObject jObject) {
+		System.out.println(jObject);
 		this.articleId = JsonHelper.parseInteger(jObject, "idArticle");
 		try {
 			this.language = Language
@@ -73,7 +74,7 @@ public class Article {
 		this.quantity = JsonHelper.parseInteger(jObject, "count");
 		this.inShoppingCart = JsonHelper.parseBoolean(jObject, "inShoppingCart");
 
-		this.product = new Product(jObject);
+		this.product = new Product(jObject.get("product").getAsJsonObject());
 
 //		try {
 //			this.product = new Product(JsonHelper.parseInteger(jObject, "idProduct"),
