@@ -29,6 +29,23 @@ public class Product {
 		this.priceGuide = priceGuide;
 	}
 
+	public Product(int productId, JsonObject jProductSearch) {
+		this.productId = productId;
+		this.englishName = JsonHelper.parseString(jProductSearch, "enName");
+		this.expansion = JsonHelper.parseString(jProductSearch, "expansionName");
+		this.availableArticles = JsonHelper.parseInteger(jProductSearch, "countArticles");
+		this.availableFoils = JsonHelper.parseInteger(jProductSearch, "countFoils");
+		try {
+			JsonObject priceGuide = jProductSearch.get("priceGuide").getAsJsonObject();
+			this.priceGuide = new PriceGuide(JsonHelper.parseBigDecimal(priceGuide, "SELL"),
+					JsonHelper.parseBigDecimal(priceGuide, "LOW"), JsonHelper.parseBigDecimal(priceGuide, "LOWEX"),
+					JsonHelper.parseBigDecimal(priceGuide, "LOWFOIL"), JsonHelper.parseBigDecimal(priceGuide, "AVG"),
+					JsonHelper.parseBigDecimal(priceGuide, "TREND"));
+		} catch (Exception e) {
+			this.priceGuide = null;
+		}
+	}
+	
 	public Product(JsonObject jProductSearch) {
 		this.productId = JsonHelper.parseInteger(jProductSearch, "idProduct");
 		this.englishName = JsonHelper.parseString(jProductSearch, "enName");

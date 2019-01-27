@@ -74,21 +74,9 @@ public class Article {
 		this.quantity = JsonHelper.parseInteger(jObject, "count");
 		this.inShoppingCart = JsonHelper.parseBoolean(jObject, "inShoppingCart");
 
-		this.product = new Product(jObject.get("product").getAsJsonObject());
+		this.product = new Product(JsonHelper.parseInteger(jObject, "idProduct"),
+				jObject.get("product").getAsJsonObject());
 
-//		try {
-//			this.product = new Product(JsonHelper.parseInteger(jObject, "idProduct"),
-//					Game.parseId(JsonHelper.parseInteger(jObject.get("product").getAsJsonObject(), "idGame")),
-//					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "enName"),
-//					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "locName"),
-//					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "image"),
-//					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "expansion"),
-//					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "nr"),
-//					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "expIcon"),
-//					JsonHelper.parseString(jObject.get("product").getAsJsonObject(), "rarity"));
-//		} catch (NullPointerException e) {
-//			this.product = null;
-//		}
 		this.lastEdited = JsonHelper.parseLocalDateTime(jObject, "lastEdited", DateTimeFormatter.ISO_DATE_TIME);
 		try {
 			this.condition = Condition.parseId(JsonHelper.parseString(jObject, "condition"));
