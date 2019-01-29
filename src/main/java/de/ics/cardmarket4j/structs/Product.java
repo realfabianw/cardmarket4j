@@ -19,16 +19,6 @@ public class Product {
 		this.productId = productId;
 	}
 
-	public Product(int productId, String englishName, String expansion, int availableArticles, int availableFoils,
-			PriceGuide priceGuide) {
-		this.productId = productId;
-		this.englishName = englishName;
-		this.expansion = expansion;
-		this.availableArticles = availableArticles;
-		this.availableFoils = availableFoils;
-		this.priceGuide = priceGuide;
-	}
-
 	public Product(int productId, JsonObject jProductSearch) {
 		this.productId = productId;
 		this.englishName = JsonHelper.parseString(jProductSearch, "enName");
@@ -45,7 +35,17 @@ public class Product {
 			this.priceGuide = null;
 		}
 	}
-	
+
+	public Product(int productId, String englishName, String expansion, int availableArticles, int availableFoils,
+			PriceGuide priceGuide) {
+		this.productId = productId;
+		this.englishName = englishName;
+		this.expansion = expansion;
+		this.availableArticles = availableArticles;
+		this.availableFoils = availableFoils;
+		this.priceGuide = priceGuide;
+	}
+
 	public Product(JsonObject jProductSearch) {
 		this.productId = JsonHelper.parseInteger(jProductSearch, "idProduct");
 		this.englishName = JsonHelper.parseString(jProductSearch, "enName");

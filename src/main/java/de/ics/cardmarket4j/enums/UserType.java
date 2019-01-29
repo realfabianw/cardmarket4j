@@ -1,7 +1,7 @@
 package de.ics.cardmarket4j.enums;
 
 public enum UserType {
-	PRIVATE(0, "private user"), COMMERCIAL(1, "commercial user"), POWERSELLER(2, "powerseller");
+	PRIVATE(0, "private"), COMMERCIAL(1, "commercial"), POWERSELLER(2, "powerseller");
 
 	public static UserType parseId(int id) {
 		for (UserType e : UserType.values()) {

@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.ics.cardmarket4j.CardMarketService;
+import de.ics.cardmarket4j.enums.Language;
+import de.ics.cardmarket4j.structs.ArticleFilter;
 
 public class Main {
 	private static Logger LOGGER = LoggerFactory.getLogger("Main");
@@ -12,7 +14,9 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		CardMarketService market = new CardMarketService("Cr0yANU52r7iDhlQ", "EWIRcYdR7pnHWdLys8uJQr3aPgLZFXgx",
 				"SnR9w5ZMT0kQwyfT2ahjqNZr7I0vKJcl", "bajBeBYsv5B4O1UA1MjGOG3AaZiAJpWM");
-		market.getStockService().getStock();
+		ArticleFilter filter = new ArticleFilter();
+		filter.setLanguage(Language.GERMAN);
+		market.getMarketplaceService().getArticles(20778, filter);
 //		market.getMarketplaceService().getProduct("Bone Saw");
 //		market.getMarketplaceService().getProductDetailed(20778);
 

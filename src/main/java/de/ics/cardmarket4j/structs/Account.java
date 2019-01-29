@@ -72,7 +72,7 @@ public class Account {
 		this.onVacation = j.get("onVacation").getAsBoolean();
 		this.lastName = j.get("name").getAsJsonObject().get("lastName").getAsString();
 		this.firstName = j.get("name").getAsJsonObject().get("firstName").getAsString();
-		this.address = new Address(j);
+		this.address = new Address(j.get("homeAddress").getAsJsonObject());
 		this.email = j.get("email").getAsString();
 		this.phoneNumber = j.get("phoneNumber").getAsString();
 		try {
@@ -80,9 +80,10 @@ public class Account {
 		} catch (UnsupportedOperationException e) {
 			this.vat = "";
 		}
-		String registerDate = j.get("registerDate").getAsString();
-		registerDate = registerDate.split("\\+01")[0] + "+01:" + registerDate.split("\\+01")[1];
-		this.registerDate = LocalDateTime.parse(registerDate, DateTimeFormatter.ISO_DATE_TIME);
+		String registrationDate = j.get("registerDate").getAsString();
+		registrationDate = registrationDate.split("\\+0[0-9]")[0] + "+0" + registrationDate.split("\\+0")[1].charAt(0)
+				+ ":" + registrationDate.split("\\+0[0-9]")[1];
+		this.registerDate = LocalDateTime.parse(registrationDate, DateTimeFormatter.ISO_DATE_TIME);
 		this.isActivated = j.get("isActivated").getAsBoolean();
 		this.totalBalance = j.get("moneyDetails").getAsJsonObject().get("totalBalance").getAsBigDecimal();
 		this.moneyBalance = j.get("moneyDetails").getAsJsonObject().get("moneyBalance").getAsBigDecimal();

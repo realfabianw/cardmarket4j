@@ -39,7 +39,7 @@ public enum Reputation {
 		return displayValue;
 	}
 
-	private int getId() {
+	public int getId() {
 		return id;
 	}
 

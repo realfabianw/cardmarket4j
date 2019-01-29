@@ -27,41 +27,13 @@ public class Article {
 	private boolean playset;
 
 	// Additional Data
+	private User seller;
 	private boolean inShoppingCart;
 	private LocalDateTime lastEdited;
 
-	/**
-	 * Constructor to add an article to the stock.
-	 * 
-	 * @param productId
-	 * @param language
-	 * @param quantity
-	 * @param price
-	 * @param condition
-	 * @param comment
-	 * @param foil
-	 * @param signed
-	 * @param altered
-	 * @param playset
-	 */
-	public Article(int productId, Language language, int quantity, BigDecimal price, Condition condition,
-			String comment, boolean foil, boolean signed, boolean altered, boolean playset) {
-		this.articleId = 0;
-		this.product = new Product(productId);
-		this.language = language;
-		this.quantity = quantity;
-		this.price = price;
-		this.condition = condition;
-		this.comment = comment;
-		this.foil = foil;
-		this.signed = signed;
-		this.altered = altered;
-		this.playset = playset;
-	}
-
 	public Article(JsonObject jObject) {
-		System.out.println(jObject);
 		this.articleId = JsonHelper.parseInteger(jObject, "idArticle");
+
 		try {
 			this.language = Language
 					.parseId(JsonHelper.parseInteger(jObject.get("language").getAsJsonObject(), "idLanguage"));
@@ -74,9 +46,17 @@ public class Article {
 		this.quantity = JsonHelper.parseInteger(jObject, "count");
 		this.inShoppingCart = JsonHelper.parseBoolean(jObject, "inShoppingCart");
 
-		this.product = new Product(JsonHelper.parseInteger(jObject, "idProduct"),
-				jObject.get("product").getAsJsonObject());
+		try {
+			this.product = new Product(JsonHelper.parseInteger(jObject, "idProduct"),
+					jObject.get("product").getAsJsonObject());
+		} catch (NullPointerException e) {
+			this.product = new Product(JsonHelper.parseInteger(jObject, "idProduct"));
+		}
+		try {
+			this.seller = new User(jObject.get("seller").getAsJsonObject());
+		} catch (NullPointerException e) {
 
+		}
 		this.lastEdited = JsonHelper.parseLocalDateTime(jObject, "lastEdited", DateTimeFormatter.ISO_DATE_TIME);
 		try {
 			this.condition = Condition.parseId(JsonHelper.parseString(jObject, "condition"));
@@ -119,6 +99,10 @@ public class Article {
 
 	public int getQuantity() {
 		return quantity;
+	}
+
+	public User getSeller() {
+		return seller;
 	}
 
 	public boolean isAltered() {
@@ -185,6 +169,10 @@ public class Article {
 		this.quantity = quantity;
 	}
 
+	public void setSeller(User seller) {
+		this.seller = seller;
+	}
+
 	public void setSigned(boolean signed) {
 		this.signed = signed;
 	}
@@ -196,7 +184,8 @@ public class Article {
 				+ (price != null ? "price=" + price + ", " : "")
 				+ (condition != null ? "condition=" + condition + ", " : "")
 				+ (comment != null ? "comment=" + comment + ", " : "") + "foil=" + foil + ", signed=" + signed
-				+ ", altered=" + altered + ", playset=" + playset + ", inShoppingCart=" + inShoppingCart + ", "
+				+ ", altered=" + altered + ", playset=" + playset + ", "
+				+ (seller != null ? "seller=" + seller + ", " : "") + "inShoppingCart=" + inShoppingCart + ", "
 				+ (lastEdited != null ? "lastEdited=" + lastEdited : "") + "]";
 	}
 }
