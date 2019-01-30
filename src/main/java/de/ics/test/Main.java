@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.ics.cardmarket4j.CardMarketService;
+import de.ics.cardmarket4j.enums.OrderState;
+import de.ics.cardmarket4j.enums.OrderType;
 
 public class Main {
 	private static Logger LOGGER = LoggerFactory.getLogger("Main");
@@ -17,7 +19,7 @@ public class Main {
 //			LOGGER.info(c.toString());
 //		}
 
-		LOGGER.info(market.getAccountService().getMessages(589595).toString());
+		market.getOrderService().getOrders(OrderType.SALE, OrderState.BOUGHT);
 
 //		market.getMarketplaceService().getProduct("Bone Saw");
 //		market.getMarketplaceService().getProductDetailed(20778);

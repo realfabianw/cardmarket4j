@@ -23,6 +23,7 @@ import de.ics.cardmarket4j.enums.HTTPMethod;
 import de.ics.cardmarket4j.service.AccountService;
 import de.ics.cardmarket4j.service.AuthenticationService;
 import de.ics.cardmarket4j.service.MarketplaceService;
+import de.ics.cardmarket4j.service.OrderService;
 import de.ics.cardmarket4j.service.StockService;
 
 public class CardMarketService {
@@ -33,12 +34,14 @@ public class CardMarketService {
 	private final AccountService accountService;
 	private final MarketplaceService marketplaceService;
 	private final StockService stockService;
+	private final OrderService orderService;
 
 	public CardMarketService(String appToken, String appSecret, String accessToken, String accessTokenSecret) {
 		this.authenticationService = new AuthenticationService(appToken, appSecret, accessToken, accessTokenSecret);
 		this.accountService = new AccountService(this);
 		this.marketplaceService = new MarketplaceService(this);
 		this.stockService = new StockService(this);
+		this.orderService = new OrderService(this);
 	}
 
 	public AccountService getAccountService() {
@@ -47,6 +50,10 @@ public class CardMarketService {
 
 	public MarketplaceService getMarketplaceService() {
 		return marketplaceService;
+	}
+
+	public OrderService getOrderService() {
+		return orderService;
 	}
 
 	public StockService getStockService() {
