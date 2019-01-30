@@ -89,7 +89,7 @@ public class JsonHelper {
 		try {
 			return jObject.get(fieldName).getAsString();
 		} catch (Exception e) {
-			return "";
+			return null;
 		}
 	}
 

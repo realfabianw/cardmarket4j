@@ -67,7 +67,9 @@ public class User {
 	public User(JsonObject jObject) {
 		this.userId = JsonHelper.parseInteger(jObject, "idUser");
 		this.userName = JsonHelper.parseString(jObject, "username");
-		String registrationDate = JsonHelper.parseString(jObject, "registrationDate");
+		String registrationDate = JsonHelper.parseString(jObject, "registrationDate") == null
+				? JsonHelper.parseString(jObject, "registerDate")
+				: JsonHelper.parseString(jObject, "registrationDate");
 		registrationDate = registrationDate.split("\\+0[0-9]")[0] + "+0" + registrationDate.split("\\+0")[1].charAt(0)
 				+ ":" + registrationDate.split("\\+0[0-9]")[1];
 		this.registrationDate = LocalDateTime.parse(registrationDate, DateTimeFormatter.ISO_DATE_TIME);
@@ -76,7 +78,11 @@ public class User {
 		this.companyName = JsonHelper.parseString(jObject.get("name").getAsJsonObject(), "company");
 		this.firstName = JsonHelper.parseString(jObject.get("name").getAsJsonObject(), "firstName");
 		this.lastName = JsonHelper.parseString(jObject.get("name").getAsJsonObject(), "lastName");
-		this.address = new Address(jObject.get("address").getAsJsonObject());
+		try {
+			this.address = new Address(jObject.get("address").getAsJsonObject());
+		} catch (NullPointerException e) {
+			this.address = new Address(jObject.get("homeAddress").getAsJsonObject());
+		}
 		this.phoneNumber = JsonHelper.parseString(jObject, "phone");
 		this.emailAddress = JsonHelper.parseString(jObject, "email");
 		this.vat = JsonHelper.parseString(jObject, "vat");
