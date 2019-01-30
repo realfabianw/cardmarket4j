@@ -51,7 +51,7 @@ public class MarketplaceService extends AbstractService {
 			LOGGER.debug("JsonElement: {}", jEle);
 			listArticle.add(new Article(jEle.getAsJsonObject()));
 		}
-		return null;
+		return listArticle;
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class MarketplaceService extends AbstractService {
 			LOGGER.debug("JsonElement: {}", jEle);
 			listArticle.add(new Article(jEle.getAsJsonObject()));
 		}
-		return null;
+		return listArticle;
 	}
 
 	/**

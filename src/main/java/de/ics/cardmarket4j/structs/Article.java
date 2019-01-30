@@ -188,4 +188,32 @@ public class Article {
 				+ (seller != null ? "seller=" + seller + ", " : "") + "inShoppingCart=" + inShoppingCart + ", "
 				+ (lastEdited != null ? "lastEdited=" + lastEdited : "") + "]";
 	}
+
+	/**
+	 * This constructor is needed, when you want to add an article to the cardmarket-store.
+	 * @param productId
+	 * @param language
+	 * @param quantity
+	 * @param price
+	 * @param condition
+	 * @param comment
+	 * @param foil
+	 * @param signed
+	 * @param altered
+	 * @param playset
+	 */
+	public Article(int productId, Language language, int quantity, BigDecimal price,
+			Condition condition, String comment, boolean foil, boolean signed, boolean altered, boolean playset) {
+		this.articleId = 0;
+		this.product = new Product(productId);
+		this.language = language;
+		this.quantity = quantity;
+		this.price = price;
+		this.condition = condition;
+		this.comment = comment;
+		this.foil = foil;
+		this.signed = signed;
+		this.altered = altered;
+		this.playset = playset;
+	}
 }
