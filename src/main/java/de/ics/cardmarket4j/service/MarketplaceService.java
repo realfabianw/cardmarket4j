@@ -48,7 +48,6 @@ public class MarketplaceService extends AbstractService {
 		List<Article> listArticle = new ArrayList<>();
 		Pair<Integer, JsonElement> response = request("articles/" + productId, HTTPMethod.GET);
 		for (JsonElement jEle : response.getValue1().getAsJsonObject().get("article").getAsJsonArray()) {
-			LOGGER.debug("JsonElement: {}", jEle);
 			listArticle.add(new Article(jEle.getAsJsonObject()));
 		}
 		return listArticle;
@@ -67,7 +66,6 @@ public class MarketplaceService extends AbstractService {
 		List<Article> listArticle = new ArrayList<>();
 		Pair<Integer, JsonElement> response = request("articles/" + productId + filter.getQuery(), HTTPMethod.GET);
 		for (JsonElement jEle : response.getValue1().getAsJsonObject().get("article").getAsJsonArray()) {
-			LOGGER.debug("JsonElement: {}", jEle);
 			listArticle.add(new Article(jEle.getAsJsonObject()));
 		}
 		return listArticle;
