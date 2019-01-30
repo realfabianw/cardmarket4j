@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.ics.cardmarket4j</groupId>
 	<artifactId>cardmarket4j</artifactId>
-	<version>0.3.0</version>
+	<version>0.3.1</version>
 	<name>cardmarket4j</name>
 
 	<properties>
