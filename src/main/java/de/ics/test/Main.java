@@ -1,7 +1,6 @@
 package de.ics.test;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -10,8 +9,6 @@ import org.slf4j.LoggerFactory;
 import de.ics.cardmarket4j.CardMarketService;
 import de.ics.cardmarket4j.enums.Condition;
 import de.ics.cardmarket4j.enums.Language;
-import de.ics.cardmarket4j.enums.OrderState;
-import de.ics.cardmarket4j.enums.OrderType;
 import de.ics.cardmarket4j.structs.Article;
 import de.ics.cardmarket4j.structs.ArticleFilter;
 

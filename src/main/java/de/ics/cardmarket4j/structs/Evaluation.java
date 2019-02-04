@@ -22,16 +22,13 @@ public class Evaluation {
 	private EvaluationGrade totalGrade;
 	private EvaluationGrade itemGrade;
 	private EvaluationGrade packagingGrade;
-	private EvaluationGrade shippingGrade;
 	private String comment;
 	private Set<Complaint> setComplaints;
 
-	public Evaluation(EvaluationGrade totalGrade, EvaluationGrade itemGrade, EvaluationGrade packagingGrade,
-			EvaluationGrade shippingGrade, String comment, Set<Complaint> setComplaints) {
+	public Evaluation(EvaluationGrade totalGrade, EvaluationGrade itemGrade, EvaluationGrade packagingGrade, String comment, Set<Complaint> setComplaints) {
 		this.totalGrade = totalGrade;
 		this.itemGrade = itemGrade;
 		this.packagingGrade = packagingGrade;
-		this.shippingGrade = shippingGrade;
 		this.comment = comment;
 		this.setComplaints = setComplaints;
 	}
@@ -40,7 +37,6 @@ public class Evaluation {
 		this.totalGrade = EvaluationGrade.parseId(JsonHelper.parseInteger(jObject, "evaluationGrade"));
 		this.itemGrade = EvaluationGrade.parseId(JsonHelper.parseInteger(jObject, "itemDescription"));
 		this.packagingGrade = EvaluationGrade.parseId(JsonHelper.parseInteger(jObject, "packaging"));
-		this.shippingGrade = EvaluationGrade.parseId(JsonHelper.parseInteger(jObject, "speed"));
 		this.comment = JsonHelper.parseString(jObject, "comment");
 		this.setComplaints = new HashSet<>();
 		for (JsonElement jEle : jObject.get("complaint").getAsJsonArray()) {
@@ -71,8 +67,6 @@ public class Evaluation {
 				return false;
 		} else if (!setComplaints.equals(other.setComplaints))
 			return false;
-		if (shippingGrade != other.shippingGrade)
-			return false;
 		if (totalGrade != other.totalGrade)
 			return false;
 		return true;
@@ -94,10 +88,6 @@ public class Evaluation {
 		return setComplaints;
 	}
 
-	public EvaluationGrade getShippingGrade() {
-		return shippingGrade;
-	}
-
 	public EvaluationGrade getTotalGrade() {
 		return totalGrade;
 	}
@@ -110,7 +100,6 @@ public class Evaluation {
 		result = prime * result + ((itemGrade == null) ? 0 : itemGrade.hashCode());
 		result = prime * result + ((packagingGrade == null) ? 0 : packagingGrade.hashCode());
 		result = prime * result + ((setComplaints == null) ? 0 : setComplaints.hashCode());
-		result = prime * result + ((shippingGrade == null) ? 0 : shippingGrade.hashCode());
 		result = prime * result + ((totalGrade == null) ? 0 : totalGrade.hashCode());
 		return result;
 	}
@@ -131,10 +120,6 @@ public class Evaluation {
 		this.setComplaints = setComplaints;
 	}
 
-	public void setShippingGrade(EvaluationGrade shippingGrade) {
-		this.shippingGrade = shippingGrade;
-	}
-
 	public void setTotalGrade(EvaluationGrade totalGrade) {
 		this.totalGrade = totalGrade;
 	}
@@ -144,7 +129,6 @@ public class Evaluation {
 		return "Evaluation [" + (totalGrade != null ? "totalGrade=" + totalGrade + ", " : "")
 				+ (itemGrade != null ? "itemGrade=" + itemGrade + ", " : "")
 				+ (packagingGrade != null ? "packagingGrade=" + packagingGrade + ", " : "")
-				+ (shippingGrade != null ? "shippingGrade=" + shippingGrade + ", " : "")
 				+ (comment != null ? "comment=" + comment + ", " : "")
 				+ (setComplaints != null ? "setComplaints=" + setComplaints : "") + "]";
 	}

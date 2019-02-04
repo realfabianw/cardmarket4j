@@ -31,6 +31,62 @@ public class Article {
 	private boolean inShoppingCart;
 	private LocalDateTime lastEdited;
 
+	/**
+	 * This constructor is needed, when you want to add an article to the cardmarket-store.
+	 * @param productId
+	 * @param language
+	 * @param quantity
+	 * @param price
+	 * @param condition
+	 * @param comment
+	 * @param foil
+	 * @param signed
+	 * @param altered
+	 * @param playset
+	 */
+	public Article(int articleId, int productId, Language language, int quantity, BigDecimal price,
+			Condition condition, String comment, boolean foil, boolean signed, boolean altered, boolean playset) {
+		this.articleId = articleId;
+		this.product = new Product(productId);
+		this.language = language;
+		this.quantity = quantity;
+		this.price = price;
+		this.condition = condition;
+		this.comment = comment;
+		this.foil = foil;
+		this.signed = signed;
+		this.altered = altered;
+		this.playset = playset;
+	}
+
+	/**
+	 * This constructor is needed, when you want to add an article to the cardmarket-store.
+	 * @param productId
+	 * @param language
+	 * @param quantity
+	 * @param price
+	 * @param condition
+	 * @param comment
+	 * @param foil
+	 * @param signed
+	 * @param altered
+	 * @param playset
+	 */
+	public Article(int productId, Language language, int quantity, BigDecimal price,
+			Condition condition, String comment, boolean foil, boolean signed, boolean altered, boolean playset) {
+		this.articleId = 0;
+		this.product = new Product(productId);
+		this.language = language;
+		this.quantity = quantity;
+		this.price = price;
+		this.condition = condition;
+		this.comment = comment;
+		this.foil = foil;
+		this.signed = signed;
+		this.altered = altered;
+		this.playset = playset;
+	}
+
 	public Article(JsonObject jObject) {
 		this.articleId = JsonHelper.parseInteger(jObject, "idArticle");
 
@@ -176,7 +232,7 @@ public class Article {
 	public void setSigned(boolean signed) {
 		this.signed = signed;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Article [articleId=" + articleId + ", " + (product != null ? "product=" + product + ", " : "")
@@ -187,61 +243,5 @@ public class Article {
 				+ ", altered=" + altered + ", playset=" + playset + ", "
 				+ (seller != null ? "seller=" + seller + ", " : "") + "inShoppingCart=" + inShoppingCart + ", "
 				+ (lastEdited != null ? "lastEdited=" + lastEdited : "") + "]";
-	}
-
-	/**
-	 * This constructor is needed, when you want to add an article to the cardmarket-store.
-	 * @param productId
-	 * @param language
-	 * @param quantity
-	 * @param price
-	 * @param condition
-	 * @param comment
-	 * @param foil
-	 * @param signed
-	 * @param altered
-	 * @param playset
-	 */
-	public Article(int productId, Language language, int quantity, BigDecimal price,
-			Condition condition, String comment, boolean foil, boolean signed, boolean altered, boolean playset) {
-		this.articleId = 0;
-		this.product = new Product(productId);
-		this.language = language;
-		this.quantity = quantity;
-		this.price = price;
-		this.condition = condition;
-		this.comment = comment;
-		this.foil = foil;
-		this.signed = signed;
-		this.altered = altered;
-		this.playset = playset;
-	}
-	
-	/**
-	 * This constructor is needed, when you want to add an article to the cardmarket-store.
-	 * @param productId
-	 * @param language
-	 * @param quantity
-	 * @param price
-	 * @param condition
-	 * @param comment
-	 * @param foil
-	 * @param signed
-	 * @param altered
-	 * @param playset
-	 */
-	public Article(int articleId, int productId, Language language, int quantity, BigDecimal price,
-			Condition condition, String comment, boolean foil, boolean signed, boolean altered, boolean playset) {
-		this.articleId = articleId;
-		this.product = new Product(productId);
-		this.language = language;
-		this.quantity = quantity;
-		this.price = price;
-		this.condition = condition;
-		this.comment = comment;
-		this.foil = foil;
-		this.signed = signed;
-		this.altered = altered;
-		this.playset = playset;
 	}
 }
