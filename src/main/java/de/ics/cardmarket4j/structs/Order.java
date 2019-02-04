@@ -83,9 +83,7 @@ public class Order {
 		this.orderState = OrderState
 				.parseValue(JsonHelper.parseString(jObject.get("state").getAsJsonObject(), "state"));
 		try {
-			String date = JsonHelper.parseString(jObject.get("state").getAsJsonObject(), "dateBought") == null
-					? JsonHelper.parseString(jObject, "registerDate")
-					: JsonHelper.parseString(jObject, "registrationDate");
+			String date = JsonHelper.parseString(jObject.get("state").getAsJsonObject(), "dateBought");
 			date = date.split("\\+0[0-9]")[0] + "+0" + date.split("\\+0")[1].charAt(0) + ":"
 					+ date.split("\\+0[0-9]")[1];
 			this.dateBought = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
@@ -93,9 +91,7 @@ public class Order {
 
 		}
 		try {
-			String date = JsonHelper.parseString(jObject.get("state").getAsJsonObject(), "datePaid") == null
-					? JsonHelper.parseString(jObject, "registerDate")
-					: JsonHelper.parseString(jObject, "registrationDate");
+			String date = JsonHelper.parseString(jObject.get("state").getAsJsonObject(), "datePaid");
 			date = date.split("\\+0[0-9]")[0] + "+0" + date.split("\\+0")[1].charAt(0) + ":"
 					+ date.split("\\+0[0-9]")[1];
 			this.datePaid = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
@@ -103,9 +99,7 @@ public class Order {
 
 		}
 		try {
-			String date = JsonHelper.parseString(jObject.get("state").getAsJsonObject(), "dateSent") == null
-					? JsonHelper.parseString(jObject, "registerDate")
-					: JsonHelper.parseString(jObject, "registrationDate");
+			String date = JsonHelper.parseString(jObject.get("state").getAsJsonObject(), "dateSent");
 			date = date.split("\\+0[0-9]")[0] + "+0" + date.split("\\+0")[1].charAt(0) + ":"
 					+ date.split("\\+0[0-9]")[1];
 			this.dateSent = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
@@ -113,9 +107,7 @@ public class Order {
 
 		}
 		try {
-			String date = JsonHelper.parseString(jObject.get("state").getAsJsonObject(), "dateRecieved") == null
-					? JsonHelper.parseString(jObject, "registerDate")
-					: JsonHelper.parseString(jObject, "registrationDate");
+			String date = JsonHelper.parseString(jObject.get("state").getAsJsonObject(), "dateRecieved");
 			date = date.split("\\+0[0-9]")[0] + "+0" + date.split("\\+0")[1].charAt(0) + ":"
 					+ date.split("\\+0[0-9]")[1];
 			this.dateRecieved = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
@@ -123,9 +115,7 @@ public class Order {
 
 		}
 		try {
-			String date = JsonHelper.parseString(jObject.get("state").getAsJsonObject(), "dateCanceled") == null
-					? JsonHelper.parseString(jObject, "registerDate")
-					: JsonHelper.parseString(jObject, "registrationDate");
+			String date = JsonHelper.parseString(jObject.get("state").getAsJsonObject(), "dateCanceled");
 			date = date.split("\\+0[0-9]")[0] + "+0" + date.split("\\+0")[1].charAt(0) + ":"
 					+ date.split("\\+0[0-9]")[1];
 			this.dateCanceled = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
