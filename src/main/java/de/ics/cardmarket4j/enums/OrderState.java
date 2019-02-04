@@ -7,7 +7,7 @@ package de.ics.cardmarket4j.enums;
  */
 public enum OrderState {
 	BOUGHT(1, "bought"), PAID(2, "paid"), SENT(4, "sent"), RECIEVED(8, "recieved"), LOST(32, "lost"),
-	CANCELED(128, "canceled");
+	CANCELLED(128, "cancelled");
 
 	public static OrderState parseId(int id) {
 		for (OrderState e : OrderState.values()) {
