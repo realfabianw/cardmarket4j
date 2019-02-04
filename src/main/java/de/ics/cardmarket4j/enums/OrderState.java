@@ -24,6 +24,9 @@ public enum OrderState {
 				return e;
 			}
 		}
+		if (value.equals("evaluated")) {
+			return OrderState.RECIEVED;
+		}
 		throw new IllegalArgumentException("Couldn't find an enum matching this value: " + value);
 	}
 
