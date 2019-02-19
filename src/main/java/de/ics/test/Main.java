@@ -27,10 +27,10 @@ public class Main {
 		filter.setMinCondition(Condition.NEAR_MINT);
 		filter.setSigned(false);
 		List<Article> listArticle = market.getMarketplaceService().getArticles(368128, filter);
-		
+
 		for (Article article : listArticle) {
 			LOGGER.info(article.toString());
 		}
-		
+
 	}
 }

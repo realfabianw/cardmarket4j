@@ -32,7 +32,9 @@ public class Article {
 	private LocalDateTime lastEdited;
 
 	/**
-	 * This constructor is needed, when you want to add an article to the cardmarket-store.
+	 * This constructor is needed, when you want to add an article to the
+	 * cardmarket-store.
+	 * 
 	 * @param productId
 	 * @param language
 	 * @param quantity
@@ -44,8 +46,8 @@ public class Article {
 	 * @param altered
 	 * @param playset
 	 */
-	public Article(int articleId, int productId, Language language, int quantity, BigDecimal price,
-			Condition condition, String comment, boolean foil, boolean signed, boolean altered, boolean playset) {
+	public Article(int articleId, int productId, Language language, int quantity, BigDecimal price, Condition condition,
+			String comment, boolean foil, boolean signed, boolean altered, boolean playset) {
 		this.articleId = articleId;
 		this.product = new Product(productId);
 		this.language = language;
@@ -60,7 +62,9 @@ public class Article {
 	}
 
 	/**
-	 * This constructor is needed, when you want to add an article to the cardmarket-store.
+	 * This constructor is needed, when you want to add an article to the
+	 * cardmarket-store.
+	 * 
 	 * @param productId
 	 * @param language
 	 * @param quantity
@@ -72,8 +76,8 @@ public class Article {
 	 * @param altered
 	 * @param playset
 	 */
-	public Article(int productId, Language language, int quantity, BigDecimal price,
-			Condition condition, String comment, boolean foil, boolean signed, boolean altered, boolean playset) {
+	public Article(int productId, Language language, int quantity, BigDecimal price, Condition condition,
+			String comment, boolean foil, boolean signed, boolean altered, boolean playset) {
 		this.articleId = 0;
 		this.product = new Product(productId);
 		this.language = language;
@@ -232,7 +236,7 @@ public class Article {
 	public void setSigned(boolean signed) {
 		this.signed = signed;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Article [articleId=" + articleId + ", " + (product != null ? "product=" + product + ", " : "")

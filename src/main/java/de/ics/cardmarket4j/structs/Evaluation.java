@@ -25,7 +25,8 @@ public class Evaluation {
 	private String comment;
 	private Set<Complaint> setComplaints;
 
-	public Evaluation(EvaluationGrade totalGrade, EvaluationGrade itemGrade, EvaluationGrade packagingGrade, String comment, Set<Complaint> setComplaints) {
+	public Evaluation(EvaluationGrade totalGrade, EvaluationGrade itemGrade, EvaluationGrade packagingGrade,
+			String comment, Set<Complaint> setComplaints) {
 		this.totalGrade = totalGrade;
 		this.itemGrade = itemGrade;
 		this.packagingGrade = packagingGrade;
