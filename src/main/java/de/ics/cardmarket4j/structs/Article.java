@@ -18,6 +18,7 @@ import de.ics.cardmarket4j.enums.Condition;
  *
  */
 public class Article {
+	private String jsonString;
 	private int articleId;
 	private int productId;
 	private LanguageCode language;
@@ -35,28 +36,8 @@ public class Article {
 	private boolean playset;
 	private boolean firstEdition;
 
-	public Article(int articleId, int productId, LanguageCode language, String comment, BigDecimal price, int quantity,
-			boolean inShoppingCart, Product product, User seller, LocalDateTime lastEdited, Condition condition,
-			boolean foil, boolean signed, boolean altered, boolean playset, boolean firstEdition) {
-		this.articleId = articleId;
-		this.productId = productId;
-		this.language = language;
-		this.comment = comment;
-		this.price = price;
-		this.quantity = quantity;
-		this.inShoppingCart = inShoppingCart;
-		this.product = product;
-		this.seller = seller;
-		this.lastEdited = lastEdited;
-		this.condition = condition;
-		this.foil = foil;
-		this.signed = signed;
-		this.altered = altered;
-		this.playset = playset;
-		this.firstEdition = firstEdition;
-	}
-
 	public Article(JsonObject jObject) {
+		this.jsonString = jObject.toString();
 		this.articleId = JsonIO.parseInteger(jObject, "idArticle");
 		this.productId = JsonIO.parseInteger(jObject, "idProduct");
 		this.language = CardMarketUtils
@@ -74,6 +55,29 @@ public class Article {
 		this.altered = JsonIO.parseBoolean(jObject, "isAltered");
 		this.playset = JsonIO.parseBoolean(jObject, "isPlayset");
 		this.firstEdition = JsonIO.parseBoolean(jObject, "isFirstEd");
+	}
+
+	public Article(String jsonString, int articleId, int productId, LanguageCode language, String comment,
+			BigDecimal price, int quantity, boolean inShoppingCart, Product product, User seller,
+			LocalDateTime lastEdited, Condition condition, boolean foil, boolean signed, boolean altered,
+			boolean playset, boolean firstEdition) {
+		this.jsonString = jsonString;
+		this.articleId = articleId;
+		this.productId = productId;
+		this.language = language;
+		this.comment = comment;
+		this.price = price;
+		this.quantity = quantity;
+		this.inShoppingCart = inShoppingCart;
+		this.product = product;
+		this.seller = seller;
+		this.lastEdited = lastEdited;
+		this.condition = condition;
+		this.foil = foil;
+		this.signed = signed;
+		this.altered = altered;
+		this.playset = playset;
+		this.firstEdition = firstEdition;
 	}
 
 	@Override
@@ -101,6 +105,11 @@ public class Article {
 		if (foil != other.foil)
 			return false;
 		if (inShoppingCart != other.inShoppingCart)
+			return false;
+		if (jsonString == null) {
+			if (other.jsonString != null)
+				return false;
+		} else if (!jsonString.equals(other.jsonString))
 			return false;
 		if (language != other.language)
 			return false;
@@ -147,6 +156,10 @@ public class Article {
 		return condition;
 	}
 
+	public String getJsonString() {
+		return jsonString;
+	}
+
 	public LanguageCode getLanguage() {
 		return language;
 	}
@@ -186,6 +199,7 @@ public class Article {
 		result = prime * result + (firstEdition ? 1231 : 1237);
 		result = prime * result + (foil ? 1231 : 1237);
 		result = prime * result + (inShoppingCart ? 1231 : 1237);
+		result = prime * result + ((jsonString == null) ? 0 : jsonString.hashCode());
 		result = prime * result + ((language == null) ? 0 : language.hashCode());
 		result = prime * result + ((lastEdited == null) ? 0 : lastEdited.hashCode());
 		result = prime * result + (playset ? 1231 : 1237);
@@ -250,6 +264,10 @@ public class Article {
 		this.inShoppingCart = inShoppingCart;
 	}
 
+	public void setJsonString(String jsonString) {
+		this.jsonString = jsonString;
+	}
+
 	public void setLanguage(LanguageCode language) {
 		this.language = language;
 	}
@@ -284,18 +302,5 @@ public class Article {
 
 	public void setSigned(boolean signed) {
 		this.signed = signed;
-	}
-
-	@Override
-	public String toString() {
-		return "Article [articleId=" + articleId + ", productId=" + productId + ", "
-				+ (language != null ? "language=" + language + ", " : "")
-				+ (comment != null ? "comment=" + comment + ", " : "") + (price != null ? "price=" + price + ", " : "")
-				+ "quantity=" + quantity + ", inShoppingCart=" + inShoppingCart + ", "
-				+ (product != null ? "product=" + product + ", " : "")
-				+ (seller != null ? "seller=" + seller + ", " : "")
-				+ (lastEdited != null ? "lastEdited=" + lastEdited + ", " : "")
-				+ (condition != null ? "condition=" + condition + ", " : "") + "foil=" + foil + ", signed=" + signed
-				+ ", altered=" + altered + ", playset=" + playset + ", firstEdition=" + firstEdition + "]";
 	}
 }
