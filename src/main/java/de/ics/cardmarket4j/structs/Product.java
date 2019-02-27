@@ -45,25 +45,57 @@ public class Product {
 		this.totalReprints = JsonIO.parseInteger(jObject, "countReprints");
 		this.name = JsonIO.parseString(jObject, "enName");
 		this.mapLocalizedNames = new HashMap<>();
-		for (JsonElement jElement : jObject.get("localization").getAsJsonArray()) {
-			JsonObject jLoc = jElement.getAsJsonObject();
-			mapLocalizedNames.put(CardMarketUtils.fromLanguageId(JsonIO.parseInteger(jLoc, "idLanguage")),
-					JsonIO.parseString(jLoc, "name"));
+		try {
+			for (JsonElement jElement : jObject.get("localization").getAsJsonArray()) {
+				JsonObject jLoc = jElement.getAsJsonObject();
+				mapLocalizedNames.put(CardMarketUtils.fromLanguageId(JsonIO.parseInteger(jLoc, "idLanguage")),
+						JsonIO.parseString(jLoc, "name"));
+			}
+		} catch (NullPointerException e) {
+
 		}
-		this.categoryId = JsonIO.parseInteger(jObject.get("category").getAsJsonObject(), "idCategory");
+		try {
+			this.categoryId = JsonIO.parseInteger(jObject.get("category").getAsJsonObject(), "idCategory");
+		} catch (NullPointerException e) {
+
+		}
 		this.categoryName = JsonIO.parseInteger(jObject, "categoryName");
 		this.selfUrl = JsonIO.parseString(jObject, "website");
 		this.imageUrl = JsonIO.parseString(jObject, "image");
-		this.game = Game.parseValue(JsonIO.parseString(jObject, "gameName"));
-		this.expansionCollectionNumber = JsonIO.parseString(jObject, "number");
+		try {
+			this.game = Game.parseValue(JsonIO.parseString(jObject, "gameName"));
+		} catch (IllegalArgumentException e) {
+			// Constructor is called from Article Instance
+			this.game = Game.parseId(JsonIO.parseInteger(jObject, "idGame"));
+		}
+		try {
+			this.expansionCollectionNumber = JsonIO.parseString(jObject, "number");
+		} catch (NullPointerException e) {
+			// Constructor is called from Article Instance
+			this.expansionCollectionNumber = JsonIO.parseString(jObject, "nr");
+		}
 		this.rarity = JsonIO.parseString(jObject, "rarity");
-		this.expansionName = JsonIO.parseString(jObject, "expansionName");
-		this.expansion = new Expansion(jObject.get("expansion").getAsJsonObject());
-		this.priceGuide = new PriceGuide(jObject.get("priceGuide").getAsJsonObject());
+		this.expansionName = (JsonIO.parseString(jObject, "expansionName") != null
+				? JsonIO.parseString(jObject, "expansionName")
+				: JsonIO.parseString(jObject, "expansion"));
+		try {
+			this.expansion = new Expansion(jObject.get("expansion").getAsJsonObject());
+		} catch (IllegalStateException e) {
+			// Constructor is called from Article Instance
+		}
+		try {
+			this.priceGuide = new PriceGuide(jObject.get("priceGuide").getAsJsonObject());
+		} catch (NullPointerException e) {
+			// Constructor is called from Article Instance
+		}
 		this.listReprintProductIds = new ArrayList<>();
-		for (JsonElement jElement : jObject.get("reprint").getAsJsonArray()) {
-			JsonObject jReprint = jElement.getAsJsonObject();
-			listReprintProductIds.add(JsonIO.parseInteger(jReprint, "idProduct"));
+		try {
+			for (JsonElement jElement : jObject.get("reprint").getAsJsonArray()) {
+				JsonObject jReprint = jElement.getAsJsonObject();
+				listReprintProductIds.add(JsonIO.parseInteger(jReprint, "idProduct"));
+			}
+		} catch (NullPointerException e) {
+			// Constructor is called from Article Instance
 		}
 	}
 

@@ -47,7 +47,11 @@ public class Article {
 		this.quantity = JsonIO.parseInteger(jObject, "count");
 		this.inShoppingCart = JsonIO.parseBoolean(jObject, "inShoppingCart");
 		this.product = new Product(jObject.get("product").getAsJsonObject());
-		this.seller = new User(jObject.get("seller").getAsJsonObject());
+		try {
+			this.seller = new User(jObject.get("seller").getAsJsonObject());
+		} catch (NullPointerException e) {
+
+		}
 		this.lastEdited = JsonIO.parseLocalDateTime(jObject, "lastEdited", DateTimeFormatter.ISO_DATE_TIME);
 		this.condition = Condition.parseId(JsonIO.parseString(jObject, "condition"));
 		this.foil = JsonIO.parseBoolean(jObject, "isFoil");
