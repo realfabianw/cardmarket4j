@@ -46,7 +46,7 @@ public class Article {
 		this.price = JsonIO.parseBigDecimal(jObject, "price");
 		this.quantity = JsonIO.parseInteger(jObject, "count");
 		this.inShoppingCart = JsonIO.parseBoolean(jObject, "inShoppingCart");
-		this.product = new Product(jObject.get("product").getAsJsonObject());
+		this.product = new Product(productId, jObject.get("product").getAsJsonObject());
 		try {
 			this.seller = new User(jObject.get("seller").getAsJsonObject());
 		} catch (NullPointerException e) {
