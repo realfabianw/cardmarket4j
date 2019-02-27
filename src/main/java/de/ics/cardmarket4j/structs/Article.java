@@ -5,128 +5,134 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import com.google.gson.JsonObject;
+import com.neovisionaries.i18n.LanguageCode;
 
-import de.ics.cardmarket4j.JsonHelper;
+import de.ics.cardmarket4j.CardMarketUtils;
+import de.ics.cardmarket4j.JsonIO;
 import de.ics.cardmarket4j.enums.Condition;
-import de.ics.cardmarket4j.enums.Language;
 
+/**
+ * 
+ * @see https://www.mkmapi.eu/ws/documentation/API_2.0:Entities:Article
+ * @author QUE
+ *
+ */
 public class Article {
-	// Essential Data for Article Identification
-	private final int articleId;
-
-	// Essential Data to add an Article/Product to the stock
-	private Product product;
-	private Language language;
-	private int quantity;
-	private BigDecimal price;
-	private Condition condition;
+	private int articleId;
+	private int productId;
+	private LanguageCode language;
 	private String comment;
+	private BigDecimal price;
+	private int quantity;
+	private boolean inShoppingCart;
+	private Product product;
+	private User seller;
+	private LocalDateTime lastEdited;
+	private Condition condition;
 	private boolean foil;
 	private boolean signed;
 	private boolean altered;
 	private boolean playset;
+	private boolean firstEdition;
 
-	// Additional Data
-	private User seller;
-	private boolean inShoppingCart;
-	private LocalDateTime lastEdited;
-
-	/**
-	 * This constructor is needed, when you want to add an article to the
-	 * cardmarket-store.
-	 * 
-	 * @param productId
-	 * @param language
-	 * @param quantity
-	 * @param price
-	 * @param condition
-	 * @param comment
-	 * @param foil
-	 * @param signed
-	 * @param altered
-	 * @param playset
-	 */
-	public Article(int articleId, int productId, Language language, int quantity, BigDecimal price, Condition condition,
-			String comment, boolean foil, boolean signed, boolean altered, boolean playset) {
+	public Article(int articleId, int productId, LanguageCode language, String comment, BigDecimal price, int quantity,
+			boolean inShoppingCart, Product product, User seller, LocalDateTime lastEdited, Condition condition,
+			boolean foil, boolean signed, boolean altered, boolean playset, boolean firstEdition) {
 		this.articleId = articleId;
-		this.product = new Product(productId);
+		this.productId = productId;
 		this.language = language;
-		this.quantity = quantity;
-		this.price = price;
-		this.condition = condition;
 		this.comment = comment;
+		this.price = price;
+		this.quantity = quantity;
+		this.inShoppingCart = inShoppingCart;
+		this.product = product;
+		this.seller = seller;
+		this.lastEdited = lastEdited;
+		this.condition = condition;
 		this.foil = foil;
 		this.signed = signed;
 		this.altered = altered;
 		this.playset = playset;
-	}
-
-	/**
-	 * This constructor is needed, when you want to add an article to the
-	 * cardmarket-store.
-	 * 
-	 * @param productId
-	 * @param language
-	 * @param quantity
-	 * @param price
-	 * @param condition
-	 * @param comment
-	 * @param foil
-	 * @param signed
-	 * @param altered
-	 * @param playset
-	 */
-	public Article(int productId, Language language, int quantity, BigDecimal price, Condition condition,
-			String comment, boolean foil, boolean signed, boolean altered, boolean playset) {
-		this.articleId = 0;
-		this.product = new Product(productId);
-		this.language = language;
-		this.quantity = quantity;
-		this.price = price;
-		this.condition = condition;
-		this.comment = comment;
-		this.foil = foil;
-		this.signed = signed;
-		this.altered = altered;
-		this.playset = playset;
+		this.firstEdition = firstEdition;
 	}
 
 	public Article(JsonObject jObject) {
-		this.articleId = JsonHelper.parseInteger(jObject, "idArticle");
+		this.articleId = JsonIO.parseInteger(jObject, "idArticle");
+		this.productId = JsonIO.parseInteger(jObject, "idProduct");
+		this.language = CardMarketUtils
+				.fromLanguageId(JsonIO.parseInteger(jObject.get("language").getAsJsonObject(), "idLanguage"));
+		this.comment = JsonIO.parseString(jObject, "comments");
+		this.price = JsonIO.parseBigDecimal(jObject, "price");
+		this.quantity = JsonIO.parseInteger(jObject, "count");
+		this.inShoppingCart = JsonIO.parseBoolean(jObject, "inShoppingCart");
+		this.product = new Product(jObject.get("product").getAsJsonObject());
+		this.seller = new User(jObject.get("seller").getAsJsonObject());
+		this.lastEdited = JsonIO.parseLocalDateTime(jObject, "lastEdited", DateTimeFormatter.ISO_DATE_TIME);
+		this.condition = Condition.parseId(JsonIO.parseString(jObject, "condition"));
+		this.foil = JsonIO.parseBoolean(jObject, "isFoil");
+		this.signed = JsonIO.parseBoolean(jObject, "isSigned");
+		this.altered = JsonIO.parseBoolean(jObject, "isAltered");
+		this.playset = JsonIO.parseBoolean(jObject, "isPlayset");
+		this.firstEdition = JsonIO.parseBoolean(jObject, "isFirstEd");
+	}
 
-		try {
-			this.language = Language
-					.parseId(JsonHelper.parseInteger(jObject.get("language").getAsJsonObject(), "idLanguage"));
-		} catch (NullPointerException e) {
-			this.language = null;
-		}
-
-		this.comment = JsonHelper.parseString(jObject, "comments");
-		this.price = JsonHelper.parseBigDecimal(jObject, "price");
-		this.quantity = JsonHelper.parseInteger(jObject, "count");
-		this.inShoppingCart = JsonHelper.parseBoolean(jObject, "inShoppingCart");
-
-		try {
-			this.product = new Product(JsonHelper.parseInteger(jObject, "idProduct"),
-					jObject.get("product").getAsJsonObject());
-		} catch (NullPointerException e) {
-			this.product = new Product(JsonHelper.parseInteger(jObject, "idProduct"));
-		}
-		try {
-			this.seller = new User(jObject.get("seller").getAsJsonObject());
-		} catch (NullPointerException e) {
-
-		}
-		this.lastEdited = JsonHelper.parseLocalDateTime(jObject, "lastEdited", DateTimeFormatter.ISO_DATE_TIME);
-		try {
-			this.condition = Condition.parseId(JsonHelper.parseString(jObject, "condition"));
-		} catch (IllegalArgumentException e) {
-			this.condition = null;
-		}
-		this.foil = JsonHelper.parseBoolean(jObject, "isFoil");
-		this.signed = JsonHelper.parseBoolean(jObject, "isSigned");
-		this.playset = JsonHelper.parseBoolean(jObject, "isPlayset");
-		this.altered = JsonHelper.parseBoolean(jObject, "isAltered");
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Article other = (Article) obj;
+		if (altered != other.altered)
+			return false;
+		if (articleId != other.articleId)
+			return false;
+		if (comment == null) {
+			if (other.comment != null)
+				return false;
+		} else if (!comment.equals(other.comment))
+			return false;
+		if (condition != other.condition)
+			return false;
+		if (firstEdition != other.firstEdition)
+			return false;
+		if (foil != other.foil)
+			return false;
+		if (inShoppingCart != other.inShoppingCart)
+			return false;
+		if (language != other.language)
+			return false;
+		if (lastEdited == null) {
+			if (other.lastEdited != null)
+				return false;
+		} else if (!lastEdited.equals(other.lastEdited))
+			return false;
+		if (playset != other.playset)
+			return false;
+		if (price == null) {
+			if (other.price != null)
+				return false;
+		} else if (!price.equals(other.price))
+			return false;
+		if (product == null) {
+			if (other.product != null)
+				return false;
+		} else if (!product.equals(other.product))
+			return false;
+		if (productId != other.productId)
+			return false;
+		if (quantity != other.quantity)
+			return false;
+		if (seller == null) {
+			if (other.seller != null)
+				return false;
+		} else if (!seller.equals(other.seller))
+			return false;
+		if (signed != other.signed)
+			return false;
+		return true;
 	}
 
 	public int getArticleId() {
@@ -141,7 +147,7 @@ public class Article {
 		return condition;
 	}
 
-	public Language getLanguage() {
+	public LanguageCode getLanguage() {
 		return language;
 	}
 
@@ -157,6 +163,10 @@ public class Article {
 		return product;
 	}
 
+	public int getProductId() {
+		return productId;
+	}
+
 	public int getQuantity() {
 		return quantity;
 	}
@@ -165,8 +175,35 @@ public class Article {
 		return seller;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (altered ? 1231 : 1237);
+		result = prime * result + articleId;
+		result = prime * result + ((comment == null) ? 0 : comment.hashCode());
+		result = prime * result + ((condition == null) ? 0 : condition.hashCode());
+		result = prime * result + (firstEdition ? 1231 : 1237);
+		result = prime * result + (foil ? 1231 : 1237);
+		result = prime * result + (inShoppingCart ? 1231 : 1237);
+		result = prime * result + ((language == null) ? 0 : language.hashCode());
+		result = prime * result + ((lastEdited == null) ? 0 : lastEdited.hashCode());
+		result = prime * result + (playset ? 1231 : 1237);
+		result = prime * result + ((price == null) ? 0 : price.hashCode());
+		result = prime * result + ((product == null) ? 0 : product.hashCode());
+		result = prime * result + productId;
+		result = prime * result + quantity;
+		result = prime * result + ((seller == null) ? 0 : seller.hashCode());
+		result = prime * result + (signed ? 1231 : 1237);
+		return result;
+	}
+
 	public boolean isAltered() {
 		return altered;
+	}
+
+	public boolean isFirstEdition() {
+		return firstEdition;
 	}
 
 	public boolean isFoil() {
@@ -189,12 +226,20 @@ public class Article {
 		this.altered = altered;
 	}
 
+	public void setArticleId(int articleId) {
+		this.articleId = articleId;
+	}
+
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
 
 	public void setCondition(Condition condition) {
 		this.condition = condition;
+	}
+
+	public void setFirstEdition(boolean firstEdition) {
+		this.firstEdition = firstEdition;
 	}
 
 	public void setFoil(boolean foil) {
@@ -205,7 +250,7 @@ public class Article {
 		this.inShoppingCart = inShoppingCart;
 	}
 
-	public void setLanguage(Language language) {
+	public void setLanguage(LanguageCode language) {
 		this.language = language;
 	}
 
@@ -225,6 +270,10 @@ public class Article {
 		this.product = product;
 	}
 
+	public void setProductId(int productId) {
+		this.productId = productId;
+	}
+
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
@@ -239,13 +288,14 @@ public class Article {
 
 	@Override
 	public String toString() {
-		return "Article [articleId=" + articleId + ", " + (product != null ? "product=" + product + ", " : "")
-				+ (language != null ? "language=" + language + ", " : "") + "quantity=" + quantity + ", "
-				+ (price != null ? "price=" + price + ", " : "")
-				+ (condition != null ? "condition=" + condition + ", " : "")
-				+ (comment != null ? "comment=" + comment + ", " : "") + "foil=" + foil + ", signed=" + signed
-				+ ", altered=" + altered + ", playset=" + playset + ", "
-				+ (seller != null ? "seller=" + seller + ", " : "") + "inShoppingCart=" + inShoppingCart + ", "
-				+ (lastEdited != null ? "lastEdited=" + lastEdited : "") + "]";
+		return "Article [articleId=" + articleId + ", productId=" + productId + ", "
+				+ (language != null ? "language=" + language + ", " : "")
+				+ (comment != null ? "comment=" + comment + ", " : "") + (price != null ? "price=" + price + ", " : "")
+				+ "quantity=" + quantity + ", inShoppingCart=" + inShoppingCart + ", "
+				+ (product != null ? "product=" + product + ", " : "")
+				+ (seller != null ? "seller=" + seller + ", " : "")
+				+ (lastEdited != null ? "lastEdited=" + lastEdited + ", " : "")
+				+ (condition != null ? "condition=" + condition + ", " : "") + "foil=" + foil + ", signed=" + signed
+				+ ", altered=" + altered + ", playset=" + playset + ", firstEdition=" + firstEdition + "]";
 	}
 }

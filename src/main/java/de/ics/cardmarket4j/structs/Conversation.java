@@ -6,14 +6,13 @@ import java.util.List;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import de.ics.cardmarket4j.JsonHelper;
+import de.ics.cardmarket4j.JsonIO;
 
 /**
- * Conversation represents a "Message-Thread" on cardmarket.
  * 
  * @see https://www.mkmapi.eu/ws/documentation/API_2.0:Account_Messages
  * @author QUE
- * @version 30.01.2019
+ * 
  */
 public class Conversation {
 	private User partner;
@@ -32,7 +31,31 @@ public class Conversation {
 				listMessages.add(new Message(jEle.getAsJsonObject()));
 			}
 		}
-		this.unreadMessages = JsonHelper.parseInteger(jObject, "unreadMessages");
+		this.unreadMessages = JsonIO.parseInteger(jObject, "unreadMessages");
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Conversation other = (Conversation) obj;
+		if (listMessages == null) {
+			if (other.listMessages != null)
+				return false;
+		} else if (!listMessages.equals(other.listMessages))
+			return false;
+		if (partner == null) {
+			if (other.partner != null)
+				return false;
+		} else if (!partner.equals(other.partner))
+			return false;
+		if (unreadMessages != other.unreadMessages)
+			return false;
+		return true;
 	}
 
 	public List<Message> getListMessages() {
@@ -45,6 +68,16 @@ public class Conversation {
 
 	public int getUnreadMessages() {
 		return unreadMessages;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((listMessages == null) ? 0 : listMessages.hashCode());
+		result = prime * result + ((partner == null) ? 0 : partner.hashCode());
+		result = prime * result + unreadMessages;
+		return result;
 	}
 
 	public void setListMessages(List<Message> listMessages) {

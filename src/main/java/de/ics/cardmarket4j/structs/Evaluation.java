@@ -6,16 +6,14 @@ import java.util.Set;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import de.ics.cardmarket4j.JsonHelper;
+import de.ics.cardmarket4j.JsonIO;
 import de.ics.cardmarket4j.enums.Complaint;
 import de.ics.cardmarket4j.enums.EvaluationGrade;
 
 /**
- * Evaluation represents an evaluation on cardmarket.
  * 
  * @see https://www.mkmapi.eu/ws/documentation/API_2.0:Entities:Evaluation
  * @author QUE
- * @version 30.01.2019
  *
  */
 public class Evaluation {
@@ -35,10 +33,10 @@ public class Evaluation {
 	}
 
 	public Evaluation(JsonObject jObject) {
-		this.totalGrade = EvaluationGrade.parseId(JsonHelper.parseInteger(jObject, "evaluationGrade"));
-		this.itemGrade = EvaluationGrade.parseId(JsonHelper.parseInteger(jObject, "itemDescription"));
-		this.packagingGrade = EvaluationGrade.parseId(JsonHelper.parseInteger(jObject, "packaging"));
-		this.comment = JsonHelper.parseString(jObject, "comment");
+		this.totalGrade = EvaluationGrade.parseId(JsonIO.parseInteger(jObject, "evaluationGrade"));
+		this.itemGrade = EvaluationGrade.parseId(JsonIO.parseInteger(jObject, "itemDescription"));
+		this.packagingGrade = EvaluationGrade.parseId(JsonIO.parseInteger(jObject, "packaging"));
+		this.comment = JsonIO.parseString(jObject, "comment");
 		this.setComplaints = new HashSet<>();
 		for (JsonElement jEle : jObject.get("complaint").getAsJsonArray()) {
 			setComplaints.add(Complaint.parseId(jEle.getAsString()));

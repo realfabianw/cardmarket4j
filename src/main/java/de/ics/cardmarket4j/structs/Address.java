@@ -3,16 +3,12 @@ package de.ics.cardmarket4j.structs;
 import com.google.gson.JsonObject;
 import com.neovisionaries.i18n.CountryCode;
 
-import de.ics.cardmarket4j.JsonHelper;
+import de.ics.cardmarket4j.JsonIO;
 
 /**
- * Class that represents an address, either of the own account or an another
- * user.
  * 
- * This class should be complete and not require further additions.
- * 
+ * @see https://www.mkmapi.eu/ws/documentation/API_2.0:Entities:Address
  * @author QUE
- * @version 29.01.2018
  *
  */
 public class Address {
@@ -24,13 +20,13 @@ public class Address {
 	private CountryCode country;
 
 	public Address(JsonObject jObject) {
-		this.name = JsonHelper.parseString(jObject, "name");
-		this.extra = JsonHelper.parseString(jObject, "extra");
-		this.street = JsonHelper.parseString(jObject, "street");
-		this.zip = JsonHelper.parseString(jObject, "zip");
-		this.city = JsonHelper.parseString(jObject, "city");
-		if (!JsonHelper.parseString(jObject, "country").equals("D")) {
-			this.country = CountryCode.getByCode(JsonHelper.parseString(jObject, "country"));
+		this.name = JsonIO.parseString(jObject, "name");
+		this.extra = JsonIO.parseString(jObject, "extra");
+		this.street = JsonIO.parseString(jObject, "street");
+		this.zip = JsonIO.parseString(jObject, "zip");
+		this.city = JsonIO.parseString(jObject, "city");
+		if (!JsonIO.parseString(jObject, "country").equals("D")) {
+			this.country = CountryCode.getByCode(JsonIO.parseString(jObject, "country"));
 		} else {
 			this.country = CountryCode.DE;
 		}

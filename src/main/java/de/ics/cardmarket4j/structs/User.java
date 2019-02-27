@@ -5,17 +5,15 @@ import java.time.format.DateTimeFormatter;
 
 import com.google.gson.JsonObject;
 
-import de.ics.cardmarket4j.JsonHelper;
+import de.ics.cardmarket4j.JsonIO;
 import de.ics.cardmarket4j.enums.Reputation;
 import de.ics.cardmarket4j.enums.RiskGroup;
 import de.ics.cardmarket4j.enums.UserType;
 
 /**
- * This class represents a user on cardmarket. This class should be complete and
- * not require further additions.
  * 
+ * @see https://www.mkmapi.eu/ws/documentation/API_2.0:Entities:User
  * @author QUE
- * @version 29.01.2019
  *
  */
 public class User {
@@ -65,34 +63,35 @@ public class User {
 	}
 
 	public User(JsonObject jObject) {
-		this.userId = JsonHelper.parseInteger(jObject, "idUser");
-		this.userName = JsonHelper.parseString(jObject, "username");
-		String registrationDate = JsonHelper.parseString(jObject, "registrationDate") == null
-				? JsonHelper.parseString(jObject, "registerDate")
-				: JsonHelper.parseString(jObject, "registrationDate");
+		this.userId = JsonIO.parseInteger(jObject, "idUser");
+		this.userName = JsonIO.parseString(jObject, "username");
+		// Account == registerDate, User == registrationDate
+		String registrationDate = JsonIO.parseString(jObject, "registrationDate") == null
+				? JsonIO.parseString(jObject, "registerDate")
+				: JsonIO.parseString(jObject, "registrationDate");
 		registrationDate = registrationDate.split("\\+0[0-9]")[0] + "+0" + registrationDate.split("\\+0")[1].charAt(0)
 				+ ":" + registrationDate.split("\\+0[0-9]")[1];
 		this.registrationDate = LocalDateTime.parse(registrationDate, DateTimeFormatter.ISO_DATE_TIME);
-		this.userType = UserType.parseId(JsonHelper.parseInteger(jObject, "isCommercial"));
-		this.seller = JsonHelper.parseBoolean(jObject, "isSeller");
-		this.companyName = JsonHelper.parseString(jObject.get("name").getAsJsonObject(), "company");
-		this.firstName = JsonHelper.parseString(jObject.get("name").getAsJsonObject(), "firstName");
-		this.lastName = JsonHelper.parseString(jObject.get("name").getAsJsonObject(), "lastName");
+		this.userType = UserType.parseId(JsonIO.parseInteger(jObject, "isCommercial"));
+		this.seller = JsonIO.parseBoolean(jObject, "isSeller");
+		this.companyName = JsonIO.parseString(jObject.get("name").getAsJsonObject(), "company");
+		this.firstName = JsonIO.parseString(jObject.get("name").getAsJsonObject(), "firstName");
+		this.lastName = JsonIO.parseString(jObject.get("name").getAsJsonObject(), "lastName");
 		try {
 			this.address = new Address(jObject.get("address").getAsJsonObject());
 		} catch (NullPointerException e) {
 			this.address = new Address(jObject.get("homeAddress").getAsJsonObject());
 		}
-		this.phoneNumber = JsonHelper.parseString(jObject, "phone");
-		this.emailAddress = JsonHelper.parseString(jObject, "email");
-		this.vat = JsonHelper.parseString(jObject, "vat");
-		this.riskGroup = RiskGroup.parseId(JsonHelper.parseInteger(jObject, "riskGroup"));
-		this.reputation = Reputation.parseId(JsonHelper.parseInteger(jObject, "reputation"));
-		this.expectedDeliveryTime = JsonHelper.parseInteger(jObject, "shipsFast");
-		this.amountSales = JsonHelper.parseInteger(jObject, "sellCount");
-		this.amountSoldItems = JsonHelper.parseInteger(jObject, "soldItems");
-		this.averageShippingTime = JsonHelper.parseInteger(jObject, "avgShippingTime");
-		this.onVacation = JsonHelper.parseBoolean(jObject, "onVacation");
+		this.phoneNumber = JsonIO.parseString(jObject, "phone");
+		this.emailAddress = JsonIO.parseString(jObject, "email");
+		this.vat = JsonIO.parseString(jObject, "vat");
+		this.riskGroup = RiskGroup.parseId(JsonIO.parseInteger(jObject, "riskGroup"));
+		this.reputation = Reputation.parseId(JsonIO.parseInteger(jObject, "reputation"));
+		this.expectedDeliveryTime = JsonIO.parseInteger(jObject, "shipsFast");
+		this.amountSales = JsonIO.parseInteger(jObject, "sellCount");
+		this.amountSoldItems = JsonIO.parseInteger(jObject, "soldItems");
+		this.averageShippingTime = JsonIO.parseInteger(jObject, "avgShippingTime");
+		this.onVacation = JsonIO.parseBoolean(jObject, "onVacation");
 	}
 
 	@Override

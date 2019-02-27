@@ -4,15 +4,12 @@ import java.math.BigDecimal;
 
 import com.google.gson.JsonObject;
 
-import de.ics.cardmarket4j.JsonHelper;
+import de.ics.cardmarket4j.JsonIO;
 
 /**
- * ShippingMethod represents a shipping method on cardmarket, which is needed to
- * represent an order.
  * 
- * @see https://www.mkmapi.eu/ws/documentation/API_2.0:Entities:Order
+ * @see https://www.mkmapi.eu/ws/documentation/API_2.0:Entities:ShippingMethod
  * @author QUE
- * @version 30.01.2019
  *
  */
 public class ShippingMethod {
@@ -31,11 +28,11 @@ public class ShippingMethod {
 	}
 
 	public ShippingMethod(JsonObject jObject) {
-		this.shippingMethodId = JsonHelper.parseInteger(jObject, "idShippingMethod");
-		this.name = JsonHelper.parseString(jObject, "name");
-		this.price = JsonHelper.parseBigDecimal(jObject, "price");
-		this.isLetter = JsonHelper.parseBoolean(jObject, "isLetter");
-		this.isInsured = JsonHelper.parseBoolean(jObject, "isInsured");
+		this.shippingMethodId = JsonIO.parseInteger(jObject, "idShippingMethod");
+		this.name = JsonIO.parseString(jObject, "name");
+		this.price = JsonIO.parseBigDecimal(jObject, "price");
+		this.isLetter = JsonIO.parseBoolean(jObject, "isLetter");
+		this.isInsured = JsonIO.parseBoolean(jObject, "isInsured");
 	}
 
 	@Override

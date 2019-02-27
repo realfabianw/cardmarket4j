@@ -5,13 +5,13 @@ import java.time.format.DateTimeFormatter;
 
 import com.google.gson.JsonObject;
 
-import de.ics.cardmarket4j.JsonHelper;
+import de.ics.cardmarket4j.JsonIO;
 
 /**
- * Message represents a message on cardmarket.
  * 
+ * @see https://www.mkmapi.eu/ws/documentation/API_2.0:Account_Messages
  * @author QUE
- * @version 30.01.2019
+ *
  */
 public class Message {
 	private int messageId;
@@ -29,13 +29,13 @@ public class Message {
 	}
 
 	public Message(JsonObject jObject) {
-		this.messageId = JsonHelper.parseInteger(jObject, "idMessage");
-		this.sending = JsonHelper.parseBoolean(jObject, "isSending");
-		this.unread = JsonHelper.parseBoolean(jObject, "unread");
-		String date = JsonHelper.parseString(jObject, "date");
+		this.messageId = JsonIO.parseInteger(jObject, "idMessage");
+		this.sending = JsonIO.parseBoolean(jObject, "isSending");
+		this.unread = JsonIO.parseBoolean(jObject, "unread");
+		String date = JsonIO.parseString(jObject, "date");
 		date = date.split("\\+0[0-9]")[0] + "+0" + date.split("\\+0")[1].charAt(0) + ":" + date.split("\\+0[0-9]")[1];
 		this.date = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
-		this.text = JsonHelper.parseString(jObject, "text");
+		this.text = JsonIO.parseString(jObject, "text");
 	}
 
 	@Override
