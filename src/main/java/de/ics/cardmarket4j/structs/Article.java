@@ -307,4 +307,17 @@ public class Article {
 	public void setSigned(boolean signed) {
 		this.signed = signed;
 	}
+
+	@Override
+	public String toString() {
+		return "Article [" + (jsonString != null ? "jsonString=" + jsonString + ", " : "") + "articleId=" + articleId
+				+ ", productId=" + productId + ", " + (language != null ? "language=" + language + ", " : "")
+				+ (comment != null ? "comment=" + comment + ", " : "") + (price != null ? "price=" + price + ", " : "")
+				+ "quantity=" + quantity + ", inShoppingCart=" + inShoppingCart + ", "
+				+ (product != null ? "product=" + product + ", " : "")
+				+ (seller != null ? "seller=" + seller + ", " : "")
+				+ (lastEdited != null ? "lastEdited=" + lastEdited + ", " : "")
+				+ (condition != null ? "condition=" + condition + ", " : "") + "foil=" + foil + ", signed=" + signed
+				+ ", altered=" + altered + ", playset=" + playset + ", firstEdition=" + firstEdition + "]";
+	}
 }
