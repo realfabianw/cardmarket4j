@@ -40,20 +40,32 @@ public class Article {
 		this.jsonString = jObject.toString();
 		this.articleId = JsonIO.parseInteger(jObject, "idArticle");
 		this.productId = JsonIO.parseInteger(jObject, "idProduct");
-		this.language = CardMarketUtils
-				.fromLanguageId(JsonIO.parseInteger(jObject.get("language").getAsJsonObject(), "idLanguage"));
+		try {
+			this.language = CardMarketUtils
+					.fromLanguageId(JsonIO.parseInteger(jObject.get("language").getAsJsonObject(), "idLanguage"));
+		} catch (NullPointerException e) {
+			// Some API-Calls dont return this (Successfull Deletion of Article - Return)
+		}
 		this.comment = JsonIO.parseString(jObject, "comments");
 		this.price = JsonIO.parseBigDecimal(jObject, "price");
 		this.quantity = JsonIO.parseInteger(jObject, "count");
 		this.inShoppingCart = JsonIO.parseBoolean(jObject, "inShoppingCart");
-		this.product = new Product(productId, jObject.get("product").getAsJsonObject());
+		try {
+			this.product = new Product(productId, jObject.get("product").getAsJsonObject());
+		} catch (NullPointerException e) {
+			// Some API-Calls dont return a this (Find Articles)
+		}
 		try {
 			this.seller = new User(jObject.get("seller").getAsJsonObject());
 		} catch (NullPointerException e) {
 
 		}
 		this.lastEdited = JsonIO.parseLocalDateTime(jObject, "lastEdited", DateTimeFormatter.ISO_DATE_TIME);
-		this.condition = Condition.parseId(JsonIO.parseString(jObject, "condition"));
+		try {
+			this.condition = Condition.parseId(JsonIO.parseString(jObject, "condition"));
+		} catch (IllegalArgumentException e) {
+			// Some API-Calls dont return a this (Successfull Deletion of Article - Return)
+		}
 		this.foil = JsonIO.parseBoolean(jObject, "isFoil");
 		this.signed = JsonIO.parseBoolean(jObject, "isSigned");
 		this.altered = JsonIO.parseBoolean(jObject, "isAltered");

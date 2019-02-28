@@ -3,6 +3,7 @@ package de.ics.cardmarket4j;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
 import com.google.gson.JsonObject;
 
 /**

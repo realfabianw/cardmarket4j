@@ -38,9 +38,9 @@ public class Product {
 	private PriceGuide priceGuide;
 	private List<Integer> listReprintProductIds;
 
-	public Product(JsonObject jObject) {
+	public Product(int productId, JsonObject jObject) {
 		this.jsonString = jObject.toString();
-		this.productId = JsonIO.parseInteger(jObject, "idProduct");
+		this.productId = productId;
 		this.metaproductId = JsonIO.parseInteger(jObject, "idMetaproduct");
 		this.totalReprints = JsonIO.parseInteger(jObject, "countReprints");
 		this.name = JsonIO.parseString(jObject, "enName");
@@ -98,10 +98,10 @@ public class Product {
 			// Constructor is called from Article Instance
 		}
 	}
-	
-	public Product(int productId, JsonObject jObject) {
+
+	public Product(JsonObject jObject) {
 		this.jsonString = jObject.toString();
-		this.productId = productId;
+		this.productId = JsonIO.parseInteger(jObject, "idProduct");
 		this.metaproductId = JsonIO.parseInteger(jObject, "idMetaproduct");
 		this.totalReprints = JsonIO.parseInteger(jObject, "countReprints");
 		this.name = JsonIO.parseString(jObject, "enName");

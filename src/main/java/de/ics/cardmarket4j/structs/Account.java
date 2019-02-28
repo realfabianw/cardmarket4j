@@ -1,6 +1,7 @@
 package de.ics.cardmarket4j.structs;
 
 import java.math.BigDecimal;
+
 import com.google.gson.JsonObject;
 import com.neovisionaries.i18n.CountryCode;
 
