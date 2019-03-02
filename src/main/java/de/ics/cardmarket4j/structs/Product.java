@@ -62,6 +62,9 @@ public class Product {
 		this.categoryName = JsonIO.parseInteger(jObject, "categoryName");
 		this.selfUrl = JsonIO.parseString(jObject, "website");
 		this.imageUrl = JsonIO.parseString(jObject, "image");
+		if (imageUrl.charAt(0) == '.') {
+			this.imageUrl = "https://www.cardmarket.com" + imageUrl.substring(1);
+		}
 		try {
 			this.game = Game.parseValue(JsonIO.parseString(jObject, "gameName"));
 		} catch (IllegalArgumentException e) {

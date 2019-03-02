@@ -222,4 +222,11 @@ public class ArticleFilter {
 	public void setUserType(UserType userType) {
 		this.userType = userType;
 	}
+
+	@Override
+	public String toString() {
+		return "ArticleFilter [userType=" + userType + ", maxResults=" + maxResults + ", minReputation=" + minReputation
+				+ ", language=" + language + ", minCondition=" + minCondition + ", foil=" + foil + ", signed=" + signed
+				+ ", altered=" + altered + ", minAvailable=" + minAvailable + "]";
+	}
 }
