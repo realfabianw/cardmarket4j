@@ -144,7 +144,7 @@ public class Product {
 				: JsonIO.parseString(jObject, "expansion"));
 		try {
 			this.expansion = new Expansion(jObject.get("expansion").getAsJsonObject());
-		} catch (IllegalStateException e) {
+		} catch (IllegalStateException | NullPointerException e) {
 			// Constructor is called from Article Instance
 		}
 		try {
