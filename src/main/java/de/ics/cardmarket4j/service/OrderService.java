@@ -39,7 +39,7 @@ public class OrderService extends AbstractService {
 	 */
 	public List<Order> getOrders(OrderType orderType, OrderState orderState) throws IOException {
 		List<Order> listOrders = new ArrayList<>();
-		Pair<Integer, JsonElement> response = request("orders/" + orderType.getId() + "/" + orderState.getId(),
+		Pair<Integer, JsonElement> response = request("orders/" + orderType.getDisplayValue() + "/" + orderState.getDisplayValue(),
 				HTTPMethod.GET);
 		for (JsonElement jEle : response.getValue1().getAsJsonObject().get("order").getAsJsonArray()) {
 			listOrders.add(new Order(jEle.getAsJsonObject()));
