@@ -70,18 +70,18 @@ public class CardMarketService {
 			}
 			connection.setRequestMethod(httpMethod.toString());
 			LOGGER.debug("Request:\t{} {}", httpMethod.toString(), uri);
-			//LOGGER.trace("Authorization:\t{}", oAuthSignature);
+			// LOGGER.trace("Authorization:\t{}", oAuthSignature);
 			connection.connect();
 			if (doOutput) {
 				OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
 				out.write(output);
 				out.close();
-				//LOGGER.trace("Request body:\t{}", output);
+				// LOGGER.trace("Request body:\t{}", output);
 			}
 
 			int responseCode = connection.getResponseCode();
-			//LOGGER.trace("Response Code:\t{}", responseCode);
-			//LOGGER.trace(HTTPUtils.getFullResponse(connection));
+			// LOGGER.trace("Response Code:\t{}", responseCode);
+			// LOGGER.trace(HTTPUtils.getFullResponse(connection));
 
 			BufferedReader rd = new BufferedReader(new InputStreamReader(
 					(responseCode == 200 || responseCode == 206 || responseCode == 204) ? connection.getInputStream()
@@ -93,7 +93,7 @@ public class CardMarketService {
 			}
 			rd.close();
 			String responseString = sb.toString();
-			//LOGGER.trace("Response Body:\t{}", responseString);
+			// LOGGER.trace("Response Body:\t{}", responseString);
 
 			JsonElement jResponse = new JsonParser().parse(responseString);
 			LOGGER.debug("Response:\t{} {}", responseCode, jResponse);

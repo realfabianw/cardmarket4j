@@ -19,6 +19,7 @@ import de.ics.cardmarket4j.enums.Game;
  *
  */
 public class Expansion {
+	private String jsonString;
 	private int expansionId;
 	private String name;
 	private Map<LanguageCode, String> mapLocalizedNames;
@@ -27,18 +28,8 @@ public class Expansion {
 	private LocalDateTime releaseDate;
 	private Game game;
 
-	public Expansion(int expansionId, String name, Map<LanguageCode, String> mapLocalizedNames, String code,
-			int iconCode, LocalDateTime releaseDate, Game game) {
-		this.expansionId = expansionId;
-		this.name = name;
-		this.mapLocalizedNames = mapLocalizedNames;
-		this.code = code;
-		this.iconCode = iconCode;
-		this.releaseDate = releaseDate;
-		this.game = game;
-	}
-
 	public Expansion(JsonObject jObject) {
+		this.jsonString = jObject.toString();
 		this.expansionId = JsonIO.parseInteger(jObject, "idExpansion");
 		this.name = JsonIO.parseString(jObject, "enName");
 		this.mapLocalizedNames = new HashMap<>();
@@ -51,6 +42,18 @@ public class Expansion {
 		this.iconCode = JsonIO.parseInteger(jObject, "icon");
 		this.releaseDate = JsonIO.parseLocalDateTime(jObject, "releaseDate", DateTimeFormatter.ISO_DATE_TIME);
 		this.game = Game.parseId(JsonIO.parseInteger(jObject, "idGame"));
+	}
+
+	public Expansion(String jsonString, int expansionId, String name, Map<LanguageCode, String> mapLocalizedNames,
+			String code, int iconCode, LocalDateTime releaseDate, Game game) {
+		this.jsonString = jsonString;
+		this.expansionId = expansionId;
+		this.name = name;
+		this.mapLocalizedNames = mapLocalizedNames;
+		this.code = code;
+		this.iconCode = iconCode;
+		this.releaseDate = releaseDate;
+		this.game = game;
 	}
 
 	@Override
@@ -72,6 +75,11 @@ public class Expansion {
 		if (game != other.game)
 			return false;
 		if (iconCode != other.iconCode)
+			return false;
+		if (jsonString == null) {
+			if (other.jsonString != null)
+				return false;
+		} else if (!jsonString.equals(other.jsonString))
 			return false;
 		if (mapLocalizedNames == null) {
 			if (other.mapLocalizedNames != null)
@@ -107,6 +115,10 @@ public class Expansion {
 		return iconCode;
 	}
 
+	public String getJsonString() {
+		return jsonString;
+	}
+
 	public Map<LanguageCode, String> getMapLocalizedNames() {
 		return mapLocalizedNames;
 	}
@@ -127,6 +139,7 @@ public class Expansion {
 		result = prime * result + expansionId;
 		result = prime * result + ((game == null) ? 0 : game.hashCode());
 		result = prime * result + iconCode;
+		result = prime * result + ((jsonString == null) ? 0 : jsonString.hashCode());
 		result = prime * result + ((mapLocalizedNames == null) ? 0 : mapLocalizedNames.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((releaseDate == null) ? 0 : releaseDate.hashCode());
@@ -149,6 +162,10 @@ public class Expansion {
 		this.iconCode = iconCode;
 	}
 
+	public void setJsonString(String jsonString) {
+		this.jsonString = jsonString;
+	}
+
 	public void setMapLocalizedNames(Map<LanguageCode, String> mapLocalizedNames) {
 		this.mapLocalizedNames = mapLocalizedNames;
 	}
@@ -163,10 +180,8 @@ public class Expansion {
 
 	@Override
 	public String toString() {
-		return "Expansion [expansionId=" + expansionId + ", " + (name != null ? "name=" + name + ", " : "")
-				+ (mapLocalizedNames != null ? "mapLocalizedNames=" + mapLocalizedNames + ", " : "")
-				+ (code != null ? "code=" + code + ", " : "") + "iconCode=" + iconCode + ", "
-				+ (releaseDate != null ? "releaseDate=" + releaseDate + ", " : "")
-				+ (game != null ? "game=" + game : "") + "]";
+		return "Expansion [jsonString=" + jsonString + ", expansionId=" + expansionId + ", name=" + name
+				+ ", mapLocalizedNames=" + mapLocalizedNames + ", code=" + code + ", iconCode=" + iconCode
+				+ ", releaseDate=" + releaseDate + ", game=" + game + "]";
 	}
 }

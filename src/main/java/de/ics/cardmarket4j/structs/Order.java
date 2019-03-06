@@ -18,6 +18,7 @@ import de.ics.cardmarket4j.enums.OrderState;
  *
  */
 public class Order {
+	private String jsonString;
 	private int orderId;
 	private boolean isBuyer;
 	private User seller;
@@ -42,38 +43,8 @@ public class Order {
 	private BigDecimal serviceFeeValue;
 	private BigDecimal totalValue;
 
-	public Order(int orderId, boolean isBuyer, User seller, User buyer, OrderState orderState, LocalDateTime dateBought,
-			LocalDateTime datePaid, LocalDateTime dateSent, LocalDateTime dateRecieved, LocalDateTime dateCanceled,
-			String cancellationReason, int mergedOrderId, ShippingMethod shippingMethod, String trackingNumber,
-			boolean isPresale, Address shippingAddress, int amountItems, String note, Evaluation evaluation,
-			List<Article> listArticles, BigDecimal listArticlesValue, BigDecimal serviceFeeValue,
-			BigDecimal totalValue) {
-		this.orderId = orderId;
-		this.isBuyer = isBuyer;
-		this.seller = seller;
-		this.buyer = buyer;
-		this.orderState = orderState;
-		this.dateBought = dateBought;
-		this.datePaid = datePaid;
-		this.dateSent = dateSent;
-		this.dateRecieved = dateRecieved;
-		this.dateCanceled = dateCanceled;
-		this.cancellationReason = cancellationReason;
-		this.mergedOrderId = mergedOrderId;
-		this.shippingMethod = shippingMethod;
-		this.trackingNumber = trackingNumber;
-		this.isPresale = isPresale;
-		this.shippingAddress = shippingAddress;
-		this.amountItems = amountItems;
-		this.note = note;
-		this.evaluation = evaluation;
-		this.listArticles = listArticles;
-		this.listArticlesValue = listArticlesValue;
-		this.serviceFeeValue = serviceFeeValue;
-		this.totalValue = totalValue;
-	}
-
 	public Order(JsonObject jObject) {
+		this.jsonString = jObject.toString();
 		this.orderId = JsonIO.parseInteger(jObject, "idOrder");
 		this.isBuyer = JsonIO.parseBoolean(jObject, "isBuyer");
 		this.buyer = new User(jObject.get("buyer").getAsJsonObject());
@@ -108,6 +79,38 @@ public class Order {
 		this.serviceFeeValue = JsonIO.parseBigDecimal(jObject, "serviceFeeValue");
 		this.totalValue = JsonIO.parseBigDecimal(jObject, "totalValue");
 
+	}
+
+	public Order(String jsonString, int orderId, boolean isBuyer, User seller, User buyer, OrderState orderState,
+			LocalDateTime dateBought, LocalDateTime datePaid, LocalDateTime dateSent, LocalDateTime dateRecieved,
+			LocalDateTime dateCanceled, String cancellationReason, int mergedOrderId, ShippingMethod shippingMethod,
+			String trackingNumber, boolean isPresale, Address shippingAddress, int amountItems, String note,
+			Evaluation evaluation, List<Article> listArticles, BigDecimal listArticlesValue, BigDecimal serviceFeeValue,
+			BigDecimal totalValue) {
+		this.jsonString = jsonString;
+		this.orderId = orderId;
+		this.isBuyer = isBuyer;
+		this.seller = seller;
+		this.buyer = buyer;
+		this.orderState = orderState;
+		this.dateBought = dateBought;
+		this.datePaid = datePaid;
+		this.dateSent = dateSent;
+		this.dateRecieved = dateRecieved;
+		this.dateCanceled = dateCanceled;
+		this.cancellationReason = cancellationReason;
+		this.mergedOrderId = mergedOrderId;
+		this.shippingMethod = shippingMethod;
+		this.trackingNumber = trackingNumber;
+		this.isPresale = isPresale;
+		this.shippingAddress = shippingAddress;
+		this.amountItems = amountItems;
+		this.note = note;
+		this.evaluation = evaluation;
+		this.listArticles = listArticles;
+		this.listArticlesValue = listArticlesValue;
+		this.serviceFeeValue = serviceFeeValue;
+		this.totalValue = totalValue;
 	}
 
 	@Override
@@ -164,6 +167,16 @@ public class Order {
 		if (isBuyer != other.isBuyer)
 			return false;
 		if (isPresale != other.isPresale)
+			return false;
+		if (jsonString == null) {
+			if (other.jsonString != null)
+				return false;
+		} else if (!jsonString.equals(other.jsonString))
+			return false;
+		if (listArticles == null) {
+			if (other.listArticles != null)
+				return false;
+		} else if (!listArticles.equals(other.listArticles))
 			return false;
 		if (listArticlesValue == null) {
 			if (other.listArticlesValue != null)
@@ -250,6 +263,10 @@ public class Order {
 		return evaluation;
 	}
 
+	public String getJsonString() {
+		return jsonString;
+	}
+
 	public List<Article> getListArticles() {
 		return listArticles;
 	}
@@ -313,6 +330,8 @@ public class Order {
 		result = prime * result + ((evaluation == null) ? 0 : evaluation.hashCode());
 		result = prime * result + (isBuyer ? 1231 : 1237);
 		result = prime * result + (isPresale ? 1231 : 1237);
+		result = prime * result + ((jsonString == null) ? 0 : jsonString.hashCode());
+		result = prime * result + ((listArticles == null) ? 0 : listArticles.hashCode());
 		result = prime * result + ((listArticlesValue == null) ? 0 : listArticlesValue.hashCode());
 		result = prime * result + mergedOrderId;
 		result = prime * result + ((note == null) ? 0 : note.hashCode());
@@ -375,6 +394,10 @@ public class Order {
 		this.evaluation = evaluation;
 	}
 
+	public void setJsonString(String jsonString) {
+		this.jsonString = jsonString;
+	}
+
 	public void setListArticles(List<Article> listArticles) {
 		this.listArticles = listArticles;
 	}
@@ -429,24 +452,14 @@ public class Order {
 
 	@Override
 	public String toString() {
-		return "Order [orderId=" + orderId + ", isBuyer=" + isBuyer + ", "
-				+ (seller != null ? "seller=" + seller + ", " : "") + (buyer != null ? "buyer=" + buyer + ", " : "")
-				+ (orderState != null ? "orderState=" + orderState + ", " : "")
-				+ (dateBought != null ? "dateBought=" + dateBought + ", " : "")
-				+ (datePaid != null ? "datePaid=" + datePaid + ", " : "")
-				+ (dateSent != null ? "dateSent=" + dateSent + ", " : "")
-				+ (dateRecieved != null ? "dateRecieved=" + dateRecieved + ", " : "")
-				+ (dateCanceled != null ? "dateCanceled=" + dateCanceled + ", " : "")
-				+ (cancellationReason != null ? "cancellationReason=" + cancellationReason + ", " : "")
-				+ "mergedOrderId=" + mergedOrderId + ", "
-				+ (shippingMethod != null ? "shippingMethod=" + shippingMethod + ", " : "")
-				+ (trackingNumber != null ? "trackingNumber=" + trackingNumber + ", " : "") + "isPresale=" + isPresale
-				+ ", " + (shippingAddress != null ? "shippingAddress=" + shippingAddress + ", " : "") + "amountItems="
-				+ amountItems + ", " + (note != null ? "note=" + note + ", " : "")
-				+ (evaluation != null ? "evaluation=" + evaluation + ", " : "")
-				+ (listArticles != null ? "listArticles=" + listArticles + ", " : "")
-				+ (listArticlesValue != null ? "listArticlesValue=" + listArticlesValue + ", " : "")
-				+ (serviceFeeValue != null ? "serviceFeeValue=" + serviceFeeValue + ", " : "")
-				+ (totalValue != null ? "totalValue=" + totalValue : "") + "]";
+		return "Order [jsonString=" + jsonString + ", orderId=" + orderId + ", isBuyer=" + isBuyer + ", seller="
+				+ seller + ", buyer=" + buyer + ", orderState=" + orderState + ", dateBought=" + dateBought
+				+ ", datePaid=" + datePaid + ", dateSent=" + dateSent + ", dateRecieved=" + dateRecieved
+				+ ", dateCanceled=" + dateCanceled + ", cancellationReason=" + cancellationReason + ", mergedOrderId="
+				+ mergedOrderId + ", shippingMethod=" + shippingMethod + ", trackingNumber=" + trackingNumber
+				+ ", isPresale=" + isPresale + ", shippingAddress=" + shippingAddress + ", amountItems=" + amountItems
+				+ ", note=" + note + ", evaluation=" + evaluation + ", listArticles=" + listArticles
+				+ ", listArticlesValue=" + listArticlesValue + ", serviceFeeValue=" + serviceFeeValue + ", totalValue="
+				+ totalValue + "]";
 	}
 }

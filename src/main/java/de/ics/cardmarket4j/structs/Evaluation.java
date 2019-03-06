@@ -17,22 +17,15 @@ import de.ics.cardmarket4j.enums.EvaluationGrade;
  *
  */
 public class Evaluation {
+	private String jsonString;
 	private EvaluationGrade totalGrade;
 	private EvaluationGrade itemGrade;
 	private EvaluationGrade packagingGrade;
 	private String comment;
 	private Set<Complaint> setComplaints;
 
-	public Evaluation(EvaluationGrade totalGrade, EvaluationGrade itemGrade, EvaluationGrade packagingGrade,
-			String comment, Set<Complaint> setComplaints) {
-		this.totalGrade = totalGrade;
-		this.itemGrade = itemGrade;
-		this.packagingGrade = packagingGrade;
-		this.comment = comment;
-		this.setComplaints = setComplaints;
-	}
-
 	public Evaluation(JsonObject jObject) {
+		this.jsonString = jObject.toString();
 		this.totalGrade = EvaluationGrade.parseId(JsonIO.parseInteger(jObject, "evaluationGrade"));
 		this.itemGrade = EvaluationGrade.parseId(JsonIO.parseInteger(jObject, "itemDescription"));
 		this.packagingGrade = EvaluationGrade.parseId(JsonIO.parseInteger(jObject, "packaging"));
@@ -41,6 +34,16 @@ public class Evaluation {
 		for (JsonElement jEle : jObject.get("complaint").getAsJsonArray()) {
 			setComplaints.add(Complaint.parseId(jEle.getAsString()));
 		}
+	}
+
+	public Evaluation(String jsonString, EvaluationGrade totalGrade, EvaluationGrade itemGrade,
+			EvaluationGrade packagingGrade, String comment, Set<Complaint> setComplaints) {
+		this.jsonString = jsonString;
+		this.totalGrade = totalGrade;
+		this.itemGrade = itemGrade;
+		this.packagingGrade = packagingGrade;
+		this.comment = comment;
+		this.setComplaints = setComplaints;
 	}
 
 	@Override
@@ -58,6 +61,11 @@ public class Evaluation {
 		} else if (!comment.equals(other.comment))
 			return false;
 		if (itemGrade != other.itemGrade)
+			return false;
+		if (jsonString == null) {
+			if (other.jsonString != null)
+				return false;
+		} else if (!jsonString.equals(other.jsonString))
 			return false;
 		if (packagingGrade != other.packagingGrade)
 			return false;
@@ -79,6 +87,10 @@ public class Evaluation {
 		return itemGrade;
 	}
 
+	public String getJsonString() {
+		return jsonString;
+	}
+
 	public EvaluationGrade getPackagingGrade() {
 		return packagingGrade;
 	}
@@ -97,6 +109,7 @@ public class Evaluation {
 		int result = 1;
 		result = prime * result + ((comment == null) ? 0 : comment.hashCode());
 		result = prime * result + ((itemGrade == null) ? 0 : itemGrade.hashCode());
+		result = prime * result + ((jsonString == null) ? 0 : jsonString.hashCode());
 		result = prime * result + ((packagingGrade == null) ? 0 : packagingGrade.hashCode());
 		result = prime * result + ((setComplaints == null) ? 0 : setComplaints.hashCode());
 		result = prime * result + ((totalGrade == null) ? 0 : totalGrade.hashCode());
@@ -109,6 +122,10 @@ public class Evaluation {
 
 	public void setItemGrade(EvaluationGrade itemGrade) {
 		this.itemGrade = itemGrade;
+	}
+
+	public void setJsonString(String jsonString) {
+		this.jsonString = jsonString;
 	}
 
 	public void setPackagingGrade(EvaluationGrade packagingGrade) {
@@ -125,11 +142,9 @@ public class Evaluation {
 
 	@Override
 	public String toString() {
-		return "Evaluation [" + (totalGrade != null ? "totalGrade=" + totalGrade + ", " : "")
-				+ (itemGrade != null ? "itemGrade=" + itemGrade + ", " : "")
-				+ (packagingGrade != null ? "packagingGrade=" + packagingGrade + ", " : "")
-				+ (comment != null ? "comment=" + comment + ", " : "")
-				+ (setComplaints != null ? "setComplaints=" + setComplaints : "") + "]";
+		return "Evaluation [jsonString=" + jsonString + ", totalGrade=" + totalGrade + ", itemGrade=" + itemGrade
+				+ ", packagingGrade=" + packagingGrade + ", comment=" + comment + ", setComplaints=" + setComplaints
+				+ "]";
 	}
 
 }

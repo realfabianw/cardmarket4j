@@ -12,6 +12,7 @@ import de.ics.cardmarket4j.JsonIO;
  *
  */
 public class Address {
+	private String jsonString;
 	private String name;
 	private String extra;
 	private String street;
@@ -20,6 +21,7 @@ public class Address {
 	private CountryCode country;
 
 	public Address(JsonObject jObject) {
+		this.jsonString = jObject.toString();
 		this.name = JsonIO.parseString(jObject, "name");
 		this.extra = JsonIO.parseString(jObject, "extra");
 		this.street = JsonIO.parseString(jObject, "street");
@@ -32,7 +34,9 @@ public class Address {
 		}
 	}
 
-	public Address(String name, String extra, String street, String zip, String city, CountryCode country) {
+	public Address(String jsonString, String name, String extra, String street, String zip, String city,
+			CountryCode country) {
+		this.jsonString = jsonString;
 		this.name = name;
 		this.extra = extra;
 		this.street = street;
@@ -61,6 +65,11 @@ public class Address {
 			if (other.extra != null)
 				return false;
 		} else if (!extra.equals(other.extra))
+			return false;
+		if (jsonString == null) {
+			if (other.jsonString != null)
+				return false;
+		} else if (!jsonString.equals(other.jsonString))
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -92,6 +101,10 @@ public class Address {
 		return extra;
 	}
 
+	public String getJsonString() {
+		return jsonString;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -111,6 +124,7 @@ public class Address {
 		result = prime * result + ((city == null) ? 0 : city.hashCode());
 		result = prime * result + ((country == null) ? 0 : country.hashCode());
 		result = prime * result + ((extra == null) ? 0 : extra.hashCode());
+		result = prime * result + ((jsonString == null) ? 0 : jsonString.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((street == null) ? 0 : street.hashCode());
 		result = prime * result + ((zip == null) ? 0 : zip.hashCode());
@@ -129,6 +143,10 @@ public class Address {
 		this.extra = extra;
 	}
 
+	public void setJsonString(String jsonString) {
+		this.jsonString = jsonString;
+	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -143,9 +161,7 @@ public class Address {
 
 	@Override
 	public String toString() {
-		return "Address [" + (name != null ? "name=" + name + ", " : "")
-				+ (extra != null ? "extra=" + extra + ", " : "") + (street != null ? "street=" + street + ", " : "")
-				+ (zip != null ? "zip=" + zip + ", " : "") + (city != null ? "city=" + city + ", " : "")
-				+ (country != null ? "country=" + country : "") + "]";
+		return "Address [jsonString=" + jsonString + ", name=" + name + ", extra=" + extra + ", street=" + street
+				+ ", zip=" + zip + ", city=" + city + ", country=" + country + "]";
 	}
 }
