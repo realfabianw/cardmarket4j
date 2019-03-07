@@ -27,7 +27,7 @@ public class Order {
 	private LocalDateTime dateBought;
 	private LocalDateTime datePaid;
 	private LocalDateTime dateSent;
-	private LocalDateTime dateRecieved;
+	private LocalDateTime dateReceived;
 	private LocalDateTime dateCanceled;
 	private String cancellationReason;
 	private int mergedOrderId;
@@ -55,7 +55,7 @@ public class Order {
 		this.dateBought = JsonIO.parseLocalDateTime(jState, "dateBought", DateTimeFormatter.ISO_DATE_TIME);
 		this.datePaid = JsonIO.parseLocalDateTime(jState, "datePaid", DateTimeFormatter.ISO_DATE_TIME);
 		this.dateSent = JsonIO.parseLocalDateTime(jState, "dateSent", DateTimeFormatter.ISO_DATE_TIME);
-		this.dateRecieved = JsonIO.parseLocalDateTime(jState, "dateRecieved", DateTimeFormatter.ISO_DATE_TIME);
+		this.dateReceived = JsonIO.parseLocalDateTime(jState, "dateReceived", DateTimeFormatter.ISO_DATE_TIME);
 		this.dateCanceled = JsonIO.parseLocalDateTime(jState, "dateCanceled", DateTimeFormatter.ISO_DATE_TIME);
 		this.cancellationReason = JsonIO.parseString(jState, "reason");
 		this.mergedOrderId = JsonIO.parseInteger(jState, "wasMergedInto");
@@ -82,7 +82,7 @@ public class Order {
 	}
 
 	public Order(String jsonString, int orderId, boolean isBuyer, User seller, User buyer, OrderState orderState,
-			LocalDateTime dateBought, LocalDateTime datePaid, LocalDateTime dateSent, LocalDateTime dateRecieved,
+			LocalDateTime dateBought, LocalDateTime datePaid, LocalDateTime dateSent, LocalDateTime dateReceived,
 			LocalDateTime dateCanceled, String cancellationReason, int mergedOrderId, ShippingMethod shippingMethod,
 			String trackingNumber, boolean isPresale, Address shippingAddress, int amountItems, String note,
 			Evaluation evaluation, List<Article> listArticles, BigDecimal listArticlesValue, BigDecimal serviceFeeValue,
@@ -96,7 +96,7 @@ public class Order {
 		this.dateBought = dateBought;
 		this.datePaid = datePaid;
 		this.dateSent = dateSent;
-		this.dateRecieved = dateRecieved;
+		this.dateReceived = dateReceived;
 		this.dateCanceled = dateCanceled;
 		this.cancellationReason = cancellationReason;
 		this.mergedOrderId = mergedOrderId;
@@ -149,10 +149,10 @@ public class Order {
 				return false;
 		} else if (!datePaid.equals(other.datePaid))
 			return false;
-		if (dateRecieved == null) {
-			if (other.dateRecieved != null)
+		if (dateReceived == null) {
+			if (other.dateReceived != null)
 				return false;
-		} else if (!dateRecieved.equals(other.dateRecieved))
+		} else if (!dateReceived.equals(other.dateReceived))
 			return false;
 		if (dateSent == null) {
 			if (other.dateSent != null)
@@ -251,8 +251,8 @@ public class Order {
 		return datePaid;
 	}
 
-	public LocalDateTime getDateRecieved() {
-		return dateRecieved;
+	public LocalDateTime getDateReceived() {
+		return dateReceived;
 	}
 
 	public LocalDateTime getDateSent() {
@@ -325,7 +325,7 @@ public class Order {
 		result = prime * result + ((dateBought == null) ? 0 : dateBought.hashCode());
 		result = prime * result + ((dateCanceled == null) ? 0 : dateCanceled.hashCode());
 		result = prime * result + ((datePaid == null) ? 0 : datePaid.hashCode());
-		result = prime * result + ((dateRecieved == null) ? 0 : dateRecieved.hashCode());
+		result = prime * result + ((dateReceived == null) ? 0 : dateReceived.hashCode());
 		result = prime * result + ((dateSent == null) ? 0 : dateSent.hashCode());
 		result = prime * result + ((evaluation == null) ? 0 : evaluation.hashCode());
 		result = prime * result + (isBuyer ? 1231 : 1237);
@@ -382,8 +382,8 @@ public class Order {
 		this.datePaid = datePaid;
 	}
 
-	public void setDateRecieved(LocalDateTime dateRecieved) {
-		this.dateRecieved = dateRecieved;
+	public void setDateReceived(LocalDateTime dateReceived) {
+		this.dateReceived = dateReceived;
 	}
 
 	public void setDateSent(LocalDateTime dateSent) {
@@ -454,7 +454,7 @@ public class Order {
 	public String toString() {
 		return "Order [jsonString=" + jsonString + ", orderId=" + orderId + ", isBuyer=" + isBuyer + ", seller="
 				+ seller + ", buyer=" + buyer + ", orderState=" + orderState + ", dateBought=" + dateBought
-				+ ", datePaid=" + datePaid + ", dateSent=" + dateSent + ", dateRecieved=" + dateRecieved
+				+ ", datePaid=" + datePaid + ", dateSent=" + dateSent + ", dateReceived=" + dateReceived
 				+ ", dateCanceled=" + dateCanceled + ", cancellationReason=" + cancellationReason + ", mergedOrderId="
 				+ mergedOrderId + ", shippingMethod=" + shippingMethod + ", trackingNumber=" + trackingNumber
 				+ ", isPresale=" + isPresale + ", shippingAddress=" + shippingAddress + ", amountItems=" + amountItems
