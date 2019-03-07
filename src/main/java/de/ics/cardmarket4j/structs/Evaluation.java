@@ -31,8 +31,12 @@ public class Evaluation {
 		this.packagingGrade = EvaluationGrade.parseId(JsonIO.parseInteger(jObject, "packaging"));
 		this.comment = JsonIO.parseString(jObject, "comment");
 		this.setComplaints = new HashSet<>();
-		for (JsonElement jEle : jObject.get("complaint").getAsJsonArray()) {
-			setComplaints.add(Complaint.parseId(jEle.getAsString()));
+		try {
+			for (JsonElement jEle : jObject.get("complaint").getAsJsonArray()) {
+				setComplaints.add(Complaint.parseId(jEle.getAsString()));
+			}
+		} catch (NullPointerException e) {
+
 		}
 	}
 

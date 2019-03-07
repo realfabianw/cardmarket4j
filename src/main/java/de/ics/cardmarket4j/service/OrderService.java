@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.javatuples.Pair;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
 import de.ics.cardmarket4j.AbstractService;
@@ -38,8 +39,10 @@ public class OrderService extends AbstractService {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	public List<Order> getOrders(OrderType orderType, OrderState orderState) throws IOException, InterruptedException {
+	public List<Order> getOrders(OrderType orderType, OrderState orderState, Integer maxPages)
+			throws IOException, InterruptedException {
 		List<Order> listOrders = new ArrayList<>();
+		int page = 1;
 		int index = 1;
 		int responseCode = 200;
 		while (responseCode == 200 || responseCode == 206) {
@@ -47,13 +50,22 @@ public class OrderService extends AbstractService {
 					"orders/" + orderType.getDisplayValue() + "/" + orderState.getDisplayValue() + "/" + index,
 					HTTPMethod.GET);
 			responseCode = response.getValue0();
+			page++;
 			index += 100;
 			if (responseCode == 200 || responseCode == 206) {
-				for (JsonElement jEle : response.getValue1().getAsJsonObject().get("order").getAsJsonArray()) {
-					listOrders.add(new Order(jEle.getAsJsonObject()));
+				JsonArray responseJsonArray = response.getValue1().getAsJsonObject().get("order").getAsJsonArray();
+				if (responseJsonArray.size() > 0) {
+					for (JsonElement jEle : responseJsonArray) {
+						listOrders.add(new Order(jEle.getAsJsonObject()));
+					}
+					Thread.sleep(100);
+					if (maxPages != null && page >= maxPages) {
+						break;
+					}
+				} else {
+					break;
 				}
 			}
-			Thread.sleep(100);
 		}
 		return listOrders;
 	}
