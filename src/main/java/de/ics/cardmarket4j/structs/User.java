@@ -5,20 +5,19 @@ import java.time.format.DateTimeFormatter;
 
 import com.google.gson.JsonObject;
 
-import de.ics.cardmarket4j.JsonHelper;
+import de.ics.cardmarket4j.JsonIO;
 import de.ics.cardmarket4j.enums.Reputation;
 import de.ics.cardmarket4j.enums.RiskGroup;
 import de.ics.cardmarket4j.enums.UserType;
 
 /**
- * This class represents a user on cardmarket. This class should be complete and
- * not require further additions.
  * 
+ * @see https://www.mkmapi.eu/ws/documentation/API_2.0:Entities:User
  * @author QUE
- * @version 29.01.2019
  *
  */
 public class User {
+	private String jsonString;
 	private int userId;
 	private String userName;
 	private LocalDateTime registrationDate;
@@ -39,15 +38,49 @@ public class User {
 	private int averageShippingTime;
 	private boolean onVacation;
 
-	public User(int userId, String userName, LocalDateTime registrationDate, UserType userType, boolean isSeller,
-			String companyName, String firstName, String lastName, Address address, String phoneNumber,
+	public User(JsonObject jObject) {
+		this.jsonString = jObject.toString();
+		this.userId = JsonIO.parseInteger(jObject, "idUser");
+		this.userName = JsonIO.parseString(jObject, "username");
+		// Account == registerDate, User == registrationDate
+		String registrationDate = JsonIO.parseString(jObject, "registrationDate") == null
+				? JsonIO.parseString(jObject, "registerDate")
+				: JsonIO.parseString(jObject, "registrationDate");
+		registrationDate = registrationDate.split("\\+0[0-9]")[0] + "+0" + registrationDate.split("\\+0")[1].charAt(0)
+				+ ":" + registrationDate.split("\\+0[0-9]")[1];
+		this.registrationDate = LocalDateTime.parse(registrationDate, DateTimeFormatter.ISO_DATE_TIME);
+		this.userType = UserType.parseId(JsonIO.parseInteger(jObject, "isCommercial"));
+		this.seller = JsonIO.parseBoolean(jObject, "isSeller");
+		this.companyName = JsonIO.parseString(jObject.get("name").getAsJsonObject(), "company");
+		this.firstName = JsonIO.parseString(jObject.get("name").getAsJsonObject(), "firstName");
+		this.lastName = JsonIO.parseString(jObject.get("name").getAsJsonObject(), "lastName");
+		try {
+			this.address = new Address(jObject.get("address").getAsJsonObject());
+		} catch (NullPointerException e) {
+			this.address = new Address(jObject.get("homeAddress").getAsJsonObject());
+		}
+		this.phoneNumber = JsonIO.parseString(jObject, "phone");
+		this.emailAddress = JsonIO.parseString(jObject, "email");
+		this.vat = JsonIO.parseString(jObject, "vat");
+		this.riskGroup = RiskGroup.parseId(JsonIO.parseInteger(jObject, "riskGroup"));
+		this.reputation = Reputation.parseId(JsonIO.parseInteger(jObject, "reputation"));
+		this.expectedDeliveryTime = JsonIO.parseInteger(jObject, "shipsFast");
+		this.amountSales = JsonIO.parseInteger(jObject, "sellCount");
+		this.amountSoldItems = JsonIO.parseInteger(jObject, "soldItems");
+		this.averageShippingTime = JsonIO.parseInteger(jObject, "avgShippingTime");
+		this.onVacation = JsonIO.parseBoolean(jObject, "onVacation");
+	}
+
+	public User(String jsonString, int userId, String userName, LocalDateTime registrationDate, UserType userType,
+			boolean seller, String companyName, String firstName, String lastName, Address address, String phoneNumber,
 			String emailAddress, String vat, RiskGroup riskGroup, Reputation reputation, int expectedDeliveryTime,
 			int amountSales, int amountSoldItems, int averageShippingTime, boolean onVacation) {
+		this.jsonString = jsonString;
 		this.userId = userId;
 		this.userName = userName;
 		this.registrationDate = registrationDate;
 		this.userType = userType;
-		this.seller = isSeller;
+		this.seller = seller;
 		this.companyName = companyName;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -62,37 +95,6 @@ public class User {
 		this.amountSoldItems = amountSoldItems;
 		this.averageShippingTime = averageShippingTime;
 		this.onVacation = onVacation;
-	}
-
-	public User(JsonObject jObject) {
-		this.userId = JsonHelper.parseInteger(jObject, "idUser");
-		this.userName = JsonHelper.parseString(jObject, "username");
-		String registrationDate = JsonHelper.parseString(jObject, "registrationDate") == null
-				? JsonHelper.parseString(jObject, "registerDate")
-				: JsonHelper.parseString(jObject, "registrationDate");
-		registrationDate = registrationDate.split("\\+0[0-9]")[0] + "+0" + registrationDate.split("\\+0")[1].charAt(0)
-				+ ":" + registrationDate.split("\\+0[0-9]")[1];
-		this.registrationDate = LocalDateTime.parse(registrationDate, DateTimeFormatter.ISO_DATE_TIME);
-		this.userType = UserType.parseId(JsonHelper.parseInteger(jObject, "isCommercial"));
-		this.seller = JsonHelper.parseBoolean(jObject, "isSeller");
-		this.companyName = JsonHelper.parseString(jObject.get("name").getAsJsonObject(), "company");
-		this.firstName = JsonHelper.parseString(jObject.get("name").getAsJsonObject(), "firstName");
-		this.lastName = JsonHelper.parseString(jObject.get("name").getAsJsonObject(), "lastName");
-		try {
-			this.address = new Address(jObject.get("address").getAsJsonObject());
-		} catch (NullPointerException e) {
-			this.address = new Address(jObject.get("homeAddress").getAsJsonObject());
-		}
-		this.phoneNumber = JsonHelper.parseString(jObject, "phone");
-		this.emailAddress = JsonHelper.parseString(jObject, "email");
-		this.vat = JsonHelper.parseString(jObject, "vat");
-		this.riskGroup = RiskGroup.parseId(JsonHelper.parseInteger(jObject, "riskGroup"));
-		this.reputation = Reputation.parseId(JsonHelper.parseInteger(jObject, "reputation"));
-		this.expectedDeliveryTime = JsonHelper.parseInteger(jObject, "shipsFast");
-		this.amountSales = JsonHelper.parseInteger(jObject, "sellCount");
-		this.amountSoldItems = JsonHelper.parseInteger(jObject, "soldItems");
-		this.averageShippingTime = JsonHelper.parseInteger(jObject, "avgShippingTime");
-		this.onVacation = JsonHelper.parseBoolean(jObject, "onVacation");
 	}
 
 	@Override
@@ -132,7 +134,10 @@ public class User {
 				return false;
 		} else if (!firstName.equals(other.firstName))
 			return false;
-		if (seller != other.seller)
+		if (jsonString == null) {
+			if (other.jsonString != null)
+				return false;
+		} else if (!jsonString.equals(other.jsonString))
 			return false;
 		if (lastName == null) {
 			if (other.lastName != null)
@@ -154,6 +159,8 @@ public class User {
 		if (reputation != other.reputation)
 			return false;
 		if (riskGroup != other.riskGroup)
+			return false;
+		if (seller != other.seller)
 			return false;
 		if (userId != other.userId)
 			return false;
@@ -204,6 +211,10 @@ public class User {
 		return firstName;
 	}
 
+	public String getJsonString() {
+		return jsonString;
+	}
+
 	public String getLastName() {
 		return lastName;
 	}
@@ -252,13 +263,14 @@ public class User {
 		result = prime * result + ((emailAddress == null) ? 0 : emailAddress.hashCode());
 		result = prime * result + expectedDeliveryTime;
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + (seller ? 1231 : 1237);
+		result = prime * result + ((jsonString == null) ? 0 : jsonString.hashCode());
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime * result + (onVacation ? 1231 : 1237);
 		result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
 		result = prime * result + ((registrationDate == null) ? 0 : registrationDate.hashCode());
 		result = prime * result + ((reputation == null) ? 0 : reputation.hashCode());
 		result = prime * result + ((riskGroup == null) ? 0 : riskGroup.hashCode());
+		result = prime * result + (seller ? 1231 : 1237);
 		result = prime * result + userId;
 		result = prime * result + ((userName == null) ? 0 : userName.hashCode());
 		result = prime * result + ((userType == null) ? 0 : userType.hashCode());
@@ -304,6 +316,10 @@ public class User {
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
+	}
+
+	public void setJsonString(String jsonString) {
+		this.jsonString = jsonString;
 	}
 
 	public void setLastName(String lastName) {
@@ -352,17 +368,11 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", " + (userName != null ? "userName=" + userName + ", " : "")
-				+ (registrationDate != null ? "registrationDate=" + registrationDate + ", " : "")
-				+ (userType != null ? "userType=" + userType + ", " : "") + "isSeller=" + seller + ", "
-				+ (companyName != null ? "companyName=" + companyName + ", " : "")
-				+ (firstName != null ? "firstName=" + firstName + ", " : "")
-				+ (lastName != null ? "lastName=" + lastName + ", " : "")
-				+ (address != null ? "address=" + address + ", " : "")
-				+ (phoneNumber != null ? "phoneNumber=" + phoneNumber + ", " : "")
-				+ (emailAddress != null ? "emailAddress=" + emailAddress + ", " : "")
-				+ (vat != null ? "vat=" + vat + ", " : "") + (riskGroup != null ? "riskGroup=" + riskGroup + ", " : "")
-				+ (reputation != null ? "reputation=" + reputation + ", " : "") + "expectedDeliveryTime="
+		return "User [jsonString=" + jsonString + ", userId=" + userId + ", userName=" + userName
+				+ ", registrationDate=" + registrationDate + ", userType=" + userType + ", seller=" + seller
+				+ ", companyName=" + companyName + ", firstName=" + firstName + ", lastName=" + lastName + ", address="
+				+ address + ", phoneNumber=" + phoneNumber + ", emailAddress=" + emailAddress + ", vat=" + vat
+				+ ", riskGroup=" + riskGroup + ", reputation=" + reputation + ", expectedDeliveryTime="
 				+ expectedDeliveryTime + ", amountSales=" + amountSales + ", amountSoldItems=" + amountSoldItems
 				+ ", averageShippingTime=" + averageShippingTime + ", onVacation=" + onVacation + "]";
 	}

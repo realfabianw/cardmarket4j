@@ -6,7 +6,7 @@ package de.ics.cardmarket4j.enums;
  * @version 30.01.2019
  */
 public enum OrderState {
-	BOUGHT(1, "bought"), PAID(2, "paid"), SENT(4, "sent"), RECIEVED(8, "recieved"), LOST(32, "lost"),
+	BOUGHT(1, "bought"), PAID(2, "paid"), SENT(4, "sent"), RECEIVED(8, "received"), LOST(32, "lost"),
 	CANCELLED(128, "cancelled");
 
 	public static OrderState parseId(int id) {
@@ -25,7 +25,7 @@ public enum OrderState {
 			}
 		}
 		if (value.equals("evaluated")) {
-			return OrderState.RECIEVED;
+			return OrderState.RECEIVED;
 		}
 		throw new IllegalArgumentException("Couldn't find an enum matching this value: " + value);
 	}
@@ -38,7 +38,7 @@ public enum OrderState {
 		this.id = id;
 	}
 
-	private String getDisplayValue() {
+	public String getDisplayValue() {
 		return displayValue;
 	}
 

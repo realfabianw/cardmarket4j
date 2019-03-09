@@ -2,6 +2,15 @@ package de.ics.cardmarket4j.structs;
 
 import java.math.BigDecimal;
 
+import com.google.gson.JsonObject;
+
+import de.ics.cardmarket4j.JsonIO;
+
+/**
+ * @see https://www.mkmapi.eu/ws/documentation/API_2.0:Entities:Product
+ * @author QUE
+ *
+ */
 public class PriceGuide {
 	private BigDecimal sell;
 	private BigDecimal low;
@@ -18,6 +27,57 @@ public class PriceGuide {
 		this.lowFoil = lowFoil;
 		this.avg = avg;
 		this.trend = trend;
+	}
+
+	public PriceGuide(JsonObject jObject) {
+		this.sell = JsonIO.parseBigDecimal(jObject, "SELL");
+		this.low = JsonIO.parseBigDecimal(jObject, "LOW");
+		this.lowExPlus = JsonIO.parseBigDecimal(jObject, "LOWEX+");
+		this.lowFoil = JsonIO.parseBigDecimal(jObject, "LOWFOIL");
+		this.avg = JsonIO.parseBigDecimal(jObject, "AVG");
+		this.trend = JsonIO.parseBigDecimal(jObject, "TREND");
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PriceGuide other = (PriceGuide) obj;
+		if (avg == null) {
+			if (other.avg != null)
+				return false;
+		} else if (!avg.equals(other.avg))
+			return false;
+		if (low == null) {
+			if (other.low != null)
+				return false;
+		} else if (!low.equals(other.low))
+			return false;
+		if (lowExPlus == null) {
+			if (other.lowExPlus != null)
+				return false;
+		} else if (!lowExPlus.equals(other.lowExPlus))
+			return false;
+		if (lowFoil == null) {
+			if (other.lowFoil != null)
+				return false;
+		} else if (!lowFoil.equals(other.lowFoil))
+			return false;
+		if (sell == null) {
+			if (other.sell != null)
+				return false;
+		} else if (!sell.equals(other.sell))
+			return false;
+		if (trend == null) {
+			if (other.trend != null)
+				return false;
+		} else if (!trend.equals(other.trend))
+			return false;
+		return true;
 	}
 
 	public BigDecimal getAvg() {
@@ -42,6 +102,19 @@ public class PriceGuide {
 
 	public BigDecimal getTrend() {
 		return trend;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((avg == null) ? 0 : avg.hashCode());
+		result = prime * result + ((low == null) ? 0 : low.hashCode());
+		result = prime * result + ((lowExPlus == null) ? 0 : lowExPlus.hashCode());
+		result = prime * result + ((lowFoil == null) ? 0 : lowFoil.hashCode());
+		result = prime * result + ((sell == null) ? 0 : sell.hashCode());
+		result = prime * result + ((trend == null) ? 0 : trend.hashCode());
+		return result;
 	}
 
 	public void setAvg(BigDecimal avg) {

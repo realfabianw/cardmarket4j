@@ -6,7 +6,7 @@ package de.ics.cardmarket4j.enums;
  * @version 30.01.2019
  */
 public enum OrderType {
-	PURCHASE(2, "purchase"), SALE(1, "sale");
+	PURCHASE(2, "buyer"), SALE(1, "seller");
 
 	public static OrderType parseId(int id) {
 		for (OrderType e : OrderType.values()) {
@@ -34,7 +34,7 @@ public enum OrderType {
 		this.id = id;
 	}
 
-	private String getDisplayValue() {
+	public String getDisplayValue() {
 		return displayValue;
 	}
 

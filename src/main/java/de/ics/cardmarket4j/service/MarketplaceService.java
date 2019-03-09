@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonElement;
+
 import de.ics.cardmarket4j.AbstractService;
 import de.ics.cardmarket4j.CardMarketService;
 import de.ics.cardmarket4j.enums.HTTPMethod;

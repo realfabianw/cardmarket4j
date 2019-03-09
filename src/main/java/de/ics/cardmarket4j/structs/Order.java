@@ -9,26 +9,25 @@ import java.util.List;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import de.ics.cardmarket4j.JsonHelper;
+import de.ics.cardmarket4j.JsonIO;
 import de.ics.cardmarket4j.enums.OrderState;
 
 /**
- * Order represents an order on cardmarket.
- * 
+ * @see https://www.mkmapi.eu/ws/documentation/API_2.0:Entities:Order
  * @author QUE
- * @version 30.01.2019
  *
  */
 public class Order {
+	private String jsonString;
 	private int orderId;
 	private boolean isBuyer;
-	private User buyer;
 	private User seller;
+	private User buyer;
 	private OrderState orderState;
 	private LocalDateTime dateBought;
 	private LocalDateTime datePaid;
 	private LocalDateTime dateSent;
-	private LocalDateTime dateRecieved;
+	private LocalDateTime dateReceived;
 	private LocalDateTime dateCanceled;
 	private String cancellationReason;
 	private int mergedOrderId;
@@ -44,21 +43,60 @@ public class Order {
 	private BigDecimal serviceFeeValue;
 	private BigDecimal totalValue;
 
-	public Order(int orderId, boolean isBuyer, User buyer, User seller, OrderState orderState, LocalDateTime dateBought,
-			LocalDateTime datePaid, LocalDateTime dateSent, LocalDateTime dateRecieved, LocalDateTime dateCanceled,
-			String cancellationReason, int mergedOrderId, ShippingMethod shippingMethod, String trackingNumber,
-			boolean isPresale, Address shippingAddress, int amountItems, String note, Evaluation evaluation,
-			List<Article> listArticles, BigDecimal listArticlesValue, BigDecimal serviceFeeValue,
+	public Order(JsonObject jObject) {
+		this.jsonString = jObject.toString();
+		this.orderId = JsonIO.parseInteger(jObject, "idOrder");
+		this.isBuyer = JsonIO.parseBoolean(jObject, "isBuyer");
+		this.buyer = new User(jObject.get("buyer").getAsJsonObject());
+		this.seller = new User(jObject.get("seller").getAsJsonObject());
+
+		JsonObject jState = jObject.get("state").getAsJsonObject();
+		this.orderState = OrderState.parseValue(JsonIO.parseString(jState, "state"));
+		this.dateBought = JsonIO.parseLocalDateTime(jState, "dateBought", DateTimeFormatter.ISO_DATE_TIME);
+		this.datePaid = JsonIO.parseLocalDateTime(jState, "datePaid", DateTimeFormatter.ISO_DATE_TIME);
+		this.dateSent = JsonIO.parseLocalDateTime(jState, "dateSent", DateTimeFormatter.ISO_DATE_TIME);
+		this.dateReceived = JsonIO.parseLocalDateTime(jState, "dateReceived", DateTimeFormatter.ISO_DATE_TIME);
+		this.dateCanceled = JsonIO.parseLocalDateTime(jState, "dateCanceled", DateTimeFormatter.ISO_DATE_TIME);
+		this.cancellationReason = JsonIO.parseString(jState, "reason");
+		this.mergedOrderId = JsonIO.parseInteger(jState, "wasMergedInto");
+
+		this.shippingMethod = new ShippingMethod(jObject.get("shippingMethod").getAsJsonObject());
+		this.trackingNumber = JsonIO.parseString(jObject, "trackingNumber");
+		this.isPresale = JsonIO.parseBoolean(jObject, "isPresale");
+		this.shippingAddress = new Address(jObject.get("shippingAddress").getAsJsonObject());
+		this.amountItems = JsonIO.parseInteger(jObject, "articleCount");
+		this.note = JsonIO.parseString(jObject, "note");
+		try {
+			this.evaluation = new Evaluation(jObject.get("evaluation").getAsJsonObject());
+		} catch (NullPointerException e) {
+
+		}
+		this.listArticles = new ArrayList<>();
+		for (JsonElement jEle : jObject.get("article").getAsJsonArray()) {
+			listArticles.add(new Article(jEle.getAsJsonObject()));
+		}
+		this.listArticlesValue = JsonIO.parseBigDecimal(jObject, "articleValue");
+		this.serviceFeeValue = JsonIO.parseBigDecimal(jObject, "serviceFeeValue");
+		this.totalValue = JsonIO.parseBigDecimal(jObject, "totalValue");
+
+	}
+
+	public Order(String jsonString, int orderId, boolean isBuyer, User seller, User buyer, OrderState orderState,
+			LocalDateTime dateBought, LocalDateTime datePaid, LocalDateTime dateSent, LocalDateTime dateReceived,
+			LocalDateTime dateCanceled, String cancellationReason, int mergedOrderId, ShippingMethod shippingMethod,
+			String trackingNumber, boolean isPresale, Address shippingAddress, int amountItems, String note,
+			Evaluation evaluation, List<Article> listArticles, BigDecimal listArticlesValue, BigDecimal serviceFeeValue,
 			BigDecimal totalValue) {
+		this.jsonString = jsonString;
 		this.orderId = orderId;
 		this.isBuyer = isBuyer;
-		this.buyer = buyer;
 		this.seller = seller;
+		this.buyer = buyer;
 		this.orderState = orderState;
 		this.dateBought = dateBought;
 		this.datePaid = datePaid;
 		this.dateSent = dateSent;
-		this.dateRecieved = dateRecieved;
+		this.dateReceived = dateReceived;
 		this.dateCanceled = dateCanceled;
 		this.cancellationReason = cancellationReason;
 		this.mergedOrderId = mergedOrderId;
@@ -75,74 +113,118 @@ public class Order {
 		this.totalValue = totalValue;
 	}
 
-	public Order(JsonObject jObject) {
-		this.orderId = JsonHelper.parseInteger(jObject, "idOrder");
-		this.isBuyer = JsonHelper.parseBoolean(jObject, "isBuyer");
-		this.buyer = new User(jObject.get("buyer").getAsJsonObject());
-		this.seller = new User(jObject.get("seller").getAsJsonObject());
-		this.orderState = OrderState
-				.parseValue(JsonHelper.parseString(jObject.get("state").getAsJsonObject(), "state"));
-		try {
-			String date = JsonHelper.parseString(jObject.get("state").getAsJsonObject(), "dateBought");
-			date = date.split("\\+0[0-9]")[0] + "+0" + date.split("\\+0")[1].charAt(0) + ":"
-					+ date.split("\\+0[0-9]")[1];
-			this.dateBought = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
-		} catch (Exception e) {
-
-		}
-		try {
-			String date = JsonHelper.parseString(jObject.get("state").getAsJsonObject(), "datePaid");
-			date = date.split("\\+0[0-9]")[0] + "+0" + date.split("\\+0")[1].charAt(0) + ":"
-					+ date.split("\\+0[0-9]")[1];
-			this.datePaid = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
-		} catch (Exception e) {
-
-		}
-		try {
-			String date = JsonHelper.parseString(jObject.get("state").getAsJsonObject(), "dateSent");
-			date = date.split("\\+0[0-9]")[0] + "+0" + date.split("\\+0")[1].charAt(0) + ":"
-					+ date.split("\\+0[0-9]")[1];
-			this.dateSent = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
-		} catch (Exception e) {
-
-		}
-		try {
-			String date = JsonHelper.parseString(jObject.get("state").getAsJsonObject(), "dateRecieved");
-			date = date.split("\\+0[0-9]")[0] + "+0" + date.split("\\+0")[1].charAt(0) + ":"
-					+ date.split("\\+0[0-9]")[1];
-			this.dateRecieved = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
-		} catch (Exception e) {
-
-		}
-		try {
-			String date = JsonHelper.parseString(jObject.get("state").getAsJsonObject(), "dateCanceled");
-			date = date.split("\\+0[0-9]")[0] + "+0" + date.split("\\+0")[1].charAt(0) + ":"
-					+ date.split("\\+0[0-9]")[1];
-			this.dateCanceled = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
-		} catch (Exception e) {
-
-		}
-		this.cancellationReason = JsonHelper.parseString(jObject.get("state").getAsJsonObject(), "reason");
-		this.mergedOrderId = JsonHelper.parseInteger(jObject.get("state").getAsJsonObject(), "wasMergedInto");
-		this.shippingMethod = new ShippingMethod(jObject.get("shippingMethod").getAsJsonObject());
-		this.trackingNumber = JsonHelper.parseString(jObject, "trackingNumber");
-		this.isPresale = JsonHelper.parseBoolean(jObject, "isPresale");
-		this.shippingAddress = new Address(jObject.get("shippingAddress").getAsJsonObject());
-		this.amountItems = JsonHelper.parseInteger(jObject, "articleCount");
-		this.note = JsonHelper.parseString(jObject, "note");
-		try {
-			this.evaluation = new Evaluation(jObject.get("evaluation").getAsJsonObject());
-		} catch (NullPointerException e) {
-
-		}
-		this.listArticles = new ArrayList<>();
-		for (JsonElement jEle : jObject.get("article").getAsJsonArray()) {
-			listArticles.add(new Article(jEle.getAsJsonObject()));
-		}
-		this.listArticlesValue = JsonHelper.parseBigDecimal(jObject, "articleValue");
-		this.serviceFeeValue = JsonHelper.parseBigDecimal(jObject, "serviceFeeValue");
-		this.totalValue = JsonHelper.parseBigDecimal(jObject, "totalValue");
-
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Order other = (Order) obj;
+		if (amountItems != other.amountItems)
+			return false;
+		if (buyer == null) {
+			if (other.buyer != null)
+				return false;
+		} else if (!buyer.equals(other.buyer))
+			return false;
+		if (cancellationReason == null) {
+			if (other.cancellationReason != null)
+				return false;
+		} else if (!cancellationReason.equals(other.cancellationReason))
+			return false;
+		if (dateBought == null) {
+			if (other.dateBought != null)
+				return false;
+		} else if (!dateBought.equals(other.dateBought))
+			return false;
+		if (dateCanceled == null) {
+			if (other.dateCanceled != null)
+				return false;
+		} else if (!dateCanceled.equals(other.dateCanceled))
+			return false;
+		if (datePaid == null) {
+			if (other.datePaid != null)
+				return false;
+		} else if (!datePaid.equals(other.datePaid))
+			return false;
+		if (dateReceived == null) {
+			if (other.dateReceived != null)
+				return false;
+		} else if (!dateReceived.equals(other.dateReceived))
+			return false;
+		if (dateSent == null) {
+			if (other.dateSent != null)
+				return false;
+		} else if (!dateSent.equals(other.dateSent))
+			return false;
+		if (evaluation == null) {
+			if (other.evaluation != null)
+				return false;
+		} else if (!evaluation.equals(other.evaluation))
+			return false;
+		if (isBuyer != other.isBuyer)
+			return false;
+		if (isPresale != other.isPresale)
+			return false;
+		if (jsonString == null) {
+			if (other.jsonString != null)
+				return false;
+		} else if (!jsonString.equals(other.jsonString))
+			return false;
+		if (listArticles == null) {
+			if (other.listArticles != null)
+				return false;
+		} else if (!listArticles.equals(other.listArticles))
+			return false;
+		if (listArticlesValue == null) {
+			if (other.listArticlesValue != null)
+				return false;
+		} else if (!listArticlesValue.equals(other.listArticlesValue))
+			return false;
+		if (mergedOrderId != other.mergedOrderId)
+			return false;
+		if (note == null) {
+			if (other.note != null)
+				return false;
+		} else if (!note.equals(other.note))
+			return false;
+		if (orderId != other.orderId)
+			return false;
+		if (orderState != other.orderState)
+			return false;
+		if (seller == null) {
+			if (other.seller != null)
+				return false;
+		} else if (!seller.equals(other.seller))
+			return false;
+		if (serviceFeeValue == null) {
+			if (other.serviceFeeValue != null)
+				return false;
+		} else if (!serviceFeeValue.equals(other.serviceFeeValue))
+			return false;
+		if (shippingAddress == null) {
+			if (other.shippingAddress != null)
+				return false;
+		} else if (!shippingAddress.equals(other.shippingAddress))
+			return false;
+		if (shippingMethod == null) {
+			if (other.shippingMethod != null)
+				return false;
+		} else if (!shippingMethod.equals(other.shippingMethod))
+			return false;
+		if (totalValue == null) {
+			if (other.totalValue != null)
+				return false;
+		} else if (!totalValue.equals(other.totalValue))
+			return false;
+		if (trackingNumber == null) {
+			if (other.trackingNumber != null)
+				return false;
+		} else if (!trackingNumber.equals(other.trackingNumber))
+			return false;
+		return true;
 	}
 
 	public int getAmountItems() {
@@ -169,8 +251,8 @@ public class Order {
 		return datePaid;
 	}
 
-	public LocalDateTime getDateRecieved() {
-		return dateRecieved;
+	public LocalDateTime getDateReceived() {
+		return dateReceived;
 	}
 
 	public LocalDateTime getDateSent() {
@@ -179,6 +261,10 @@ public class Order {
 
 	public Evaluation getEvaluation() {
 		return evaluation;
+	}
+
+	public String getJsonString() {
+		return jsonString;
 	}
 
 	public List<Article> getListArticles() {
@@ -229,6 +315,37 @@ public class Order {
 		return trackingNumber;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + amountItems;
+		result = prime * result + ((buyer == null) ? 0 : buyer.hashCode());
+		result = prime * result + ((cancellationReason == null) ? 0 : cancellationReason.hashCode());
+		result = prime * result + ((dateBought == null) ? 0 : dateBought.hashCode());
+		result = prime * result + ((dateCanceled == null) ? 0 : dateCanceled.hashCode());
+		result = prime * result + ((datePaid == null) ? 0 : datePaid.hashCode());
+		result = prime * result + ((dateReceived == null) ? 0 : dateReceived.hashCode());
+		result = prime * result + ((dateSent == null) ? 0 : dateSent.hashCode());
+		result = prime * result + ((evaluation == null) ? 0 : evaluation.hashCode());
+		result = prime * result + (isBuyer ? 1231 : 1237);
+		result = prime * result + (isPresale ? 1231 : 1237);
+		result = prime * result + ((jsonString == null) ? 0 : jsonString.hashCode());
+		result = prime * result + ((listArticles == null) ? 0 : listArticles.hashCode());
+		result = prime * result + ((listArticlesValue == null) ? 0 : listArticlesValue.hashCode());
+		result = prime * result + mergedOrderId;
+		result = prime * result + ((note == null) ? 0 : note.hashCode());
+		result = prime * result + orderId;
+		result = prime * result + ((orderState == null) ? 0 : orderState.hashCode());
+		result = prime * result + ((seller == null) ? 0 : seller.hashCode());
+		result = prime * result + ((serviceFeeValue == null) ? 0 : serviceFeeValue.hashCode());
+		result = prime * result + ((shippingAddress == null) ? 0 : shippingAddress.hashCode());
+		result = prime * result + ((shippingMethod == null) ? 0 : shippingMethod.hashCode());
+		result = prime * result + ((totalValue == null) ? 0 : totalValue.hashCode());
+		result = prime * result + ((trackingNumber == null) ? 0 : trackingNumber.hashCode());
+		return result;
+	}
+
 	public boolean isBuyer() {
 		return isBuyer;
 	}
@@ -265,8 +382,8 @@ public class Order {
 		this.datePaid = datePaid;
 	}
 
-	public void setDateRecieved(LocalDateTime dateRecieved) {
-		this.dateRecieved = dateRecieved;
+	public void setDateReceived(LocalDateTime dateReceived) {
+		this.dateReceived = dateReceived;
 	}
 
 	public void setDateSent(LocalDateTime dateSent) {
@@ -275,6 +392,10 @@ public class Order {
 
 	public void setEvaluation(Evaluation evaluation) {
 		this.evaluation = evaluation;
+	}
+
+	public void setJsonString(String jsonString) {
+		this.jsonString = jsonString;
 	}
 
 	public void setListArticles(List<Article> listArticles) {
@@ -331,25 +452,14 @@ public class Order {
 
 	@Override
 	public String toString() {
-		return "Order [orderId=" + orderId + ", isBuyer=" + isBuyer + ", "
-				+ (buyer != null ? "buyer=" + buyer + ", " : "") + (seller != null ? "seller=" + seller + ", " : "")
-				+ (orderState != null ? "orderState=" + orderState + ", " : "")
-				+ (dateBought != null ? "dateBought=" + dateBought + ", " : "")
-				+ (datePaid != null ? "datePaid=" + datePaid + ", " : "")
-				+ (dateSent != null ? "dateSent=" + dateSent + ", " : "")
-				+ (dateRecieved != null ? "dateRecieved=" + dateRecieved + ", " : "")
-				+ (dateCanceled != null ? "dateCanceled=" + dateCanceled + ", " : "")
-				+ (cancellationReason != null ? "cancellationReason=" + cancellationReason + ", " : "")
-				+ "mergedOrderId=" + mergedOrderId + ", "
-				+ (shippingMethod != null ? "shippingMethod=" + shippingMethod + ", " : "")
-				+ (trackingNumber != null ? "trackingNumber=" + trackingNumber + ", " : "") + "isPresale=" + isPresale
-				+ ", " + (shippingAddress != null ? "shippingAddress=" + shippingAddress + ", " : "") + "amountItems="
-				+ amountItems + ", " + (note != null ? "note=" + note + ", " : "")
-				+ (evaluation != null ? "evaluation=" + evaluation + ", " : "")
-				+ (listArticles != null ? "listArticles=" + listArticles + ", " : "")
-				+ (listArticlesValue != null ? "listArticlesValue=" + listArticlesValue + ", " : "")
-				+ (serviceFeeValue != null ? "serviceFeeValue=" + serviceFeeValue + ", " : "")
-				+ (totalValue != null ? "totalValue=" + totalValue : "") + "]";
+		return "Order [jsonString=" + jsonString + ", orderId=" + orderId + ", isBuyer=" + isBuyer + ", seller="
+				+ seller + ", buyer=" + buyer + ", orderState=" + orderState + ", dateBought=" + dateBought
+				+ ", datePaid=" + datePaid + ", dateSent=" + dateSent + ", dateReceived=" + dateReceived
+				+ ", dateCanceled=" + dateCanceled + ", cancellationReason=" + cancellationReason + ", mergedOrderId="
+				+ mergedOrderId + ", shippingMethod=" + shippingMethod + ", trackingNumber=" + trackingNumber
+				+ ", isPresale=" + isPresale + ", shippingAddress=" + shippingAddress + ", amountItems=" + amountItems
+				+ ", note=" + note + ", evaluation=" + evaluation + ", listArticles=" + listArticles
+				+ ", listArticlesValue=" + listArticlesValue + ", serviceFeeValue=" + serviceFeeValue + ", totalValue="
+				+ totalValue + "]";
 	}
-
 }

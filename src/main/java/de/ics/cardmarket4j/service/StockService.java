@@ -1,7 +1,6 @@
 package de.ics.cardmarket4j.service;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,8 +9,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonElement;
+
 import de.ics.cardmarket4j.AbstractService;
 import de.ics.cardmarket4j.CardMarketService;
+import de.ics.cardmarket4j.CardMarketUtils;
 import de.ics.cardmarket4j.enums.Game;
 import de.ics.cardmarket4j.enums.HTTPMethod;
 import de.ics.cardmarket4j.structs.Article;
@@ -66,7 +67,7 @@ public class StockService extends AbstractService {
 		for (Article a : listArticles) {
 			xml.append("<article>");
 			xml.append("<idArticle>" + a.getArticleId() + "</idArticle>");
-			xml.append("<idLanguage>" + a.getLanguage().getId() + "</idLanguage>");
+			xml.append("<idLanguage>" + CardMarketUtils.toLanguageId(a.getLanguage()) + "</idLanguage>");
 			xml.append("<comments>" + a.getComment() + "</comments>");
 			xml.append("<count>" + a.getQuantity() + "</count>");
 			xml.append("<price>" + a.getPrice() + "</price>");
@@ -152,56 +153,13 @@ public class StockService extends AbstractService {
 		return insertListArticles(listArticles);
 	}
 
-	/**
-	 * @deprecated
-	 * @param productId
-	 * @param languageId
-	 * @param quantity
-	 * @param price
-	 * @param condition
-	 * @param comment
-	 * @param isFoil
-	 * @param isSigned
-	 * @param isAltered
-	 * @param isPlayset
-	 * @return
-	 * @throws IOException
-	 */
-	@Deprecated
-	private List<Article> insertArticle(int productId, int languageId, int quantity, BigDecimal price, String condition,
-			String comment, boolean isFoil, boolean isSigned, boolean isAltered, boolean isPlayset) throws IOException {
-		StringBuilder xml = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
-		xml.append("<request>");
-		xml.append("<article>");
-		xml.append("<idProduct>" + productId + "</idProduct>");
-		xml.append("<idLanguage>" + languageId + "</idLanguage>");
-		xml.append("<comments>" + comment + "</comments>");
-		xml.append("<count>" + quantity + "</count>");
-		xml.append("<price>" + price + "</price>");
-		xml.append("<condition>" + condition + "</condition>");
-		xml.append("<isFoil>" + isFoil + "</isFoil>");
-		xml.append("<isSigned>" + isSigned + "</isSigned>");
-		xml.append("<isAltered>" + isAltered + "</isAltered>");
-		xml.append("<isPlayset>" + isPlayset + "</isPlayset>");
-		xml.append("</article>");
-		xml.append("</request>");
-		LOGGER.trace("XML: {}", xml);
-		Pair<Integer, JsonElement> response = requestWithOutput("stock", HTTPMethod.POST, xml.toString());
-
-		List<Article> listArticle = new ArrayList<>();
-		for (JsonElement jEle : response.getValue1().getAsJsonObject().get("article").getAsJsonArray()) {
-			listArticle.add(new Article(jEle.getAsJsonObject()));
-		}
-		return listArticle;
-	}
-
 	public List<Article> insertListArticles(List<Article> listArticles) throws IOException {
 		StringBuilder xml = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 		xml.append("<request>");
 		for (Article a : listArticles) {
 			xml.append("<article>");
 			xml.append("<idProduct>" + a.getProduct().getProductId() + "</idProduct>");
-			xml.append("<idLanguage>" + a.getLanguage().getId() + "</idLanguage>");
+			xml.append("<idLanguage>" + CardMarketUtils.toLanguageId(a.getLanguage()) + "</idLanguage>");
 			xml.append("<comments>" + a.getComment() + "</comments>");
 			xml.append("<count>" + a.getQuantity() + "</count>");
 			xml.append("<price>" + a.getPrice() + "</price>");

@@ -1,7 +1,9 @@
 package de.ics.cardmarket4j.structs;
 
+import com.neovisionaries.i18n.LanguageCode;
+
+import de.ics.cardmarket4j.CardMarketUtils;
 import de.ics.cardmarket4j.enums.Condition;
-import de.ics.cardmarket4j.enums.Language;
 import de.ics.cardmarket4j.enums.Reputation;
 import de.ics.cardmarket4j.enums.UserType;
 
@@ -17,7 +19,7 @@ public class ArticleFilter {
 	private UserType userType;
 	private Integer maxResults;
 	private Reputation minReputation;
-	private Language language;
+	private LanguageCode language;
 	private Condition minCondition;
 	private Boolean foil;
 	private Boolean signed;
@@ -77,7 +79,7 @@ public class ArticleFilter {
 		return foil;
 	}
 
-	public Language getLanguage() {
+	public LanguageCode getLanguage() {
 		return language;
 	}
 
@@ -126,7 +128,7 @@ public class ArticleFilter {
 			if (sb.charAt(sb.length() - 1) != '?') {
 				sb.append("&");
 			}
-			sb.append("idLanguage=" + language.getId());
+			sb.append("idLanguage=" + CardMarketUtils.toLanguageId(language));
 		}
 		if (minCondition != null) {
 			if (sb.charAt(sb.length() - 1) != '?') {
@@ -193,7 +195,7 @@ public class ArticleFilter {
 		this.foil = foil;
 	}
 
-	public void setLanguage(Language language) {
+	public void setLanguage(LanguageCode language) {
 		this.language = language;
 	}
 
@@ -223,13 +225,8 @@ public class ArticleFilter {
 
 	@Override
 	public String toString() {
-		return "ArticleFilter [" + (userType != null ? "userType=" + userType + ", " : "")
-				+ (maxResults != null ? "maxResults=" + maxResults + ", " : "")
-				+ (minReputation != null ? "minReputation=" + minReputation + ", " : "")
-				+ (language != null ? "language=" + language + ", " : "")
-				+ (minCondition != null ? "minCondition=" + minCondition + ", " : "")
-				+ (foil != null ? "foil=" + foil + ", " : "") + (signed != null ? "signed=" + signed + ", " : "")
-				+ (altered != null ? "altered=" + altered + ", " : "")
-				+ (minAvailable != null ? "minAvailable=" + minAvailable : "") + "]";
+		return "ArticleFilter [userType=" + userType + ", maxResults=" + maxResults + ", minReputation=" + minReputation
+				+ ", language=" + language + ", minCondition=" + minCondition + ", foil=" + foil + ", signed=" + signed
+				+ ", altered=" + altered + ", minAvailable=" + minAvailable + "]";
 	}
 }

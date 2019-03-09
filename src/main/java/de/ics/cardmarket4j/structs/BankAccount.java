@@ -2,14 +2,12 @@ package de.ics.cardmarket4j.structs;
 
 import com.google.gson.JsonObject;
 
-import de.ics.cardmarket4j.JsonHelper;
+import de.ics.cardmarket4j.JsonIO;
 
 /**
- * BankAccount stores all data related to a connected bank account.
  * 
  * @see https://www.mkmapi.eu/ws/documentation/API_2.0:Entities:Account
  * @author QUE
- * @version 30.01.2019
  *
  */
 public class BankAccount {
@@ -19,10 +17,10 @@ public class BankAccount {
 	private String bankName;
 
 	public BankAccount(JsonObject jObject) {
-		this.registeredOwner = JsonHelper.parseString(jObject, "accountOwner");
-		this.iban = JsonHelper.parseString(jObject, "iban");
-		this.bic = JsonHelper.parseString(jObject, "bic");
-		this.bankName = JsonHelper.parseString(jObject, "bankname");
+		this.registeredOwner = JsonIO.parseString(jObject, "accountOwner");
+		this.iban = JsonIO.parseString(jObject, "iban");
+		this.bic = JsonIO.parseString(jObject, "bic");
+		this.bankName = JsonIO.parseString(jObject, "bankname");
 	}
 
 	@Override

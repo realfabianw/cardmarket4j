@@ -1,20 +1,18 @@
 package de.ics.cardmarket4j.structs;
 
 import java.math.BigDecimal;
+
 import com.google.gson.JsonObject;
 import com.neovisionaries.i18n.CountryCode;
 
-import de.ics.cardmarket4j.JsonHelper;
+import de.ics.cardmarket4j.JsonIO;
 import de.ics.cardmarket4j.enums.DeliverySpeed;
 import de.ics.cardmarket4j.enums.SellerActivationStatus;
 
 /**
- * Account extends User and adds information, that only the authenticated user
- * can retrieve.
  * 
  * @see https://www.mkmapi.eu/ws/documentation/API_2.0:Entities:Account
  * @author QUE
- * @version 30.01.2019
  *
  */
 public class Account extends User {
@@ -34,25 +32,24 @@ public class Account extends User {
 
 	public Account(JsonObject jObject) {
 		super(jObject);
-		if (JsonHelper.parseString(jObject, "country").equals("D")) {
+		if (JsonIO.parseString(jObject, "country").equals("D")) {
 			this.country = CountryCode.DE;
 		} else {
-			this.country = CountryCode.getByCode(JsonHelper.parseString(jObject, "country"));
+			this.country = CountryCode.getByCode(JsonIO.parseString(jObject, "country"));
 		}
-		this.maySell = JsonHelper.parseBoolean(jObject, "maySell");
-		this.sellerActivationStatus = SellerActivationStatus
-				.parseId(JsonHelper.parseInteger(jObject, "sellerActivation"));
-		this.deliverySpeed = DeliverySpeed.parseId(JsonHelper.parseInteger(jObject, "shipsFast"));
-		this.activated = JsonHelper.parseBoolean(jObject, "isActivated");
-		this.totalBalance = JsonHelper.parseBigDecimal(jObject.get("moneyDetails").getAsJsonObject(), "totalBalance");
-		this.moneyBalance = JsonHelper.parseBigDecimal(jObject.get("moneyDetails").getAsJsonObject(), "moneyBalance");
-		this.bonusBalance = JsonHelper.parseBigDecimal(jObject.get("moneyDetails").getAsJsonObject(), "bonusBalance");
-		this.unpaidAmount = JsonHelper.parseBigDecimal(jObject.get("moneyDetails").getAsJsonObject(), "unpaidAmount");
-		this.providerRechargeAmount = JsonHelper.parseBigDecimal(jObject.get("moneyDetails").getAsJsonObject(),
+		this.maySell = JsonIO.parseBoolean(jObject, "maySell");
+		this.sellerActivationStatus = SellerActivationStatus.parseId(JsonIO.parseInteger(jObject, "sellerActivation"));
+		this.deliverySpeed = DeliverySpeed.parseId(JsonIO.parseInteger(jObject, "shipsFast"));
+		this.activated = JsonIO.parseBoolean(jObject, "isActivated");
+		this.totalBalance = JsonIO.parseBigDecimal(jObject.get("moneyDetails").getAsJsonObject(), "totalBalance");
+		this.moneyBalance = JsonIO.parseBigDecimal(jObject.get("moneyDetails").getAsJsonObject(), "moneyBalance");
+		this.bonusBalance = JsonIO.parseBigDecimal(jObject.get("moneyDetails").getAsJsonObject(), "bonusBalance");
+		this.unpaidAmount = JsonIO.parseBigDecimal(jObject.get("moneyDetails").getAsJsonObject(), "unpaidAmount");
+		this.providerRechargeAmount = JsonIO.parseBigDecimal(jObject.get("moneyDetails").getAsJsonObject(),
 				"providerRechargeAmounT");
 		this.bankAccount = new BankAccount(jObject.get("bankAccount").getAsJsonObject());
-		this.amountItemsInShoppingCard = JsonHelper.parseInteger(jObject, "articlesInShoppingCart");
-		this.amountUnreadMessages = JsonHelper.parseInteger(jObject, "unreadMessages");
+		this.amountItemsInShoppingCard = JsonIO.parseInteger(jObject, "articlesInShoppingCart");
+		this.amountUnreadMessages = JsonIO.parseInteger(jObject, "unreadMessages");
 	}
 
 	@Override
