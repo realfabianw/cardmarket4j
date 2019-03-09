@@ -173,16 +173,14 @@ public class StockService extends AbstractService {
 		return listArticle;
 	}
 
-	public List<Article> removeArticle(Article article) throws IOException {
-		List<Article> listArticles = new ArrayList<>();
-		listArticles.add(article);
-		return removeListArticles(listArticles);
+	public List<Article> removeArticle(IsCardMarketArticle article) throws IOException {
+		return removeListArticles(Arrays.asList(article));
 	}
 
-	public List<Article> removeListArticles(List<Article> listArticles) throws IOException {
+	public List<Article> removeListArticles(List<IsCardMarketArticle> listArticles) throws IOException {
 		StringBuilder xml = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 		xml.append("<request>");
-		for (Article a : listArticles) {
+		for (IsCardMarketArticle a : listArticles) {
 			xml.append("<article>");
 			xml.append("<idArticle>" + a.getArticleId() + "</idArticle>");
 			xml.append("<count>" + a.getQuantity() + "</count>");
