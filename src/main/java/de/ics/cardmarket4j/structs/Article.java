@@ -53,7 +53,7 @@ public class Article implements IsCardMarketArticle {
 		try {
 			this.product = new Product(productId, jObject.get("product").getAsJsonObject());
 		} catch (NullPointerException e) {
-			// Some API-Calls dont return a this (Find Articles)
+
 		}
 		try {
 			this.seller = new User(jObject.get("seller").getAsJsonObject());
