@@ -17,11 +17,11 @@ import de.ics.cardmarket4j.enums.Condition;
  * @author QUE
  *
  */
-public class Article {
+public class Article implements IsCardMarketArticle {
 	private String jsonString;
 	private int articleId;
 	private int productId;
-	private LanguageCode language;
+	private LanguageCode languageCode;
 	private String comment;
 	private BigDecimal price;
 	private int quantity;
@@ -41,7 +41,7 @@ public class Article {
 		this.articleId = JsonIO.parseInteger(jObject, "idArticle");
 		this.productId = JsonIO.parseInteger(jObject, "idProduct");
 		try {
-			this.language = CardMarketUtils
+			this.languageCode = CardMarketUtils
 					.fromLanguageId(JsonIO.parseInteger(jObject.get("language").getAsJsonObject(), "idLanguage"));
 		} catch (NullPointerException e) {
 			// Some API-Calls dont return this (Successfull Deletion of Article - Return)
@@ -73,14 +73,14 @@ public class Article {
 		this.firstEdition = JsonIO.parseBoolean(jObject, "isFirstEd");
 	}
 
-	public Article(String jsonString, int articleId, int productId, LanguageCode language, String comment,
+	public Article(String jsonString, int articleId, int productId, LanguageCode languageCode, String comment,
 			BigDecimal price, int quantity, boolean inShoppingCart, Product product, User seller,
 			LocalDateTime lastEdited, Condition condition, boolean foil, boolean signed, boolean altered,
 			boolean playset, boolean firstEdition) {
 		this.jsonString = jsonString;
 		this.articleId = articleId;
 		this.productId = productId;
-		this.language = language;
+		this.languageCode = languageCode;
 		this.comment = comment;
 		this.price = price;
 		this.quantity = quantity;
@@ -127,7 +127,7 @@ public class Article {
 				return false;
 		} else if (!jsonString.equals(other.jsonString))
 			return false;
-		if (language != other.language)
+		if (languageCode != other.languageCode)
 			return false;
 		if (lastEdited == null) {
 			if (other.lastEdited != null)
@@ -160,14 +160,17 @@ public class Article {
 		return true;
 	}
 
+	@Override
 	public int getArticleId() {
 		return articleId;
 	}
 
+	@Override
 	public String getComment() {
 		return comment;
 	}
 
+	@Override
 	public Condition getCondition() {
 		return condition;
 	}
@@ -176,14 +179,16 @@ public class Article {
 		return jsonString;
 	}
 
-	public LanguageCode getLanguage() {
-		return language;
+	@Override
+	public LanguageCode getLanguageCode() {
+		return languageCode;
 	}
 
 	public LocalDateTime getLastEdited() {
 		return lastEdited;
 	}
 
+	@Override
 	public BigDecimal getPrice() {
 		return price;
 	}
@@ -192,10 +197,12 @@ public class Article {
 		return product;
 	}
 
+	@Override
 	public int getProductId() {
 		return productId;
 	}
 
+	@Override
 	public int getQuantity() {
 		return quantity;
 	}
@@ -216,7 +223,7 @@ public class Article {
 		result = prime * result + (foil ? 1231 : 1237);
 		result = prime * result + (inShoppingCart ? 1231 : 1237);
 		result = prime * result + ((jsonString == null) ? 0 : jsonString.hashCode());
-		result = prime * result + ((language == null) ? 0 : language.hashCode());
+		result = prime * result + ((languageCode == null) ? 0 : languageCode.hashCode());
 		result = prime * result + ((lastEdited == null) ? 0 : lastEdited.hashCode());
 		result = prime * result + (playset ? 1231 : 1237);
 		result = prime * result + ((price == null) ? 0 : price.hashCode());
@@ -228,6 +235,7 @@ public class Article {
 		return result;
 	}
 
+	@Override
 	public boolean isAltered() {
 		return altered;
 	}
@@ -236,6 +244,7 @@ public class Article {
 		return firstEdition;
 	}
 
+	@Override
 	public boolean isFoil() {
 		return foil;
 	}
@@ -248,6 +257,7 @@ public class Article {
 		return playset;
 	}
 
+	@Override
 	public boolean isSigned() {
 		return signed;
 	}
@@ -284,8 +294,8 @@ public class Article {
 		this.jsonString = jsonString;
 	}
 
-	public void setLanguage(LanguageCode language) {
-		this.language = language;
+	public void setLanguageCode(LanguageCode language) {
+		this.languageCode = language;
 	}
 
 	public void setLastEdited(LocalDateTime lastEdited) {
@@ -323,7 +333,7 @@ public class Article {
 	@Override
 	public String toString() {
 		return "Article [" + (jsonString != null ? "jsonString=" + jsonString + ", " : "") + "articleId=" + articleId
-				+ ", productId=" + productId + ", " + (language != null ? "language=" + language + ", " : "")
+				+ ", productId=" + productId + ", " + (languageCode != null ? "language=" + languageCode + ", " : "")
 				+ (comment != null ? "comment=" + comment + ", " : "") + (price != null ? "price=" + price + ", " : "")
 				+ "quantity=" + quantity + ", inShoppingCart=" + inShoppingCart + ", "
 				+ (product != null ? "product=" + product + ", " : "")
