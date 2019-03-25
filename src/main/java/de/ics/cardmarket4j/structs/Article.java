@@ -17,7 +17,7 @@ import de.ics.cardmarket4j.enums.Condition;
  * @author QUE
  *
  */
-public class Article implements IsCardMarketArticle {
+public class Article implements IsCardMarketCard {
 	private String jsonString;
 	private int articleId;
 	private int productId;
