@@ -22,7 +22,6 @@ public enum RiskGroup {
 	}
 
 	private final String displayValue;
-
 	private final int id;
 
 	private RiskGroup(int id, String displayValue) {

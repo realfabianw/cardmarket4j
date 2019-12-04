@@ -1,6 +1,6 @@
 package de.ics.cardmarket4j.structs;
 
-import de.ics.cardmarket4j.enums.Condition;
+import de.ics.cardmarket4j.entity.enumeration.Condition;
 
 public interface IsCardMarketCard extends IsCardMarketArticle {
 	public Condition getCondition();

@@ -19,12 +19,12 @@ import javax.crypto.spec.SecretKeySpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.ics.cardmarket4j.enums.HTTPMethod;
+import de.ics.cardmarket4j.entity.enumeration.HTTPMethod;
 
 public class AuthenticationService {
 	private static Logger LOGGER = LoggerFactory.getLogger("AuthenticationService");
 
-	public static String join(Collection<?> s, String delimiter) {
+	private static String join(Collection<?> s, String delimiter) {
 		StringBuilder builder = new StringBuilder();
 		Iterator<?> iter = s.iterator();
 		while (iter.hasNext()) {
@@ -35,15 +35,6 @@ public class AuthenticationService {
 			builder.append(delimiter);
 		}
 		return builder.toString();
-	}
-
-	public static String rawUrlEncode(String str) {
-		try {
-			return URLEncoder.encode(str, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			LOGGER.warn("The given String ({}) couldn't be encoded.\n{}", str, e);
-			return str;
-		}
 	}
 
 	private final String appToken;
@@ -127,53 +118,6 @@ public class AuthenticationService {
 
 		String authHeader = "OAuth " + join(headerParamStrings, ", ");
 		return authHeader;
-	}
-
-	/**
-	 * @deprecated
-	 * @param fullUrl
-	 * @param httpMethod
-	 * @return
-	 * @throws UnsupportedEncodingException
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidKeyException
-	 */
-	@Deprecated
-	private String createOAuthSignatureDreprecated(String fullUrl, HTTPMethod httpMethod)
-			throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
-		String realm = fullUrl;
-		String oauth_version = "1.0";
-		String oauth_consumer_key = appToken;
-		String oauth_token = accessToken;
-		String oauth_signature_method = "HMAC-SHA1";
-		String oauth_timestamp = "" + (System.currentTimeMillis() / 1000);
-		String oauth_nonce = "" + System.currentTimeMillis();
-
-		String encodedRequestURL = rawUrlEncode(fullUrl);
-
-		String baseString = httpMethod + "&" + encodedRequestURL + "&";
-
-		String paramString = "oauth_consumer_key=" + rawUrlEncode(oauth_consumer_key) + "&oauth_nonce="
-				+ rawUrlEncode(oauth_nonce) + "&oauth_signature_method=" + rawUrlEncode(oauth_signature_method)
-				+ "&oauth_timestamp=" + rawUrlEncode(oauth_timestamp) + "&oauth_token=" + rawUrlEncode(oauth_token)
-				+ "&oauth_version=" + rawUrlEncode(oauth_version);
-
-		baseString = baseString + rawUrlEncode(paramString);
-
-		String signingKey = rawUrlEncode(appSecret) + "&" + rawUrlEncode(accessTokenSecret);
-
-		Mac mac = Mac.getInstance("HmacSHA1");
-		SecretKeySpec secret = new SecretKeySpec(signingKey.getBytes(), mac.getAlgorithm());
-		mac.init(secret);
-		byte[] digest = mac.doFinal(baseString.getBytes());
-		String oauth_signature = Base64.getEncoder().encodeToString(digest);
-
-		String authorizationProperty = "OAuth " + "realm=\"" + realm + "\", " + "oauth_version=\"" + oauth_version
-				+ "\", " + "oauth_timestamp=\"" + oauth_timestamp + "\", " + "oauth_nonce=\"" + oauth_nonce + "\", "
-				+ "oauth_consumer_key=\"" + oauth_consumer_key + "\", " + "oauth_token=\"" + oauth_token + "\", "
-				+ "oauth_signature_method=\"" + oauth_signature_method + "\", " + "oauth_signature=\"" + oauth_signature
-				+ "\"";
-		return authorizationProperty;
 	}
 
 	private Map<String, String> parseQueryString(String query) {

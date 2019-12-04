@@ -5,12 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.JsonElement;
+
 import de.ics.cardmarket4j.AbstractService;
 import de.ics.cardmarket4j.CardMarketService;
-import de.ics.cardmarket4j.JsonIO;
 import de.ics.cardmarket4j.entity.Account;
 import de.ics.cardmarket4j.entity.Conversation;
-import de.ics.cardmarket4j.enums.HTTPMethod;
+import de.ics.cardmarket4j.entity.enumeration.HTTPMethod;
+import de.ics.cardmarket4j.utils.JsonIO;
 
 /**
  * AccountService provides a connection to several account related functions.

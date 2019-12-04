@@ -23,7 +23,6 @@ public enum SellerActivationStatus {
 	}
 
 	private final String displayValue;
-
 	private final int id;
 
 	private SellerActivationStatus(int id, String displayValue) {

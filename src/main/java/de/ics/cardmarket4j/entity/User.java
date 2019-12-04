@@ -1,6 +1,7 @@
 package de.ics.cardmarket4j.entity;
 
 import java.time.LocalDateTime;
+
 import de.ics.cardmarket4j.entity.enumeration.Reputation;
 import de.ics.cardmarket4j.entity.enumeration.RiskGroup;
 import de.ics.cardmarket4j.entity.enumeration.UserType;

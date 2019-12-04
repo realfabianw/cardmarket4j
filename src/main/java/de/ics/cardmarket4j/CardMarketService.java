@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
-import de.ics.cardmarket4j.enums.HTTPMethod;
+import de.ics.cardmarket4j.entity.enumeration.HTTPMethod;
 import de.ics.cardmarket4j.service.AccountService;
 import de.ics.cardmarket4j.service.AuthenticationService;
 import de.ics.cardmarket4j.service.MarketplaceService;
@@ -27,7 +27,7 @@ import de.ics.cardmarket4j.utils.HTTPUtils;
 
 public class CardMarketService {
 	private static final String URI = "https://api.cardmarket.com/ws/v2.0/output.json/";
-	private static Logger LOGGER = LoggerFactory.getLogger("CardMarket");
+	private static Logger LOGGER = LoggerFactory.getLogger("CardMarketService");
 	private final AuthenticationService authenticationService;
 	private final AccountService accountService;
 	private final MarketplaceService marketplaceService;

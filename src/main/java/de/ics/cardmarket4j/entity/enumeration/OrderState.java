@@ -1,10 +1,5 @@
-package de.ics.cardmarket4j.enums;
+package de.ics.cardmarket4j.entity.enumeration;
 
-/**
- * 
- * @author QUE
- * @version 30.01.2019
- */
 public enum OrderState {
 	BOUGHT(1, "bought"), PAID(2, "paid"), SENT(4, "sent"), RECEIVED(8, "received"), LOST(32, "lost"),
 	CANCELLED(128, "cancelled");

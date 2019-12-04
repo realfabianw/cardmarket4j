@@ -22,7 +22,6 @@ public enum UserType {
 	}
 
 	private final String displayValue;
-
 	private final int id;
 
 	private UserType(int id, String displayValue) {

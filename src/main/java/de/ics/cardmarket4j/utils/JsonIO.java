@@ -1,4 +1,4 @@
-package de.ics.cardmarket4j;
+package de.ics.cardmarket4j.utils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

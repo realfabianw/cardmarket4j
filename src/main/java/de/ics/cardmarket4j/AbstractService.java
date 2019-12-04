@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonElement;
 
-import de.ics.cardmarket4j.enums.HTTPMethod;
+import de.ics.cardmarket4j.entity.enumeration.HTTPMethod;
 
 public abstract class AbstractService {
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass().getSimpleName());

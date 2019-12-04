@@ -2,9 +2,9 @@ package de.ics.cardmarket4j.structs;
 
 import com.neovisionaries.i18n.LanguageCode;
 
+import de.ics.cardmarket4j.entity.enumeration.Condition;
 import de.ics.cardmarket4j.entity.enumeration.Reputation;
 import de.ics.cardmarket4j.entity.enumeration.UserType;
-import de.ics.cardmarket4j.enums.Condition;
 import de.ics.cardmarket4j.utils.CardMarketUtils;
 
 /**

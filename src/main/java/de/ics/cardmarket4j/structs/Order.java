@@ -9,10 +9,10 @@ import java.util.List;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import de.ics.cardmarket4j.JsonIO;
 import de.ics.cardmarket4j.entity.Address;
 import de.ics.cardmarket4j.entity.User;
-import de.ics.cardmarket4j.enums.OrderState;
+import de.ics.cardmarket4j.entity.enumeration.OrderState;
+import de.ics.cardmarket4j.utils.JsonIO;
 
 /**
  * @see https://www.mkmapi.eu/ws/documentation/API_2.0:Entities:Order

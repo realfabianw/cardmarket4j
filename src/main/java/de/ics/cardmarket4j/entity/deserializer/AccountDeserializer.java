@@ -10,12 +10,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.neovisionaries.i18n.CountryCode;
 
-import de.ics.cardmarket4j.JsonIO;
 import de.ics.cardmarket4j.entity.Account;
 import de.ics.cardmarket4j.entity.BankAccount;
 import de.ics.cardmarket4j.entity.User;
 import de.ics.cardmarket4j.entity.enumeration.DeliverySpeed;
 import de.ics.cardmarket4j.entity.enumeration.SellerActivationStatus;
+import de.ics.cardmarket4j.utils.JsonIO;
 
 public class AccountDeserializer implements JsonDeserializer<Account> {
 

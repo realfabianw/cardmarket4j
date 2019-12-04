@@ -1,10 +1,5 @@
-package de.ics.cardmarket4j.enums;
+package de.ics.cardmarket4j.entity.enumeration;
 
-/**
- * 
- * @author QUE
- * @version 30.01.2019
- */
 public enum Complaint {
 	BADCOMMUNICATION("badCommunication", "bad communication"),
 	INCOMPLETESHIPMENT("incompleteShipment", "incomplete shipment"), NOTFOIL("notFoil", "not foil"),

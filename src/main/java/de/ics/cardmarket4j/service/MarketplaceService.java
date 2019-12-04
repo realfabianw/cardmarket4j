@@ -14,7 +14,7 @@ import com.google.gson.JsonElement;
 
 import de.ics.cardmarket4j.AbstractService;
 import de.ics.cardmarket4j.CardMarketService;
-import de.ics.cardmarket4j.enums.HTTPMethod;
+import de.ics.cardmarket4j.entity.enumeration.HTTPMethod;
 import de.ics.cardmarket4j.structs.Article;
 import de.ics.cardmarket4j.structs.ArticleFilter;
 import de.ics.cardmarket4j.structs.Product;

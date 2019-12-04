@@ -6,9 +6,9 @@ import java.util.Set;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import de.ics.cardmarket4j.JsonIO;
-import de.ics.cardmarket4j.enums.Complaint;
-import de.ics.cardmarket4j.enums.EvaluationGrade;
+import de.ics.cardmarket4j.entity.enumeration.Complaint;
+import de.ics.cardmarket4j.entity.enumeration.EvaluationGrade;
+import de.ics.cardmarket4j.utils.JsonIO;
 
 /**
  * 

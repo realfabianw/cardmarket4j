@@ -9,9 +9,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.neovisionaries.i18n.LanguageCode;
 
-import de.ics.cardmarket4j.JsonIO;
-import de.ics.cardmarket4j.enums.Game;
+import de.ics.cardmarket4j.entity.enumeration.Game;
 import de.ics.cardmarket4j.utils.CardMarketUtils;
+import de.ics.cardmarket4j.utils.JsonIO;
 
 /**
  * @see https://www.mkmapi.eu/ws/documentation/API_2.0:Entities:Expansion

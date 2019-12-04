@@ -1,10 +1,5 @@
-package de.ics.cardmarket4j.enums;
+package de.ics.cardmarket4j.entity.enumeration;
 
-/**
- * 
- * @author QUE
- * @version 19.01.2018 - complete list at this date
- */
 public enum Condition {
 	MINT("MT", "Mint"), NEAR_MINT("NM", "Near Mint"), EXCELLENT("EX", "Excellent"), GOOD("GD", "Good"),
 	LIGHT_PLAYED("LP", "Light Played"), PLAYED("PL", "Played"), POOR("PO", "Poor");

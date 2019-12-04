@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import com.google.gson.JsonObject;
 
-import de.ics.cardmarket4j.JsonIO;
+import de.ics.cardmarket4j.utils.JsonIO;
 
 /**
  * 

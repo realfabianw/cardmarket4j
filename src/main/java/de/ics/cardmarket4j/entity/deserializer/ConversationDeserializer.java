@@ -10,10 +10,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
-import de.ics.cardmarket4j.JsonIO;
 import de.ics.cardmarket4j.entity.Conversation;
 import de.ics.cardmarket4j.entity.Message;
 import de.ics.cardmarket4j.entity.User;
+import de.ics.cardmarket4j.utils.JsonIO;
 
 public class ConversationDeserializer implements JsonDeserializer<Conversation> {
 

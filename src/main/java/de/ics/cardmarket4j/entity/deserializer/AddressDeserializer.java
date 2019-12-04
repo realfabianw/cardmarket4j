@@ -8,8 +8,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.neovisionaries.i18n.CountryCode;
 
-import de.ics.cardmarket4j.JsonIO;
 import de.ics.cardmarket4j.entity.Address;
+import de.ics.cardmarket4j.utils.JsonIO;
 
 public class AddressDeserializer implements JsonDeserializer<Address> {
 	@Override
