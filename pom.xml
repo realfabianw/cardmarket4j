@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.ics.cardmarket4j</groupId>
 	<artifactId>cardmarket4j</artifactId>
-	<version>0.6.6</version>
+	<version>0.7.0</version>
 	<name>cardmarket4j</name>
 
 	<properties>
-		<version.gson>2.8.5</version.gson>
+		<version.gson>(2.8.5, 2.9.0]</version.gson>
 		<version.logback>1.2.3</version.logback>
 		<version.javatuples>1.2</version.javatuples>
 		<version.nv-i18n>1.24</version.nv-i18n>

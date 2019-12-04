@@ -1,4 +1,4 @@
-package de.ics.cardmarket4j.enums;
+package de.ics.cardmarket4j.entity.enumeration;
 
 public enum Reputation {
 	NO_REPUTATION(0, "not enough sales to rate"), OUTSTANDING_SELLER(1, "outstanding seller"),
@@ -23,9 +23,6 @@ public enum Reputation {
 		throw new IllegalArgumentException("Couldn't find an enum matching this value: " + value);
 	}
 
-	/**
-	 * Speichert den Anzeigenamen.
-	 */
 	private final String displayValue;
 
 	private final int id;

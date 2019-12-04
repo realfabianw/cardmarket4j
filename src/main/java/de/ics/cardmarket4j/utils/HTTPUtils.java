@@ -1,13 +1,9 @@
-package de.ics.cardmarket4j;
+package de.ics.cardmarket4j.utils;
 
 import java.net.HttpURLConnection;
 
 public class HTTPUtils {
-	public static String getFullResponse(HttpURLConnection connection) {
-		return getHeader(connection);
-	}
-
-	private static String getHeader(HttpURLConnection connection) {
+	public static String getResponseHeader(HttpURLConnection connection) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("\n-- Response Header--");
@@ -19,5 +15,4 @@ public class HTTPUtils {
 		}
 		return sb.toString();
 	}
-
 }

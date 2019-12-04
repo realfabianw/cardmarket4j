@@ -1,4 +1,4 @@
-package de.ics.cardmarket4j.enums;
+package de.ics.cardmarket4j.entity.enumeration;
 
 public enum DeliverySpeed {
 	UNKNOWN(-1, "unknown shipping speed"), NORMAL(0, "normal shipping speed"), VERY_FAST(1, "very fast shipping"),
@@ -22,9 +22,6 @@ public enum DeliverySpeed {
 		throw new IllegalArgumentException("Couldn't find an enum matching this value: " + value);
 	}
 
-	/**
-	 * Speichert den Anzeigenamen.
-	 */
 	private final String displayValue;
 
 	private final int id;

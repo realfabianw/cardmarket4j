@@ -7,9 +7,10 @@ import java.time.format.DateTimeFormatter;
 import com.google.gson.JsonObject;
 import com.neovisionaries.i18n.LanguageCode;
 
-import de.ics.cardmarket4j.CardMarketUtils;
 import de.ics.cardmarket4j.JsonIO;
+import de.ics.cardmarket4j.entity.User;
 import de.ics.cardmarket4j.enums.Condition;
+import de.ics.cardmarket4j.utils.CardMarketUtils;
 
 /**
  * 

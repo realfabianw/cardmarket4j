@@ -1,10 +1,10 @@
-package de.ics.cardmarket4j.enums;
+package de.ics.cardmarket4j.entity.enumeration;
 
-public enum UserType {
-	PRIVATE(0, "private"), COMMERCIAL(1, "commercial"), POWERSELLER(2, "powerseller");
+public enum RiskGroup {
+	NO_RISK(0, "no risk"), LOW_RISK(1, "low risk"), HIGH_RISK(2, "high risk");
 
-	public static UserType parseId(int id) {
-		for (UserType e : UserType.values()) {
+	public static RiskGroup parseId(int id) {
+		for (RiskGroup e : RiskGroup.values()) {
 			if (e.getId() == id) {
 				return e;
 			}
@@ -12,8 +12,8 @@ public enum UserType {
 		throw new IllegalArgumentException("Couldn't find an enum matching this value: " + id);
 	}
 
-	public static UserType parseValue(String value) {
-		for (UserType e : UserType.values()) {
+	public static RiskGroup parseValue(String value) {
+		for (RiskGroup e : RiskGroup.values()) {
 			if (e.getDisplayValue().equals(value)) {
 				return e;
 			}
@@ -21,16 +21,13 @@ public enum UserType {
 		throw new IllegalArgumentException("Couldn't find an enum matching this value: " + value);
 	}
 
-	/**
-	 * Speichert den Anzeigenamen.
-	 */
 	private final String displayValue;
 
 	private final int id;
 
-	private UserType(int id, String displayValue) {
-		this.id = id;
+	private RiskGroup(int id, String displayValue) {
 		this.displayValue = displayValue;
+		this.id = id;
 	}
 
 	private String getDisplayValue() {

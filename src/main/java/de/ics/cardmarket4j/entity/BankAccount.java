@@ -1,4 +1,4 @@
-package de.ics.cardmarket4j.structs;
+package de.ics.cardmarket4j.entity;
 
 import com.google.gson.JsonObject;
 
@@ -16,11 +16,19 @@ public class BankAccount {
 	private String bic;
 	private String bankName;
 
+	@Deprecated
 	public BankAccount(JsonObject jObject) {
 		this.registeredOwner = JsonIO.parseString(jObject, "accountOwner");
 		this.iban = JsonIO.parseString(jObject, "iban");
 		this.bic = JsonIO.parseString(jObject, "bic");
 		this.bankName = JsonIO.parseString(jObject, "bankname");
+	}
+
+	public BankAccount(String registeredOwner, String iban, String bic, String bankName) {
+		this.registeredOwner = registeredOwner;
+		this.iban = iban;
+		this.bic = bic;
+		this.bankName = bankName;
 	}
 
 	@Override

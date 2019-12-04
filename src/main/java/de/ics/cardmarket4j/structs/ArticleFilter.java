@@ -2,10 +2,10 @@ package de.ics.cardmarket4j.structs;
 
 import com.neovisionaries.i18n.LanguageCode;
 
-import de.ics.cardmarket4j.CardMarketUtils;
+import de.ics.cardmarket4j.entity.enumeration.Reputation;
+import de.ics.cardmarket4j.entity.enumeration.UserType;
 import de.ics.cardmarket4j.enums.Condition;
-import de.ics.cardmarket4j.enums.Reputation;
-import de.ics.cardmarket4j.enums.UserType;
+import de.ics.cardmarket4j.utils.CardMarketUtils;
 
 /**
  * This class represents the filter function for articles on cardmarket. Filters

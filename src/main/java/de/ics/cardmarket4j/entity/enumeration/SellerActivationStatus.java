@@ -1,4 +1,4 @@
-package de.ics.cardmarket4j.enums;
+package de.ics.cardmarket4j.entity.enumeration;
 
 public enum SellerActivationStatus {
 	NONE(0, "no seller activation"), REQUESTED(1, "seller activation requested, but transfers still pending"),
@@ -22,9 +22,6 @@ public enum SellerActivationStatus {
 		throw new IllegalArgumentException("Couldn't find an enum matching this value: " + value);
 	}
 
-	/**
-	 * Speichert den Anzeigenamen.
-	 */
 	private final String displayValue;
 
 	private final int id;

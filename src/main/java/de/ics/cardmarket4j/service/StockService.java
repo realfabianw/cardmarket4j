@@ -13,11 +13,11 @@ import com.google.gson.JsonElement;
 
 import de.ics.cardmarket4j.AbstractService;
 import de.ics.cardmarket4j.CardMarketService;
-import de.ics.cardmarket4j.CardMarketUtils;
 import de.ics.cardmarket4j.enums.Game;
 import de.ics.cardmarket4j.enums.HTTPMethod;
 import de.ics.cardmarket4j.structs.Article;
 import de.ics.cardmarket4j.structs.IsCardMarketCard;
+import de.ics.cardmarket4j.utils.CardMarketUtils;
 
 public class StockService extends AbstractService {
 	private static Logger LOGGER = LoggerFactory.getLogger("StockService");
@@ -42,7 +42,7 @@ public class StockService extends AbstractService {
 		}
 		xml.append("</request>");
 		LOGGER.trace("XML: {}", xml);
-		Pair<Integer, JsonElement> response = requestWithOutput("stock/decrease", HTTPMethod.PUT, xml.toString());
+		Pair<Integer, JsonElement> response = request("stock/decrease", HTTPMethod.PUT, xml.toString());
 
 		List<Article> listArticle = new ArrayList<>();
 		for (JsonElement jEle : response.getValue1().getAsJsonObject().get("article").getAsJsonArray()) {
@@ -77,7 +77,7 @@ public class StockService extends AbstractService {
 		}
 		xml.append("</request>");
 		LOGGER.trace("XML: {}", xml);
-		Pair<Integer, JsonElement> response = requestWithOutput("stock", HTTPMethod.PUT, xml.toString());
+		Pair<Integer, JsonElement> response = request("stock", HTTPMethod.PUT, xml.toString());
 
 		List<Article> listArticle = new ArrayList<>();
 		for (JsonElement jEle : response.getValue1().getAsJsonObject().get("updatedArticles").getAsJsonArray()) {
@@ -133,7 +133,7 @@ public class StockService extends AbstractService {
 		}
 		xml.append("</request>");
 		LOGGER.trace("XML: {}", xml);
-		Pair<Integer, JsonElement> response = requestWithOutput("stock/increase", HTTPMethod.PUT, xml.toString());
+		Pair<Integer, JsonElement> response = request("stock/increase", HTTPMethod.PUT, xml.toString());
 
 		List<Article> listArticle = new ArrayList<>();
 		for (JsonElement jEle : response.getValue1().getAsJsonObject().get("article").getAsJsonArray()) {
@@ -164,7 +164,7 @@ public class StockService extends AbstractService {
 		}
 		xml.append("</request>");
 		LOGGER.trace("XML: {}", xml);
-		Pair<Integer, JsonElement> response = requestWithOutput("stock", HTTPMethod.POST, xml.toString());
+		Pair<Integer, JsonElement> response = request("stock", HTTPMethod.POST, xml.toString());
 
 		List<Article> listArticle = new ArrayList<>();
 		for (JsonElement jEle : response.getValue1().getAsJsonObject().get("inserted").getAsJsonArray()) {
@@ -188,7 +188,7 @@ public class StockService extends AbstractService {
 		}
 		xml.append("</request>");
 		LOGGER.trace("XML: {}", xml);
-		Pair<Integer, JsonElement> response = requestWithOutput("stock", HTTPMethod.DELETE, xml.toString());
+		Pair<Integer, JsonElement> response = request("stock", HTTPMethod.DELETE, xml.toString());
 
 		List<Article> listArticle = new ArrayList<>();
 		for (JsonElement jEle : response.getValue1().getAsJsonObject().get("deleted").getAsJsonArray()) {

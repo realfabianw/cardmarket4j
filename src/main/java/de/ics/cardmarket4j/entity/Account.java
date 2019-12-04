@@ -1,13 +1,17 @@
-package de.ics.cardmarket4j.structs;
+package de.ics.cardmarket4j.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import com.google.gson.JsonObject;
 import com.neovisionaries.i18n.CountryCode;
 
 import de.ics.cardmarket4j.JsonIO;
-import de.ics.cardmarket4j.enums.DeliverySpeed;
-import de.ics.cardmarket4j.enums.SellerActivationStatus;
+import de.ics.cardmarket4j.entity.enumeration.DeliverySpeed;
+import de.ics.cardmarket4j.entity.enumeration.Reputation;
+import de.ics.cardmarket4j.entity.enumeration.RiskGroup;
+import de.ics.cardmarket4j.entity.enumeration.SellerActivationStatus;
+import de.ics.cardmarket4j.entity.enumeration.UserType;
 
 /**
  * 
@@ -30,6 +34,33 @@ public class Account extends User {
 	private int amountItemsInShoppingCard;
 	private int amountUnreadMessages;
 
+	public Account(int userId, String userName, LocalDateTime registrationDate, UserType userType, boolean seller,
+			String companyName, String firstName, String lastName, Address address, String phoneNumber,
+			String emailAddress, String vat, RiskGroup riskGroup, Reputation reputation, int expectedDeliveryTime,
+			int amountSales, int amountSoldItems, int averageShippingTime, boolean onVacation, CountryCode country,
+			boolean maySell, SellerActivationStatus sellerActivationStatus, DeliverySpeed deliverySpeed,
+			boolean activated, BigDecimal totalBalance, BigDecimal moneyBalance, BigDecimal bonusBalance,
+			BigDecimal unpaidAmount, BigDecimal providerRechargeAmount, BankAccount bankAccount,
+			int amountItemsInShoppingCard, int amountUnreadMessages) {
+		super(userId, userName, registrationDate, userType, seller, companyName, firstName, lastName, address,
+				phoneNumber, emailAddress, vat, riskGroup, reputation, expectedDeliveryTime, amountSales,
+				amountSoldItems, averageShippingTime, onVacation);
+		this.country = country;
+		this.maySell = maySell;
+		this.sellerActivationStatus = sellerActivationStatus;
+		this.deliverySpeed = deliverySpeed;
+		this.activated = activated;
+		this.totalBalance = totalBalance;
+		this.moneyBalance = moneyBalance;
+		this.bonusBalance = bonusBalance;
+		this.unpaidAmount = unpaidAmount;
+		this.providerRechargeAmount = providerRechargeAmount;
+		this.bankAccount = bankAccount;
+		this.amountItemsInShoppingCard = amountItemsInShoppingCard;
+		this.amountUnreadMessages = amountUnreadMessages;
+	}
+
+	@Deprecated
 	public Account(JsonObject jObject) {
 		super(jObject);
 		if (JsonIO.parseString(jObject, "country").equals("D")) {

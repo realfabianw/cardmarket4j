@@ -4,7 +4,18 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+
+import de.ics.cardmarket4j.entity.Account;
+import de.ics.cardmarket4j.entity.Address;
+import de.ics.cardmarket4j.entity.BankAccount;
+import de.ics.cardmarket4j.entity.User;
+import de.ics.cardmarket4j.entity.deserializer.AccountDeserializer;
+import de.ics.cardmarket4j.entity.deserializer.AddressDeserializer;
+import de.ics.cardmarket4j.entity.deserializer.BankAccountDeserializer;
+import de.ics.cardmarket4j.entity.deserializer.UserDeserializer;
 
 /**
  * Class that catches NullPointerExceptions while getting responses from the
@@ -14,6 +25,22 @@ import com.google.gson.JsonObject;
  *
  */
 public class JsonIO {
+
+	private static Gson gson;
+
+	public static Gson getGson() {
+		if (gson == null) {
+			GsonBuilder gsonBuilder = new GsonBuilder();
+			gsonBuilder.registerTypeAdapter(Address.class, new AddressDeserializer());
+			gsonBuilder.registerTypeAdapter(BankAccount.class, new BankAccountDeserializer());
+			gsonBuilder.registerTypeAdapter(User.class, new UserDeserializer());
+			gsonBuilder.registerTypeAdapter(Account.class, new AccountDeserializer());
+
+			gson = gsonBuilder.create();
+		}
+		return gson;
+	}
+
 	public static BigDecimal parseBigDecimal(JsonObject jObject, String fieldName) {
 		try {
 			return jObject.get(fieldName).getAsBigDecimal();

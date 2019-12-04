@@ -1,4 +1,4 @@
-package de.ics.cardmarket4j.structs;
+package de.ics.cardmarket4j.entity;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -6,9 +6,9 @@ import java.time.format.DateTimeFormatter;
 import com.google.gson.JsonObject;
 
 import de.ics.cardmarket4j.JsonIO;
-import de.ics.cardmarket4j.enums.Reputation;
-import de.ics.cardmarket4j.enums.RiskGroup;
-import de.ics.cardmarket4j.enums.UserType;
+import de.ics.cardmarket4j.entity.enumeration.Reputation;
+import de.ics.cardmarket4j.entity.enumeration.RiskGroup;
+import de.ics.cardmarket4j.entity.enumeration.UserType;
 
 /**
  * 
@@ -17,7 +17,6 @@ import de.ics.cardmarket4j.enums.UserType;
  *
  */
 public class User {
-	private String jsonString;
 	private int userId;
 	private String userName;
 	private LocalDateTime registrationDate;
@@ -38,8 +37,33 @@ public class User {
 	private int averageShippingTime;
 	private boolean onVacation;
 
+	public User(int userId, String userName, LocalDateTime registrationDate, UserType userType, boolean seller,
+			String companyName, String firstName, String lastName, Address address, String phoneNumber,
+			String emailAddress, String vat, RiskGroup riskGroup, Reputation reputation, int expectedDeliveryTime,
+			int amountSales, int amountSoldItems, int averageShippingTime, boolean onVacation) {
+		this.userId = userId;
+		this.userName = userName;
+		this.registrationDate = registrationDate;
+		this.userType = userType;
+		this.seller = seller;
+		this.companyName = companyName;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.address = address;
+		this.phoneNumber = phoneNumber;
+		this.emailAddress = emailAddress;
+		this.vat = vat;
+		this.riskGroup = riskGroup;
+		this.reputation = reputation;
+		this.expectedDeliveryTime = expectedDeliveryTime;
+		this.amountSales = amountSales;
+		this.amountSoldItems = amountSoldItems;
+		this.averageShippingTime = averageShippingTime;
+		this.onVacation = onVacation;
+	}
+
+	@Deprecated
 	public User(JsonObject jObject) {
-		this.jsonString = jObject.toString();
 		this.userId = JsonIO.parseInteger(jObject, "idUser");
 		this.userName = JsonIO.parseString(jObject, "username");
 		// Account == registerDate, User == registrationDate
@@ -69,32 +93,6 @@ public class User {
 		this.amountSoldItems = JsonIO.parseInteger(jObject, "soldItems");
 		this.averageShippingTime = JsonIO.parseInteger(jObject, "avgShippingTime");
 		this.onVacation = JsonIO.parseBoolean(jObject, "onVacation");
-	}
-
-	public User(String jsonString, int userId, String userName, LocalDateTime registrationDate, UserType userType,
-			boolean seller, String companyName, String firstName, String lastName, Address address, String phoneNumber,
-			String emailAddress, String vat, RiskGroup riskGroup, Reputation reputation, int expectedDeliveryTime,
-			int amountSales, int amountSoldItems, int averageShippingTime, boolean onVacation) {
-		this.jsonString = jsonString;
-		this.userId = userId;
-		this.userName = userName;
-		this.registrationDate = registrationDate;
-		this.userType = userType;
-		this.seller = seller;
-		this.companyName = companyName;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.address = address;
-		this.phoneNumber = phoneNumber;
-		this.emailAddress = emailAddress;
-		this.vat = vat;
-		this.riskGroup = riskGroup;
-		this.reputation = reputation;
-		this.expectedDeliveryTime = expectedDeliveryTime;
-		this.amountSales = amountSales;
-		this.amountSoldItems = amountSoldItems;
-		this.averageShippingTime = averageShippingTime;
-		this.onVacation = onVacation;
 	}
 
 	@Override
@@ -133,11 +131,6 @@ public class User {
 			if (other.firstName != null)
 				return false;
 		} else if (!firstName.equals(other.firstName))
-			return false;
-		if (jsonString == null) {
-			if (other.jsonString != null)
-				return false;
-		} else if (!jsonString.equals(other.jsonString))
 			return false;
 		if (lastName == null) {
 			if (other.lastName != null)
@@ -211,10 +204,6 @@ public class User {
 		return firstName;
 	}
 
-	public String getJsonString() {
-		return jsonString;
-	}
-
 	public String getLastName() {
 		return lastName;
 	}
@@ -263,7 +252,6 @@ public class User {
 		result = prime * result + ((emailAddress == null) ? 0 : emailAddress.hashCode());
 		result = prime * result + expectedDeliveryTime;
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((jsonString == null) ? 0 : jsonString.hashCode());
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime * result + (onVacation ? 1231 : 1237);
 		result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
@@ -318,10 +306,6 @@ public class User {
 		this.firstName = firstName;
 	}
 
-	public void setJsonString(String jsonString) {
-		this.jsonString = jsonString;
-	}
-
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
@@ -368,13 +352,18 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [jsonString=" + jsonString + ", userId=" + userId + ", userName=" + userName
-				+ ", registrationDate=" + registrationDate + ", userType=" + userType + ", seller=" + seller
-				+ ", companyName=" + companyName + ", firstName=" + firstName + ", lastName=" + lastName + ", address="
-				+ address + ", phoneNumber=" + phoneNumber + ", emailAddress=" + emailAddress + ", vat=" + vat
-				+ ", riskGroup=" + riskGroup + ", reputation=" + reputation + ", expectedDeliveryTime="
+		return "User [userId=" + userId + ", " + (userName != null ? "userName=" + userName + ", " : "")
+				+ (registrationDate != null ? "registrationDate=" + registrationDate + ", " : "")
+				+ (userType != null ? "userType=" + userType + ", " : "") + "seller=" + seller + ", "
+				+ (companyName != null ? "companyName=" + companyName + ", " : "")
+				+ (firstName != null ? "firstName=" + firstName + ", " : "")
+				+ (lastName != null ? "lastName=" + lastName + ", " : "")
+				+ (address != null ? "address=" + address + ", " : "")
+				+ (phoneNumber != null ? "phoneNumber=" + phoneNumber + ", " : "")
+				+ (emailAddress != null ? "emailAddress=" + emailAddress + ", " : "")
+				+ (vat != null ? "vat=" + vat + ", " : "") + (riskGroup != null ? "riskGroup=" + riskGroup + ", " : "")
+				+ (reputation != null ? "reputation=" + reputation + ", " : "") + "expectedDeliveryTime="
 				+ expectedDeliveryTime + ", amountSales=" + amountSales + ", amountSoldItems=" + amountSoldItems
 				+ ", averageShippingTime=" + averageShippingTime + ", onVacation=" + onVacation + "]";
 	}
-
 }

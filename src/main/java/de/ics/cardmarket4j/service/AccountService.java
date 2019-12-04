@@ -6,12 +6,19 @@ import java.util.List;
 
 import org.javatuples.Pair;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import de.ics.cardmarket4j.AbstractService;
 import de.ics.cardmarket4j.CardMarketService;
+import de.ics.cardmarket4j.JsonIO;
+import de.ics.cardmarket4j.entity.Account;
+import de.ics.cardmarket4j.entity.User;
+import de.ics.cardmarket4j.entity.deserializer.AccountDeserializer;
+import de.ics.cardmarket4j.entity.deserializer.UserDeserializer;
 import de.ics.cardmarket4j.enums.HTTPMethod;
-import de.ics.cardmarket4j.structs.Account;
 import de.ics.cardmarket4j.structs.Conversation;
 
 /**
@@ -36,8 +43,10 @@ public class AccountService extends AbstractService {
 	 * @throws IOException
 	 */
 	public Account getAccountInformation() throws IOException {
-		return new Account(
-				request("account", HTTPMethod.GET).getValue1().getAsJsonObject().get("account").getAsJsonObject());
+		JsonElement response = request("account", HTTPMethod.GET);
+		Account acc = JsonIO.getGson().fromJson(response.getAsJsonObject().get("account"), Account.class);
+		LOGGER.info("Account: {}", acc);
+		return new Account(response.getAsJsonObject().get("account").getAsJsonObject());
 	}
 
 	/**

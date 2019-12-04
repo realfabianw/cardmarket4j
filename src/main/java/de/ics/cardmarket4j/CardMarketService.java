@@ -23,16 +23,19 @@ import de.ics.cardmarket4j.service.AuthenticationService;
 import de.ics.cardmarket4j.service.MarketplaceService;
 import de.ics.cardmarket4j.service.OrderService;
 import de.ics.cardmarket4j.service.StockService;
+import de.ics.cardmarket4j.utils.HTTPUtils;
 
 public class CardMarketService {
 	private static final String URI = "https://api.cardmarket.com/ws/v2.0/output.json/";
 	private static Logger LOGGER = LoggerFactory.getLogger("CardMarket");
-	private Pair<Integer, JsonElement> lastResponse;
 	private final AuthenticationService authenticationService;
 	private final AccountService accountService;
 	private final MarketplaceService marketplaceService;
 	private final StockService stockService;
 	private final OrderService orderService;
+	private Pair<Integer, JsonElement> lastResponse;
+	private int requestCount;
+	private int requestLimit;
 
 	public CardMarketService(String appToken, String appSecret, String accessToken, String accessTokenSecret) {
 		this.authenticationService = new AuthenticationService(appToken, appSecret, accessToken, accessTokenSecret);
@@ -54,34 +57,36 @@ public class CardMarketService {
 		return orderService;
 	}
 
+	public int getRequestCount() {
+		return requestCount;
+	}
+
+	public int getRequestLimit() {
+		return requestLimit;
+	}
+
 	public StockService getStockService() {
 		return stockService;
 	}
 
-	Pair<Integer, JsonElement> request(String URL, HTTPMethod httpMethod, boolean doOutput, String output)
-			throws IOException {
+	Pair<Integer, JsonElement> request(String URL, HTTPMethod httpMethod) throws IOException {
 		try {
 			String uri = URI + URL.replaceAll("\\s", "%20");
 			HttpURLConnection connection = (HttpURLConnection) new URL(uri).openConnection();
+
 			String oAuthSignature = authenticationService.createOAuthSignature(uri, httpMethod);
 			connection.addRequestProperty("Authorization", oAuthSignature);
-			if (doOutput) {
-				connection.setDoOutput(true);
-			}
 			connection.setRequestMethod(httpMethod.toString());
+
 			LOGGER.debug("Request:\t{} {}", httpMethod.toString(), uri);
-			// LOGGER.trace("Authorization:\t{}", oAuthSignature);
+			LOGGER.trace("Authorization:\t{}", oAuthSignature);
 			connection.connect();
-			if (doOutput) {
-				OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
-				out.write(output);
-				out.close();
-				// LOGGER.trace("Request body:\t{}", output);
-			}
 
 			int responseCode = connection.getResponseCode();
-			// LOGGER.trace("Response Code:\t{}", responseCode);
-			// LOGGER.trace(HTTPUtils.getFullResponse(connection));
+			LOGGER.trace("Response Code:\t{}", responseCode);
+			LOGGER.trace("Response Header: {}", HTTPUtils.getResponseHeader(connection));
+			requestCount = connection.getHeaderFieldInt("X-Request-Limit-Count", -1);
+			requestLimit = connection.getHeaderFieldInt("X-Request-Limit-Max", -1);
 
 			BufferedReader rd = new BufferedReader(new InputStreamReader(
 					(responseCode == 200 || responseCode == 206 || responseCode == 204) ? connection.getInputStream()
@@ -92,71 +97,64 @@ public class CardMarketService {
 				sb.append(line);
 			}
 			rd.close();
-			String responseString = sb.toString();
-			// LOGGER.trace("Response Body:\t{}", responseString);
 
-			JsonElement jResponse = new JsonParser().parse(responseString);
+			String responseString = sb.toString();
+			LOGGER.trace("Response Body:\t{}", responseString);
+			JsonElement jResponse = JsonParser.parseString(responseString);
 			LOGGER.debug("Response:\t{} {}", responseCode, jResponse);
-			return new Pair<>(responseCode, jResponse);
-		} catch (MalformedURLException | InvalidKeyException | NoSuchAlgorithmException e) {
+			lastResponse = new Pair<>(responseCode, jResponse);
+			return lastResponse;
+		} catch (MalformedURLException | InvalidKeyException | NoSuchAlgorithmException | NullPointerException e) {
 			LOGGER.error("An critical error occured", e);
 			System.exit(-1);
 			return null;
 		}
 	}
 
-//	Pair<Integer, JsonElement> request(String URL, HTTPMethod httpMethod, boolean doOutput, String output)
-//			throws IOException {
-//		int responseCode = 0;
-//		String responseString = "";
-//		try {
-//			JsonElement responseContent = null;
-//			// Whitespaces are not allowed in urls, so they have to be removed before trying
-//			// to open a connection.
-//			String fullUrl = URI + URL.replaceAll("\\s", "%20");
-//			HttpURLConnection connection = (HttpURLConnection) new URL(fullUrl).openConnection();
-//			connection.addRequestProperty("Authorization",
-//					authenticationService.createOAuthSignature(fullUrl, httpMethod));
-//			// I dont think these are needed here.
-//			// connection.setDoInput(true);
-//			if (doOutput) {
-//				connection.setDoOutput(true);
-//			}
-//			LOGGER.trace("Request:\t{} {}", httpMethod.toString(), fullUrl);
-//			connection.setRequestMethod(httpMethod.toString());
-//			connection.connect();
-//
-//			if (doOutput) {
-//				OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
-//				out.write(output);
-//				out.close();
-//			}
-//
-//			LOGGER.trace(HTTPUtils.getFullResponse(connection));
-//
-//			responseCode = connection.getResponseCode();
-//
-//			BufferedReader rd = new BufferedReader(new InputStreamReader(
-//					responseCode == 200 ? connection.getInputStream() : connection.getErrorStream()));
-//			StringBuffer sb = new StringBuffer();
-//			String line;
-//			while ((line = rd.readLine()) != null) {
-//				sb.append(line);
-//			}
-//			rd.close();
-//			responseString = sb.toString();
-//			responseContent = new JsonParser().parse(sb.toString());
-//
-//			Pair<Integer, JsonElement> response = new Pair<>(responseCode, responseContent);
-//			LOGGER.trace("Response:\t{}", response);
-//			lastResponse = response;
-//			return response;
-//		} catch (InvalidKeyException | UnsupportedEncodingException | NoSuchAlgorithmException | ProtocolException
-//				| NullPointerException | JsonSyntaxException | MalformedJsonException e) {
-//			LOGGER.error("Response: {}, {}", responseCode, responseString);
-//			LOGGER.error("Fatal error. Exiting...", e);
-//			System.exit(-1);
-//			return null;
-//		}
-//	}
+	Pair<Integer, JsonElement> request(String URL, HTTPMethod httpMethod, String requestBody) throws IOException {
+		try {
+			String uri = URI + URL.replaceAll("\\s", "%20");
+			HttpURLConnection connection = (HttpURLConnection) new URL(uri).openConnection();
+
+			String oAuthSignature = authenticationService.createOAuthSignature(uri, httpMethod);
+			connection.addRequestProperty("Authorization", oAuthSignature);
+			connection.setDoOutput(true);
+			connection.setRequestMethod(httpMethod.toString());
+
+			LOGGER.debug("Request:\t{} {}", httpMethod.toString(), uri);
+			LOGGER.trace("Authorization:\t{}", oAuthSignature);
+			connection.connect();
+
+			OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
+			out.write(requestBody);
+			out.close();
+			LOGGER.trace("Request Body:\t{}", requestBody);
+
+			int responseCode = connection.getResponseCode();
+			LOGGER.trace("Response Code:\t{}", responseCode);
+			LOGGER.trace("Response Header: {}", HTTPUtils.getResponseHeader(connection));
+			requestCount = connection.getHeaderFieldInt("X-Request-Limit-Count", -1);
+			requestLimit = connection.getHeaderFieldInt("X-Request-Limit-Max", -1);
+
+			BufferedReader rd = new BufferedReader(new InputStreamReader(
+					(responseCode == 200 || responseCode == 206 || responseCode == 204) ? connection.getInputStream()
+							: connection.getErrorStream()));
+			StringBuffer sb = new StringBuffer();
+			String line;
+			while ((line = rd.readLine()) != null) {
+				sb.append(line);
+			}
+			rd.close();
+
+			String responseString = sb.toString();
+			LOGGER.trace("Response Body:\t{}", responseString);
+			JsonElement jResponse = JsonParser.parseString(responseString);
+			LOGGER.debug("Response:\t{} {}", responseCode, jResponse);
+			return new Pair<>(responseCode, jResponse);
+		} catch (MalformedURLException | InvalidKeyException | NoSuchAlgorithmException | NullPointerException e) {
+			LOGGER.error("An critical error occured", e);
+			System.exit(-1);
+			return null;
+		}
+	}
 }
