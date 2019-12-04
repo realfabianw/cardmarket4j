@@ -1,9 +1,5 @@
 package de.ics.cardmarket4j.entity;
 
-import com.google.gson.JsonObject;
-
-import de.ics.cardmarket4j.JsonIO;
-
 /**
  * 
  * @see https://www.mkmapi.eu/ws/documentation/API_2.0:Entities:Account
@@ -15,14 +11,6 @@ public class BankAccount {
 	private String iban;
 	private String bic;
 	private String bankName;
-
-	@Deprecated
-	public BankAccount(JsonObject jObject) {
-		this.registeredOwner = JsonIO.parseString(jObject, "accountOwner");
-		this.iban = JsonIO.parseString(jObject, "iban");
-		this.bic = JsonIO.parseString(jObject, "bic");
-		this.bankName = JsonIO.parseString(jObject, "bankname");
-	}
 
 	public BankAccount(String registeredOwner, String iban, String bic, String bankName) {
 		this.registeredOwner = registeredOwner;

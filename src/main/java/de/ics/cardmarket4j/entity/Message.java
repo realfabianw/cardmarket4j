@@ -1,11 +1,6 @@
-package de.ics.cardmarket4j.structs;
+package de.ics.cardmarket4j.entity;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-import com.google.gson.JsonObject;
-
-import de.ics.cardmarket4j.JsonIO;
 
 /**
  * 
@@ -26,16 +21,6 @@ public class Message {
 		this.unread = unread;
 		this.date = date;
 		this.text = text;
-	}
-
-	public Message(JsonObject jObject) {
-		this.messageId = JsonIO.parseInteger(jObject, "idMessage");
-		this.sending = JsonIO.parseBoolean(jObject, "isSending");
-		this.unread = JsonIO.parseBoolean(jObject, "unread");
-		String date = JsonIO.parseString(jObject, "date");
-		date = date.split("\\+0[0-9]")[0] + "+0" + date.split("\\+0")[1].charAt(0) + ":" + date.split("\\+0[0-9]")[1];
-		this.date = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
-		this.text = JsonIO.parseString(jObject, "text");
 	}
 
 	@Override

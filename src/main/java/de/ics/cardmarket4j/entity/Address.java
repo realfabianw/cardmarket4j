@@ -1,9 +1,6 @@
 package de.ics.cardmarket4j.entity;
 
-import com.google.gson.JsonObject;
 import com.neovisionaries.i18n.CountryCode;
-
-import de.ics.cardmarket4j.JsonIO;
 
 /**
  * 
@@ -18,20 +15,6 @@ public class Address {
 	private String zip;
 	private String city;
 	private CountryCode country;
-
-	@Deprecated
-	public Address(JsonObject jObject) {
-		this.name = JsonIO.parseString(jObject, "name");
-		this.extra = JsonIO.parseString(jObject, "extra");
-		this.street = JsonIO.parseString(jObject, "street");
-		this.zip = JsonIO.parseString(jObject, "zip");
-		this.city = JsonIO.parseString(jObject, "city");
-		if (!JsonIO.parseString(jObject, "country").equals("D")) {
-			this.country = CountryCode.getByCode(JsonIO.parseString(jObject, "country"));
-		} else {
-			this.country = CountryCode.DE;
-		}
-	}
 
 	public Address(String name, String extra, String street, String zip, String city, CountryCode country) {
 		this.name = name;

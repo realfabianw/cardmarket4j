@@ -49,6 +49,10 @@ public class CardMarketService {
 		return accountService;
 	}
 
+	public Pair<Integer, JsonElement> getLastResponse() {
+		return lastResponse;
+	}
+
 	public MarketplaceService getMarketplaceService() {
 		return marketplaceService;
 	}

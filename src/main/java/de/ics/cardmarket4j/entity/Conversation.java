@@ -1,13 +1,6 @@
-package de.ics.cardmarket4j.structs;
+package de.ics.cardmarket4j.entity;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
-import de.ics.cardmarket4j.JsonIO;
-import de.ics.cardmarket4j.entity.User;
 
 /**
  * 
@@ -20,19 +13,10 @@ public class Conversation {
 	private List<Message> listMessages;
 	private int unreadMessages;
 
-	public Conversation(JsonObject jObject) {
-		this.partner = new User(jObject.get("partner").getAsJsonObject());
-		this.listMessages = new ArrayList<>();
-		try {
-			// Message Overview (Single Message)
-			listMessages.add(new Message(jObject.get("message").getAsJsonObject()));
-		} catch (IllegalStateException e) {
-			// Multiple Messages
-			for (JsonElement jEle : jObject.get("message").getAsJsonArray()) {
-				listMessages.add(new Message(jEle.getAsJsonObject()));
-			}
-		}
-		this.unreadMessages = JsonIO.parseInteger(jObject, "unreadMessages");
+	public Conversation(User partner, List<Message> listMessages, int unreadMessages) {
+		this.partner = partner;
+		this.listMessages = listMessages;
+		this.unreadMessages = unreadMessages;
 	}
 
 	@Override

@@ -1,11 +1,6 @@
 package de.ics.cardmarket4j.entity;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-import com.google.gson.JsonObject;
-
-import de.ics.cardmarket4j.JsonIO;
 import de.ics.cardmarket4j.entity.enumeration.Reputation;
 import de.ics.cardmarket4j.entity.enumeration.RiskGroup;
 import de.ics.cardmarket4j.entity.enumeration.UserType;
@@ -60,39 +55,6 @@ public class User {
 		this.amountSoldItems = amountSoldItems;
 		this.averageShippingTime = averageShippingTime;
 		this.onVacation = onVacation;
-	}
-
-	@Deprecated
-	public User(JsonObject jObject) {
-		this.userId = JsonIO.parseInteger(jObject, "idUser");
-		this.userName = JsonIO.parseString(jObject, "username");
-		// Account == registerDate, User == registrationDate
-		String registrationDate = JsonIO.parseString(jObject, "registrationDate") == null
-				? JsonIO.parseString(jObject, "registerDate")
-				: JsonIO.parseString(jObject, "registrationDate");
-		registrationDate = registrationDate.split("\\+0[0-9]")[0] + "+0" + registrationDate.split("\\+0")[1].charAt(0)
-				+ ":" + registrationDate.split("\\+0[0-9]")[1];
-		this.registrationDate = LocalDateTime.parse(registrationDate, DateTimeFormatter.ISO_DATE_TIME);
-		this.userType = UserType.parseId(JsonIO.parseInteger(jObject, "isCommercial"));
-		this.seller = JsonIO.parseBoolean(jObject, "isSeller");
-		this.companyName = JsonIO.parseString(jObject.get("name").getAsJsonObject(), "company");
-		this.firstName = JsonIO.parseString(jObject.get("name").getAsJsonObject(), "firstName");
-		this.lastName = JsonIO.parseString(jObject.get("name").getAsJsonObject(), "lastName");
-		try {
-			this.address = new Address(jObject.get("address").getAsJsonObject());
-		} catch (NullPointerException e) {
-			this.address = new Address(jObject.get("homeAddress").getAsJsonObject());
-		}
-		this.phoneNumber = JsonIO.parseString(jObject, "phone");
-		this.emailAddress = JsonIO.parseString(jObject, "email");
-		this.vat = JsonIO.parseString(jObject, "vat");
-		this.riskGroup = RiskGroup.parseId(JsonIO.parseInteger(jObject, "riskGroup"));
-		this.reputation = Reputation.parseId(JsonIO.parseInteger(jObject, "reputation"));
-		this.expectedDeliveryTime = JsonIO.parseInteger(jObject, "shipsFast");
-		this.amountSales = JsonIO.parseInteger(jObject, "sellCount");
-		this.amountSoldItems = JsonIO.parseInteger(jObject, "soldItems");
-		this.averageShippingTime = JsonIO.parseInteger(jObject, "avgShippingTime");
-		this.onVacation = JsonIO.parseBoolean(jObject, "onVacation");
 	}
 
 	@Override

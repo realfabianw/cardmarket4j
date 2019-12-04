@@ -2,6 +2,7 @@ package de.ics.cardmarket4j;
 
 import java.io.IOException;
 
+import org.javatuples.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,6 +16,10 @@ public abstract class AbstractService {
 
 	public AbstractService(CardMarketService cardMarket) {
 		this.cardMarket = cardMarket;
+	}
+
+	protected Pair<Integer, JsonElement> getLastResponse() {
+		return cardMarket.getLastResponse();
 	}
 
 	protected JsonElement request(String URL, HTTPMethod httpMethod) throws IOException {

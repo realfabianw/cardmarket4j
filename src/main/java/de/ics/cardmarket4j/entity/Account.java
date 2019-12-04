@@ -3,10 +3,8 @@ package de.ics.cardmarket4j.entity;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.google.gson.JsonObject;
 import com.neovisionaries.i18n.CountryCode;
 
-import de.ics.cardmarket4j.JsonIO;
 import de.ics.cardmarket4j.entity.enumeration.DeliverySpeed;
 import de.ics.cardmarket4j.entity.enumeration.Reputation;
 import de.ics.cardmarket4j.entity.enumeration.RiskGroup;
@@ -58,29 +56,6 @@ public class Account extends User {
 		this.bankAccount = bankAccount;
 		this.amountItemsInShoppingCard = amountItemsInShoppingCard;
 		this.amountUnreadMessages = amountUnreadMessages;
-	}
-
-	@Deprecated
-	public Account(JsonObject jObject) {
-		super(jObject);
-		if (JsonIO.parseString(jObject, "country").equals("D")) {
-			this.country = CountryCode.DE;
-		} else {
-			this.country = CountryCode.getByCode(JsonIO.parseString(jObject, "country"));
-		}
-		this.maySell = JsonIO.parseBoolean(jObject, "maySell");
-		this.sellerActivationStatus = SellerActivationStatus.parseId(JsonIO.parseInteger(jObject, "sellerActivation"));
-		this.deliverySpeed = DeliverySpeed.parseId(JsonIO.parseInteger(jObject, "shipsFast"));
-		this.activated = JsonIO.parseBoolean(jObject, "isActivated");
-		this.totalBalance = JsonIO.parseBigDecimal(jObject.get("moneyDetails").getAsJsonObject(), "totalBalance");
-		this.moneyBalance = JsonIO.parseBigDecimal(jObject.get("moneyDetails").getAsJsonObject(), "moneyBalance");
-		this.bonusBalance = JsonIO.parseBigDecimal(jObject.get("moneyDetails").getAsJsonObject(), "bonusBalance");
-		this.unpaidAmount = JsonIO.parseBigDecimal(jObject.get("moneyDetails").getAsJsonObject(), "unpaidAmount");
-		this.providerRechargeAmount = JsonIO.parseBigDecimal(jObject.get("moneyDetails").getAsJsonObject(),
-				"providerRechargeAmounT");
-		this.bankAccount = new BankAccount(jObject.get("bankAccount").getAsJsonObject());
-		this.amountItemsInShoppingCard = JsonIO.parseInteger(jObject, "articlesInShoppingCart");
-		this.amountUnreadMessages = JsonIO.parseInteger(jObject, "unreadMessages");
 	}
 
 	@Override

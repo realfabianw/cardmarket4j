@@ -14,7 +14,10 @@ public class Main {
 		CardMarketService market = new CardMarketService("wnyJdqZJHmy2eQ28", "Jh7aj2jiR5REFMbeKn2VijlEpjwK1nf3",
 				"YHEpS1HRHkIjixZFJAHfdqHVw3r3ZS7C", "VtADsKQR7OUTN77QP8IX2DkKetxo5kU9");
 
-		LOGGER.info("Account: {}", market.getAccountService().getAccountInformation());
-		LOGGER.info("Requests: {}/{}", market.getRequestCount(), market.getRequestLimit());
+		LOGGER.info("Account: {}", market.getAccountService().getAccount());
+		market.getAccountService().setVacationStatus(true);
+		LOGGER.info("Account: {}", market.getAccountService().getAccount());
+		market.getAccountService().setVacationStatus(false);
+		LOGGER.info("Account: {}", market.getAccountService().getAccount());
 	}
 }
