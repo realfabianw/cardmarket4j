@@ -2,6 +2,7 @@ package de.ics.cardmarket4j.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.javatuples.Pair;
@@ -16,6 +17,7 @@ import de.ics.cardmarket4j.CardMarketUtils;
 import de.ics.cardmarket4j.enums.Game;
 import de.ics.cardmarket4j.enums.HTTPMethod;
 import de.ics.cardmarket4j.structs.Article;
+import de.ics.cardmarket4j.structs.IsCardMarketCard;
 
 public class StockService extends AbstractService {
 	private static Logger LOGGER = LoggerFactory.getLogger("StockService");
@@ -25,16 +27,14 @@ public class StockService extends AbstractService {
 		// TODO Auto-generated constructor stub
 	}
 
-	public List<Article> decreaseArticleQuantity(Article article) throws IOException {
-		List<Article> listArticles = new ArrayList<>();
-		listArticles.add(article);
-		return decreaseListArticleQuantity(listArticles);
+	public List<Article> decreaseArticleQuantity(IsCardMarketCard article) throws IOException {
+		return decreaseListArticleQuantity(Arrays.asList(article));
 	}
 
-	public List<Article> decreaseListArticleQuantity(List<Article> listArticles) throws IOException {
+	public List<Article> decreaseListArticleQuantity(List<IsCardMarketCard> listArticles) throws IOException {
 		StringBuilder xml = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 		xml.append("<request>");
-		for (Article a : listArticles) {
+		for (IsCardMarketCard a : listArticles) {
 			xml.append("<article>");
 			xml.append("<idArticle>" + a.getArticleId() + "</idArticle>");
 			xml.append("<count>" + a.getQuantity() + "</count>");
@@ -55,19 +55,17 @@ public class StockService extends AbstractService {
 		return listArticle;
 	}
 
-	public List<Article> editArticle(Article article) throws IOException {
-		List<Article> listArticles = new ArrayList<>();
-		listArticles.add(article);
-		return editListArticles(listArticles);
+	public List<Article> editArticle(IsCardMarketCard article) throws IOException {
+		return editListArticles(Arrays.asList(article));
 	}
 
-	public List<Article> editListArticles(List<Article> listArticles) throws IOException {
+	public List<Article> editListArticles(List<IsCardMarketCard> listArticles) throws IOException {
 		StringBuilder xml = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 		xml.append("<request>");
-		for (Article a : listArticles) {
+		for (IsCardMarketCard a : listArticles) {
 			xml.append("<article>");
 			xml.append("<idArticle>" + a.getArticleId() + "</idArticle>");
-			xml.append("<idLanguage>" + CardMarketUtils.toLanguageId(a.getLanguage()) + "</idLanguage>");
+			xml.append("<idLanguage>" + CardMarketUtils.toLanguageId(a.getLanguageCode()) + "</idLanguage>");
 			xml.append("<comments>" + a.getComment() + "</comments>");
 			xml.append("<count>" + a.getQuantity() + "</count>");
 			xml.append("<price>" + a.getPrice() + "</price>");
@@ -75,7 +73,6 @@ public class StockService extends AbstractService {
 			xml.append("<isFoil>" + a.isFoil() + "</isFoil>");
 			xml.append("<isSigned>" + a.isSigned() + "</isSigned>");
 			xml.append("<isAltered>" + a.isAltered() + "</isAltered>");
-			xml.append("<isPlayset>" + a.isPlayset() + "</isPlayset>");
 			xml.append("</article>");
 		}
 		xml.append("</request>");
@@ -121,16 +118,14 @@ public class StockService extends AbstractService {
 		return listArticle;
 	}
 
-	public List<Article> increaseArticleQuantity(Article article) throws IOException {
-		List<Article> listArticles = new ArrayList<>();
-		listArticles.add(article);
-		return increaseListArticleQuantity(listArticles);
+	public List<Article> increaseArticleQuantity(IsCardMarketCard article) throws IOException {
+		return increaseListArticleQuantity(Arrays.asList(article));
 	}
 
-	public List<Article> increaseListArticleQuantity(List<Article> listArticles) throws IOException {
+	public List<Article> increaseListArticleQuantity(List<IsCardMarketCard> listArticles) throws IOException {
 		StringBuilder xml = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 		xml.append("<request>");
-		for (Article a : listArticles) {
+		for (IsCardMarketCard a : listArticles) {
 			xml.append("<article>");
 			xml.append("<idArticle>" + a.getArticleId() + "</idArticle>");
 			xml.append("<count>" + a.getQuantity() + "</count>");
@@ -147,19 +142,17 @@ public class StockService extends AbstractService {
 		return listArticle;
 	}
 
-	public List<Article> insertArticle(Article article) throws IOException {
-		List<Article> listArticles = new ArrayList<>();
-		listArticles.add(article);
-		return insertListArticles(listArticles);
+	public List<Article> insertArticle(IsCardMarketCard article) throws IOException {
+		return insertListArticles(Arrays.asList(article));
 	}
 
-	public List<Article> insertListArticles(List<Article> listArticles) throws IOException {
+	public List<Article> insertListArticles(List<IsCardMarketCard> listArticles) throws IOException {
 		StringBuilder xml = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 		xml.append("<request>");
-		for (Article a : listArticles) {
+		for (IsCardMarketCard a : listArticles) {
 			xml.append("<article>");
-			xml.append("<idProduct>" + a.getProduct().getProductId() + "</idProduct>");
-			xml.append("<idLanguage>" + CardMarketUtils.toLanguageId(a.getLanguage()) + "</idLanguage>");
+			xml.append("<idProduct>" + a.getProductId() + "</idProduct>");
+			xml.append("<idLanguage>" + CardMarketUtils.toLanguageId(a.getLanguageCode()) + "</idLanguage>");
 			xml.append("<comments>" + a.getComment() + "</comments>");
 			xml.append("<count>" + a.getQuantity() + "</count>");
 			xml.append("<price>" + a.getPrice() + "</price>");
@@ -167,7 +160,6 @@ public class StockService extends AbstractService {
 			xml.append("<isFoil>" + a.isFoil() + "</isFoil>");
 			xml.append("<isSigned>" + a.isSigned() + "</isSigned>");
 			xml.append("<isAltered>" + a.isAltered() + "</isAltered>");
-			xml.append("<isPlayset>" + a.isPlayset() + "</isPlayset>");
 			xml.append("</article>");
 		}
 		xml.append("</request>");
@@ -181,16 +173,14 @@ public class StockService extends AbstractService {
 		return listArticle;
 	}
 
-	public List<Article> removeArticle(Article article) throws IOException {
-		List<Article> listArticles = new ArrayList<>();
-		listArticles.add(article);
-		return removeListArticles(listArticles);
+	public List<Article> removeArticle(IsCardMarketCard article) throws IOException {
+		return removeListArticles(Arrays.asList(article));
 	}
 
-	public List<Article> removeListArticles(List<Article> listArticles) throws IOException {
+	public List<Article> removeListArticles(List<IsCardMarketCard> listArticles) throws IOException {
 		StringBuilder xml = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 		xml.append("<request>");
-		for (Article a : listArticles) {
+		for (IsCardMarketCard a : listArticles) {
 			xml.append("<article>");
 			xml.append("<idArticle>" + a.getArticleId() + "</idArticle>");
 			xml.append("<count>" + a.getQuantity() + "</count>");

@@ -73,6 +73,10 @@ public class Product {
 		}
 		try {
 			this.expansionCollectionNumber = JsonIO.parseString(jObject, "number");
+			if (this.expansionCollectionNumber == null) {
+				// TODO dirty fix. JsonIO muss Exceptions werfen anstatt null zu returnen
+				this.expansionCollectionNumber = JsonIO.parseString(jObject, "nr");
+			}
 		} catch (NullPointerException e) {
 			// Constructor is called from Article Instance
 			this.expansionCollectionNumber = JsonIO.parseString(jObject, "nr");
@@ -83,7 +87,7 @@ public class Product {
 				: JsonIO.parseString(jObject, "expansion"));
 		try {
 			this.expansion = new Expansion(jObject.get("expansion").getAsJsonObject());
-		} catch (IllegalStateException e) {
+		} catch (IllegalStateException | NullPointerException e) {
 			// Constructor is called from Article Instance
 		}
 		try {
