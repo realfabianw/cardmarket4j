@@ -12,13 +12,19 @@ import de.ics.cardmarket4j.entity.Account;
 import de.ics.cardmarket4j.entity.Address;
 import de.ics.cardmarket4j.entity.BankAccount;
 import de.ics.cardmarket4j.entity.Conversation;
+import de.ics.cardmarket4j.entity.Expansion;
 import de.ics.cardmarket4j.entity.Message;
+import de.ics.cardmarket4j.entity.PriceGuide;
+import de.ics.cardmarket4j.entity.Product;
 import de.ics.cardmarket4j.entity.User;
 import de.ics.cardmarket4j.entity.deserializer.AccountDeserializer;
 import de.ics.cardmarket4j.entity.deserializer.AddressDeserializer;
 import de.ics.cardmarket4j.entity.deserializer.BankAccountDeserializer;
 import de.ics.cardmarket4j.entity.deserializer.ConversationDeserializer;
+import de.ics.cardmarket4j.entity.deserializer.ExpansionDeserializer;
 import de.ics.cardmarket4j.entity.deserializer.MessageDeserializer;
+import de.ics.cardmarket4j.entity.deserializer.PriceGuideDeserializer;
+import de.ics.cardmarket4j.entity.deserializer.ProductDeserializer;
 import de.ics.cardmarket4j.entity.deserializer.UserDeserializer;
 
 /**
@@ -39,7 +45,10 @@ public class JsonIO {
 			gsonBuilder.registerTypeAdapter(Address.class, new AddressDeserializer());
 			gsonBuilder.registerTypeAdapter(BankAccount.class, new BankAccountDeserializer());
 			gsonBuilder.registerTypeAdapter(Conversation.class, new ConversationDeserializer());
+			gsonBuilder.registerTypeAdapter(Expansion.class, new ExpansionDeserializer());
 			gsonBuilder.registerTypeAdapter(Message.class, new MessageDeserializer());
+			gsonBuilder.registerTypeAdapter(PriceGuide.class, new PriceGuideDeserializer());
+			gsonBuilder.registerTypeAdapter(Product.class, new ProductDeserializer());
 			gsonBuilder.registerTypeAdapter(User.class, new UserDeserializer());
 
 			gson = gsonBuilder.create();

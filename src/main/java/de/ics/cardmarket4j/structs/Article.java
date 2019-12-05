@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 import com.google.gson.JsonObject;
 import com.neovisionaries.i18n.LanguageCode;
 
+import de.ics.cardmarket4j.entity.Product;
 import de.ics.cardmarket4j.entity.User;
 import de.ics.cardmarket4j.entity.enumeration.Condition;
 import de.ics.cardmarket4j.utils.CardMarketUtils;
@@ -57,7 +58,7 @@ public class Article implements IsCardMarketCard {
 
 		}
 		try {
-			this.seller = new User(jObject.get("seller").getAsJsonObject());
+			this.seller = JsonIO.getGson().fromJson(jObject.get("seller"), User.class);
 		} catch (NullPointerException e) {
 
 		}

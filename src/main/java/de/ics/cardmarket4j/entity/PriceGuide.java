@@ -1,4 +1,4 @@
-package de.ics.cardmarket4j.structs;
+package de.ics.cardmarket4j.entity;
 
 import java.math.BigDecimal;
 
@@ -27,15 +27,6 @@ public class PriceGuide {
 		this.lowFoil = lowFoil;
 		this.avg = avg;
 		this.trend = trend;
-	}
-
-	public PriceGuide(JsonObject jObject) {
-		this.sell = JsonIO.parseBigDecimal(jObject, "SELL");
-		this.low = JsonIO.parseBigDecimal(jObject, "LOW");
-		this.lowExPlus = JsonIO.parseBigDecimal(jObject, "LOWEX+");
-		this.lowFoil = JsonIO.parseBigDecimal(jObject, "LOWFOIL");
-		this.avg = JsonIO.parseBigDecimal(jObject, "AVG");
-		this.trend = JsonIO.parseBigDecimal(jObject, "TREND");
 	}
 
 	@Override

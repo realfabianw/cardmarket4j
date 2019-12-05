@@ -14,10 +14,10 @@ import com.google.gson.JsonElement;
 
 import de.ics.cardmarket4j.AbstractService;
 import de.ics.cardmarket4j.CardMarketService;
+import de.ics.cardmarket4j.entity.Product;
 import de.ics.cardmarket4j.entity.enumeration.HTTPMethod;
 import de.ics.cardmarket4j.structs.Article;
 import de.ics.cardmarket4j.structs.ArticleFilter;
-import de.ics.cardmarket4j.structs.Product;
 
 /**
  * MarketplaceService provides a connection to several marketplace related
@@ -84,8 +84,8 @@ public class MarketplaceService extends AbstractService {
 	public Set<Product> getProduct(String searchQuery) throws IOException {
 		Set<Product> setProducts = new HashSet<>();
 		String query = "search=" + searchQuery;
-		Pair<Integer, JsonElement> response = request("products/find?" + query, HTTPMethod.GET);
-		for (JsonElement jEle : response.getValue1().getAsJsonObject().get("product").getAsJsonArray()) {
+		JsonElement response = request("products/find?" + query, HTTPMethod.GET);
+		for (JsonElement jEle : response.getAsJsonObject().get("product").getAsJsonArray()) {
 			setProducts.add(new Product(jEle.getAsJsonObject()));
 		}
 		return setProducts;
@@ -101,7 +101,7 @@ public class MarketplaceService extends AbstractService {
 	 * @throws IOException
 	 */
 	public Product getProductDetails(int productId) throws IOException {
-		Pair<Integer, JsonElement> response = request("products/" + productId, HTTPMethod.GET);
-		return new Product(response.getValue1().getAsJsonObject().get("product").getAsJsonObject());
+		JsonElement response = request("products/" + productId, HTTPMethod.GET);
+		return new Product(response.getAsJsonObject().get("product").getAsJsonObject());
 	}
 }
