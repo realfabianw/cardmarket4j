@@ -37,6 +37,7 @@ public class OrderService extends AbstractService {
 	 * @return {@code List<Order> listOrders}
 	 * @throws IOException
 	 * @throws InterruptedException
+	 * @version 0.7
 	 */
 	public List<Order> getOrders(OrderType orderType, OrderState orderState, Integer maxPages)
 			throws IOException, InterruptedException {

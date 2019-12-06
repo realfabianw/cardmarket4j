@@ -5,12 +5,16 @@ public enum Condition {
 	LIGHT_PLAYED("LP", "Light Played"), PLAYED("PL", "Played"), POOR("PO", "Poor");
 
 	public static Condition parseId(String id) {
-		for (Condition e : Condition.values()) {
-			if (e.getId().equals(id)) {
-				return e;
+		if (id != null) {
+			for (Condition e : Condition.values()) {
+				if (e.getId().equals(id)) {
+					return e;
+				}
 			}
+			throw new IllegalArgumentException("Couldn't find an enum matching this value: " + id);
+		} else {
+			return null;
 		}
-		throw new IllegalArgumentException("Couldn't find an enum matching this value: " + id);
 	}
 
 	public static Condition parseValue(String value) {

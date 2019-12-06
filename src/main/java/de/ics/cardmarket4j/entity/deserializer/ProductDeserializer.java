@@ -69,10 +69,13 @@ public class ProductDeserializer implements JsonDeserializer<Product> {
 				? JsonIO.parseString(jObject, "expansionName")
 				: JsonIO.parseString(jObject, "expansion"));
 		Expansion expansion = null;
-		if (jObject.get("expansion").isJsonObject()) {
-			expansion = JsonIO.getGson().fromJson(jObject.get("expansion"), Expansion.class);
-		}
+		try {
+			if (jObject.get("expansion").isJsonObject()) {
+				expansion = JsonIO.getGson().fromJson(jObject.get("expansion"), Expansion.class);
+			}
+		} catch (NullPointerException e) {
 
+		}
 		PriceGuide priceGuide = JsonIO.getGson().fromJson(jObject.get("priceGuide"), PriceGuide.class);
 
 		List<Integer> listReprintProductIds = new ArrayList<>();

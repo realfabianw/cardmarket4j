@@ -30,155 +30,26 @@ public class Product {
 	private PriceGuide priceGuide;
 	private List<Integer> listReprintProductIds;
 
-	public Integer getProductId() {
-		return productId;
-	}
-
-	public void setProductId(Integer productId) {
+	public Product(Integer productId, Integer metaproductId, Integer totalReprints, String name,
+			Map<LanguageCode, String> mapLocalizedNames, Integer categoryId, Integer categoryName, String selfUrl,
+			String imageUrl, Game game, String expansionCollectionNumber, String rarity, String expansionName,
+			Expansion expansion, PriceGuide priceGuide, List<Integer> listReprintProductIds) {
 		this.productId = productId;
-	}
-
-	public Integer getMetaproductId() {
-		return metaproductId;
-	}
-
-	public void setMetaproductId(Integer metaproductId) {
 		this.metaproductId = metaproductId;
-	}
-
-	public Integer getTotalReprints() {
-		return totalReprints;
-	}
-
-	public void setTotalReprints(Integer totalReprints) {
 		this.totalReprints = totalReprints;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Map<LanguageCode, String> getMapLocalizedNames() {
-		return mapLocalizedNames;
-	}
-
-	public void setMapLocalizedNames(Map<LanguageCode, String> mapLocalizedNames) {
 		this.mapLocalizedNames = mapLocalizedNames;
-	}
-
-	public Integer getCategoryId() {
-		return categoryId;
-	}
-
-	public void setCategoryId(Integer categoryId) {
 		this.categoryId = categoryId;
-	}
-
-	public Integer getCategoryName() {
-		return categoryName;
-	}
-
-	public void setCategoryName(Integer categoryName) {
 		this.categoryName = categoryName;
-	}
-
-	public String getSelfUrl() {
-		return selfUrl;
-	}
-
-	public void setSelfUrl(String selfUrl) {
 		this.selfUrl = selfUrl;
-	}
-
-	public String getImageUrl() {
-		return imageUrl;
-	}
-
-	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
-	}
-
-	public Game getGame() {
-		return game;
-	}
-
-	public void setGame(Game game) {
 		this.game = game;
-	}
-
-	public String getExpansionCollectionNumber() {
-		return expansionCollectionNumber;
-	}
-
-	public void setExpansionCollectionNumber(String expansionCollectionNumber) {
 		this.expansionCollectionNumber = expansionCollectionNumber;
-	}
-
-	public String getRarity() {
-		return rarity;
-	}
-
-	public void setRarity(String rarity) {
 		this.rarity = rarity;
-	}
-
-	public String getExpansionName() {
-		return expansionName;
-	}
-
-	public void setExpansionName(String expansionName) {
 		this.expansionName = expansionName;
-	}
-
-	public Expansion getExpansion() {
-		return expansion;
-	}
-
-	public void setExpansion(Expansion expansion) {
 		this.expansion = expansion;
-	}
-
-	public PriceGuide getPriceGuide() {
-		return priceGuide;
-	}
-
-	public void setPriceGuide(PriceGuide priceGuide) {
 		this.priceGuide = priceGuide;
-	}
-
-	public List<Integer> getListReprintProductIds() {
-		return listReprintProductIds;
-	}
-
-	public void setListReprintProductIds(List<Integer> listReprintProductIds) {
 		this.listReprintProductIds = listReprintProductIds;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((categoryId == null) ? 0 : categoryId.hashCode());
-		result = prime * result + ((categoryName == null) ? 0 : categoryName.hashCode());
-		result = prime * result + ((expansion == null) ? 0 : expansion.hashCode());
-		result = prime * result + ((expansionCollectionNumber == null) ? 0 : expansionCollectionNumber.hashCode());
-		result = prime * result + ((expansionName == null) ? 0 : expansionName.hashCode());
-		result = prime * result + ((game == null) ? 0 : game.hashCode());
-		result = prime * result + ((imageUrl == null) ? 0 : imageUrl.hashCode());
-		result = prime * result + ((listReprintProductIds == null) ? 0 : listReprintProductIds.hashCode());
-		result = prime * result + ((mapLocalizedNames == null) ? 0 : mapLocalizedNames.hashCode());
-		result = prime * result + ((metaproductId == null) ? 0 : metaproductId.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((priceGuide == null) ? 0 : priceGuide.hashCode());
-		result = prime * result + ((productId == null) ? 0 : productId.hashCode());
-		result = prime * result + ((rarity == null) ? 0 : rarity.hashCode());
-		result = prime * result + ((selfUrl == null) ? 0 : selfUrl.hashCode());
-		result = prime * result + ((totalReprints == null) ? 0 : totalReprints.hashCode());
-		return result;
 	}
 
 	@Override
@@ -270,6 +141,157 @@ public class Product {
 		return true;
 	}
 
+	public Integer getCategoryId() {
+		return categoryId;
+	}
+
+	public Integer getCategoryName() {
+		return categoryName;
+	}
+
+	public Expansion getExpansion() {
+		return expansion;
+	}
+
+	public String getExpansionCollectionNumber() {
+		return expansionCollectionNumber;
+	}
+
+	public String getExpansionName() {
+		return expansionName;
+	}
+
+	public Game getGame() {
+		return game;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public List<Integer> getListReprintProductIds() {
+		return listReprintProductIds;
+	}
+
+	public Map<LanguageCode, String> getMapLocalizedNames() {
+		return mapLocalizedNames;
+	}
+
+	public Integer getMetaproductId() {
+		return metaproductId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public PriceGuide getPriceGuide() {
+		return priceGuide;
+	}
+
+	public Integer getProductId() {
+		return productId;
+	}
+
+	public String getRarity() {
+		return rarity;
+	}
+
+	public String getSelfUrl() {
+		return selfUrl;
+	}
+
+	public Integer getTotalReprints() {
+		return totalReprints;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((categoryId == null) ? 0 : categoryId.hashCode());
+		result = prime * result + ((categoryName == null) ? 0 : categoryName.hashCode());
+		result = prime * result + ((expansion == null) ? 0 : expansion.hashCode());
+		result = prime * result + ((expansionCollectionNumber == null) ? 0 : expansionCollectionNumber.hashCode());
+		result = prime * result + ((expansionName == null) ? 0 : expansionName.hashCode());
+		result = prime * result + ((game == null) ? 0 : game.hashCode());
+		result = prime * result + ((imageUrl == null) ? 0 : imageUrl.hashCode());
+		result = prime * result + ((listReprintProductIds == null) ? 0 : listReprintProductIds.hashCode());
+		result = prime * result + ((mapLocalizedNames == null) ? 0 : mapLocalizedNames.hashCode());
+		result = prime * result + ((metaproductId == null) ? 0 : metaproductId.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((priceGuide == null) ? 0 : priceGuide.hashCode());
+		result = prime * result + ((productId == null) ? 0 : productId.hashCode());
+		result = prime * result + ((rarity == null) ? 0 : rarity.hashCode());
+		result = prime * result + ((selfUrl == null) ? 0 : selfUrl.hashCode());
+		result = prime * result + ((totalReprints == null) ? 0 : totalReprints.hashCode());
+		return result;
+	}
+
+	public void setCategoryId(Integer categoryId) {
+		this.categoryId = categoryId;
+	}
+
+	public void setCategoryName(Integer categoryName) {
+		this.categoryName = categoryName;
+	}
+
+	public void setExpansion(Expansion expansion) {
+		this.expansion = expansion;
+	}
+
+	public void setExpansionCollectionNumber(String expansionCollectionNumber) {
+		this.expansionCollectionNumber = expansionCollectionNumber;
+	}
+
+	public void setExpansionName(String expansionName) {
+		this.expansionName = expansionName;
+	}
+
+	public void setGame(Game game) {
+		this.game = game;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
+	public void setListReprintProductIds(List<Integer> listReprintProductIds) {
+		this.listReprintProductIds = listReprintProductIds;
+	}
+
+	public void setMapLocalizedNames(Map<LanguageCode, String> mapLocalizedNames) {
+		this.mapLocalizedNames = mapLocalizedNames;
+	}
+
+	public void setMetaproductId(Integer metaproductId) {
+		this.metaproductId = metaproductId;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setPriceGuide(PriceGuide priceGuide) {
+		this.priceGuide = priceGuide;
+	}
+
+	public void setProductId(Integer productId) {
+		this.productId = productId;
+	}
+
+	public void setRarity(String rarity) {
+		this.rarity = rarity;
+	}
+
+	public void setSelfUrl(String selfUrl) {
+		this.selfUrl = selfUrl;
+	}
+
+	public void setTotalReprints(Integer totalReprints) {
+		this.totalReprints = totalReprints;
+	}
+
 	@Override
 	public String toString() {
 		return "Product [" + (productId != null ? "productId=" + productId + ", " : "")
@@ -288,27 +310,5 @@ public class Product {
 				+ (expansion != null ? "expansion=" + expansion + ", " : "")
 				+ (priceGuide != null ? "priceGuide=" + priceGuide + ", " : "")
 				+ (listReprintProductIds != null ? "listReprintProductIds=" + listReprintProductIds : "") + "]";
-	}
-
-	public Product(Integer productId, Integer metaproductId, Integer totalReprints, String name,
-			Map<LanguageCode, String> mapLocalizedNames, Integer categoryId, Integer categoryName, String selfUrl,
-			String imageUrl, Game game, String expansionCollectionNumber, String rarity, String expansionName,
-			Expansion expansion, PriceGuide priceGuide, List<Integer> listReprintProductIds) {
-		this.productId = productId;
-		this.metaproductId = metaproductId;
-		this.totalReprints = totalReprints;
-		this.name = name;
-		this.mapLocalizedNames = mapLocalizedNames;
-		this.categoryId = categoryId;
-		this.categoryName = categoryName;
-		this.selfUrl = selfUrl;
-		this.imageUrl = imageUrl;
-		this.game = game;
-		this.expansionCollectionNumber = expansionCollectionNumber;
-		this.rarity = rarity;
-		this.expansionName = expansionName;
-		this.expansion = expansion;
-		this.priceGuide = priceGuide;
-		this.listReprintProductIds = listReprintProductIds;
 	}
 }
