@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 
 import de.ics.cardmarket4j.CardMarketService;
 import de.ics.cardmarket4j.entity.Product;
+import de.ics.cardmarket4j.entity.enumeration.Game;
+import de.ics.cardmarket4j.entity.util.ProductFilter;
 
 public class Main {
 	private static Logger LOGGER = LoggerFactory.getLogger("Main");
@@ -18,7 +20,9 @@ public class Main {
 
 		LOGGER.info("List of Products");
 
-		Set<Product> setProducts = market.getMarketplaceService().getProduct("Lightning Bolt");
+		ProductFilter pF = new ProductFilter("Lightning Bolt");
+		pF.setGame(Game.MTG);
+		Set<Product> setProducts = market.getMarketplaceService().getProduct(pF);
 		for (Product p : setProducts) {
 			LOGGER.info(p.toString());
 		}

@@ -16,6 +16,7 @@ import de.ics.cardmarket4j.AbstractService;
 import de.ics.cardmarket4j.CardMarketService;
 import de.ics.cardmarket4j.entity.Product;
 import de.ics.cardmarket4j.entity.enumeration.HTTPMethod;
+import de.ics.cardmarket4j.entity.util.ProductFilter;
 import de.ics.cardmarket4j.structs.Article;
 import de.ics.cardmarket4j.structs.ArticleFilter;
 import de.ics.cardmarket4j.utils.JsonIO;
@@ -83,10 +84,9 @@ public class MarketplaceService extends AbstractService {
 	 * @throws IOException
 	 * @version 0.7
 	 */
-	public Set<Product> getProduct(String searchQuery) throws IOException {
+	public Set<Product> getProduct(ProductFilter productFilter) throws IOException {
 		Set<Product> setProducts = new HashSet<>();
-		String query = "search=" + searchQuery;
-		JsonElement response = request("products/find?" + query, HTTPMethod.GET);
+		JsonElement response = request("products/find?" + productFilter.getQuery(), HTTPMethod.GET);
 		for (JsonElement jEle : response.getAsJsonObject().get("product").getAsJsonArray()) {
 			setProducts.add(JsonIO.getGson().fromJson(jEle, Product.class));
 		}
