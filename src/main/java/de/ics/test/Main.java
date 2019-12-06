@@ -37,9 +37,15 @@ public class Main {
 //		LOGGER.info(market.getMarketplaceService().getProductDetails(397929).toString());
 
 		// Test: Stock Service
+		// Testkarte - Crypt Creeper 2537
 		List<Article> listArticles = market.getStockService().getStock();
 		for (Article article : listArticles) {
-			LOGGER.info(article.toString());
+			if (article.getProductId() == 2537) {
+				LOGGER.info(article.toString());
+				article.setQuantity(2);
+				market.getStockService().increaseArticleQuantity(article);
+			}
+
 		}
 	}
 }
