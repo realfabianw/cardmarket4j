@@ -29,7 +29,6 @@ import de.ics.cardmarket4j.util.JsonIO;
 public class MarketplaceService extends AbstractService {
 	public MarketplaceService(CardMarketService cardMarket) {
 		super(cardMarket);
-
 	}
 
 	/**

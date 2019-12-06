@@ -7,9 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.ics.cardmarket4j.CardMarketService;
-import de.ics.cardmarket4j.entity.Order;
-import de.ics.cardmarket4j.entity.enumeration.OrderState;
-import de.ics.cardmarket4j.entity.enumeration.OrderType;
+import de.ics.cardmarket4j.entity.Article;
 
 public class Main {
 	private static Logger LOGGER = LoggerFactory.getLogger("Main");
@@ -28,14 +26,20 @@ public class Main {
 //			LOGGER.info(a.toString());
 //		}
 
-		List<Order> listOrders = market.getOrderService().getOrders(OrderType.SALE, OrderState.RECEIVED, 1);
-
-		for (Order o : listOrders) {
-			LOGGER.info(o.toString());
-		}
+//		List<Order> listOrders = market.getOrderService().getOrders(OrderType.SALE, OrderState.RECEIVED, 1);
+//
+//		for (Order o : listOrders) {
+//			LOGGER.info(o.toString());
+//		}
 
 //		LOGGER.info("Specific Products");
 //		LOGGER.info(market.getMarketplaceService().getProductDetails(5689).toString());
 //		LOGGER.info(market.getMarketplaceService().getProductDetails(397929).toString());
+
+		// Test: Stock Service
+		List<Article> listArticles = market.getStockService().getStock();
+		for (Article article : listArticles) {
+			LOGGER.info(article.toString());
+		}
 	}
 }

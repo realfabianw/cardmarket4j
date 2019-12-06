@@ -6,8 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.javatuples.Pair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonElement;
 
@@ -18,13 +16,11 @@ import de.ics.cardmarket4j.entity.enumeration.Game;
 import de.ics.cardmarket4j.entity.enumeration.HTTPMethod;
 import de.ics.cardmarket4j.structs.IsCardMarketCard;
 import de.ics.cardmarket4j.util.CardMarketUtils;
+import de.ics.cardmarket4j.util.JsonIO;
 
 public class StockService extends AbstractService {
-	private static Logger LOGGER = LoggerFactory.getLogger("StockService");
-
 	public StockService(CardMarketService cardMarket) {
 		super(cardMarket);
-		// TODO Auto-generated constructor stub
 	}
 
 	public List<Article> decreaseArticleQuantity(IsCardMarketCard article) throws IOException {
@@ -109,11 +105,18 @@ public class StockService extends AbstractService {
 		return listArticle;
 	}
 
+	/**
+	 * Returns the users stock. TODO implement paging for more than 1000 results
+	 * 
+	 * @return {@code List<Article> listArticles}
+	 * @throws IOException
+	 * @version 0.7
+	 */
 	public List<Article> getStock() throws IOException {
 		List<Article> listArticle = new ArrayList<>();
-		Pair<Integer, JsonElement> response = request("stock", HTTPMethod.GET);
-		for (JsonElement jEle : response.getValue1().getAsJsonObject().get("article").getAsJsonArray()) {
-			listArticle.add(new Article(jEle.getAsJsonObject()));
+		JsonElement response = request("stock", HTTPMethod.GET);
+		for (JsonElement jEle : response.getAsJsonObject().get("article").getAsJsonArray()) {
+			listArticle.add(JsonIO.getGson().fromJson(jEle, Article.class));
 		}
 		return listArticle;
 	}
