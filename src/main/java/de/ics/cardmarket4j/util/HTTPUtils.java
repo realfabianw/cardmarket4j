@@ -1,4 +1,4 @@
-package de.ics.cardmarket4j.utils;
+package de.ics.cardmarket4j.util;
 
 import java.net.HttpURLConnection;
 

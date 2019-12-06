@@ -4,17 +4,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.javatuples.Pair;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
 import de.ics.cardmarket4j.AbstractService;
 import de.ics.cardmarket4j.CardMarketService;
+import de.ics.cardmarket4j.entity.Order;
 import de.ics.cardmarket4j.entity.enumeration.HTTPMethod;
 import de.ics.cardmarket4j.entity.enumeration.OrderState;
 import de.ics.cardmarket4j.entity.enumeration.OrderType;
-import de.ics.cardmarket4j.structs.Order;
+import de.ics.cardmarket4j.util.JsonIO;
 
 /**
  * OrderServices provides a connection to several order related functions on
@@ -46,17 +45,17 @@ public class OrderService extends AbstractService {
 		int index = 1;
 		int responseCode = 200;
 		while (responseCode == 200 || responseCode == 206) {
-			Pair<Integer, JsonElement> response = request(
+			JsonElement response = request(
 					"orders/" + orderType.getDisplayValue() + "/" + orderState.getDisplayValue() + "/" + index,
 					HTTPMethod.GET);
-			responseCode = response.getValue0();
+			responseCode = getLastResponse().getValue0();
 			page++;
 			index += 100;
 			if (responseCode == 200 || responseCode == 206) {
-				JsonArray responseJsonArray = response.getValue1().getAsJsonObject().get("order").getAsJsonArray();
+				JsonArray responseJsonArray = response.getAsJsonObject().get("order").getAsJsonArray();
 				if (responseJsonArray.size() > 0) {
 					for (JsonElement jEle : responseJsonArray) {
-						listOrders.add(new Order(jEle.getAsJsonObject()));
+						listOrders.add(JsonIO.getGson().fromJson(jEle, Order.class));
 					}
 					Thread.sleep(100);
 					if (maxPages != null && page >= maxPages) {

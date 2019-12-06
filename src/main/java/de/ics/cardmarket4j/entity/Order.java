@@ -1,19 +1,10 @@
-package de.ics.cardmarket4j.structs;
+package de.ics.cardmarket4j.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
-import de.ics.cardmarket4j.entity.Address;
-import de.ics.cardmarket4j.entity.Article;
-import de.ics.cardmarket4j.entity.User;
 import de.ics.cardmarket4j.entity.enumeration.OrderState;
-import de.ics.cardmarket4j.utils.JsonIO;
 
 /**
  * @see https://www.mkmapi.eu/ws/documentation/API_2.0:Entities:Order
@@ -21,7 +12,6 @@ import de.ics.cardmarket4j.utils.JsonIO;
  *
  */
 public class Order {
-	private String jsonString;
 	private int orderId;
 	private boolean isBuyer;
 	private User seller;
@@ -33,7 +23,7 @@ public class Order {
 	private LocalDateTime dateReceived;
 	private LocalDateTime dateCanceled;
 	private String cancellationReason;
-	private int mergedOrderId;
+	private Integer mergedOrderId;
 	private ShippingMethod shippingMethod;
 	private String trackingNumber;
 	private boolean isPresale;
@@ -46,51 +36,12 @@ public class Order {
 	private BigDecimal serviceFeeValue;
 	private BigDecimal totalValue;
 
-	public Order(JsonObject jObject) {
-		this.jsonString = jObject.toString();
-		this.orderId = JsonIO.parseInteger(jObject, "idOrder");
-		this.isBuyer = JsonIO.parseBoolean(jObject, "isBuyer");
-		this.buyer = new User(jObject.get("buyer").getAsJsonObject());
-		this.seller = new User(jObject.get("seller").getAsJsonObject());
-
-		JsonObject jState = jObject.get("state").getAsJsonObject();
-		this.orderState = OrderState.parseValue(JsonIO.parseString(jState, "state"));
-		this.dateBought = JsonIO.parseLocalDateTime(jState, "dateBought", DateTimeFormatter.ISO_DATE_TIME);
-		this.datePaid = JsonIO.parseLocalDateTime(jState, "datePaid", DateTimeFormatter.ISO_DATE_TIME);
-		this.dateSent = JsonIO.parseLocalDateTime(jState, "dateSent", DateTimeFormatter.ISO_DATE_TIME);
-		this.dateReceived = JsonIO.parseLocalDateTime(jState, "dateReceived", DateTimeFormatter.ISO_DATE_TIME);
-		this.dateCanceled = JsonIO.parseLocalDateTime(jState, "dateCanceled", DateTimeFormatter.ISO_DATE_TIME);
-		this.cancellationReason = JsonIO.parseString(jState, "reason");
-		this.mergedOrderId = JsonIO.parseInteger(jState, "wasMergedInto");
-
-		this.shippingMethod = new ShippingMethod(jObject.get("shippingMethod").getAsJsonObject());
-		this.trackingNumber = JsonIO.parseString(jObject, "trackingNumber");
-		this.isPresale = JsonIO.parseBoolean(jObject, "isPresale");
-		this.shippingAddress = new Address(jObject.get("shippingAddress").getAsJsonObject());
-		this.amountItems = JsonIO.parseInteger(jObject, "articleCount");
-		this.note = JsonIO.parseString(jObject, "note");
-		try {
-			this.evaluation = new Evaluation(jObject.get("evaluation").getAsJsonObject());
-		} catch (NullPointerException e) {
-
-		}
-		this.listArticles = new ArrayList<>();
-		for (JsonElement jEle : jObject.get("article").getAsJsonArray()) {
-			listArticles.add(new Article(jEle.getAsJsonObject()));
-		}
-		this.listArticlesValue = JsonIO.parseBigDecimal(jObject, "articleValue");
-		this.serviceFeeValue = JsonIO.parseBigDecimal(jObject, "serviceFeeValue");
-		this.totalValue = JsonIO.parseBigDecimal(jObject, "totalValue");
-
-	}
-
-	public Order(String jsonString, int orderId, boolean isBuyer, User seller, User buyer, OrderState orderState,
-			LocalDateTime dateBought, LocalDateTime datePaid, LocalDateTime dateSent, LocalDateTime dateReceived,
-			LocalDateTime dateCanceled, String cancellationReason, int mergedOrderId, ShippingMethod shippingMethod,
-			String trackingNumber, boolean isPresale, Address shippingAddress, int amountItems, String note,
-			Evaluation evaluation, List<Article> listArticles, BigDecimal listArticlesValue, BigDecimal serviceFeeValue,
+	public Order(int orderId, boolean isBuyer, User seller, User buyer, OrderState orderState, LocalDateTime dateBought,
+			LocalDateTime datePaid, LocalDateTime dateSent, LocalDateTime dateReceived, LocalDateTime dateCanceled,
+			String cancellationReason, Integer mergedOrderId, ShippingMethod shippingMethod, String trackingNumber,
+			boolean isPresale, Address shippingAddress, int amountItems, String note, Evaluation evaluation,
+			List<Article> listArticles, BigDecimal listArticlesValue, BigDecimal serviceFeeValue,
 			BigDecimal totalValue) {
-		this.jsonString = jsonString;
 		this.orderId = orderId;
 		this.isBuyer = isBuyer;
 		this.seller = seller;
@@ -171,11 +122,6 @@ public class Order {
 			return false;
 		if (isPresale != other.isPresale)
 			return false;
-		if (jsonString == null) {
-			if (other.jsonString != null)
-				return false;
-		} else if (!jsonString.equals(other.jsonString))
-			return false;
 		if (listArticles == null) {
 			if (other.listArticles != null)
 				return false;
@@ -186,7 +132,10 @@ public class Order {
 				return false;
 		} else if (!listArticlesValue.equals(other.listArticlesValue))
 			return false;
-		if (mergedOrderId != other.mergedOrderId)
+		if (mergedOrderId == null) {
+			if (other.mergedOrderId != null)
+				return false;
+		} else if (!mergedOrderId.equals(other.mergedOrderId))
 			return false;
 		if (note == null) {
 			if (other.note != null)
@@ -266,20 +215,12 @@ public class Order {
 		return evaluation;
 	}
 
-	public String getJsonString() {
-		return jsonString;
-	}
-
 	public List<Article> getListArticles() {
 		return listArticles;
 	}
 
 	public BigDecimal getListArticlesValue() {
 		return listArticlesValue;
-	}
-
-	public int getMergedOrderId() {
-		return mergedOrderId;
 	}
 
 	public String getNote() {
@@ -333,10 +274,9 @@ public class Order {
 		result = prime * result + ((evaluation == null) ? 0 : evaluation.hashCode());
 		result = prime * result + (isBuyer ? 1231 : 1237);
 		result = prime * result + (isPresale ? 1231 : 1237);
-		result = prime * result + ((jsonString == null) ? 0 : jsonString.hashCode());
 		result = prime * result + ((listArticles == null) ? 0 : listArticles.hashCode());
 		result = prime * result + ((listArticlesValue == null) ? 0 : listArticlesValue.hashCode());
-		result = prime * result + mergedOrderId;
+		result = prime * result + ((mergedOrderId == null) ? 0 : mergedOrderId.hashCode());
 		result = prime * result + ((note == null) ? 0 : note.hashCode());
 		result = prime * result + orderId;
 		result = prime * result + ((orderState == null) ? 0 : orderState.hashCode());
@@ -397,10 +337,6 @@ public class Order {
 		this.evaluation = evaluation;
 	}
 
-	public void setJsonString(String jsonString) {
-		this.jsonString = jsonString;
-	}
-
 	public void setListArticles(List<Article> listArticles) {
 		this.listArticles = listArticles;
 	}
@@ -409,7 +345,7 @@ public class Order {
 		this.listArticlesValue = listArticlesValue;
 	}
 
-	public void setMergedOrderId(int mergedOrderId) {
+	public void setMergedOrderId(Integer mergedOrderId) {
 		this.mergedOrderId = mergedOrderId;
 	}
 
@@ -455,14 +391,25 @@ public class Order {
 
 	@Override
 	public String toString() {
-		return "Order [jsonString=" + jsonString + ", orderId=" + orderId + ", isBuyer=" + isBuyer + ", seller="
-				+ seller + ", buyer=" + buyer + ", orderState=" + orderState + ", dateBought=" + dateBought
-				+ ", datePaid=" + datePaid + ", dateSent=" + dateSent + ", dateReceived=" + dateReceived
-				+ ", dateCanceled=" + dateCanceled + ", cancellationReason=" + cancellationReason + ", mergedOrderId="
-				+ mergedOrderId + ", shippingMethod=" + shippingMethod + ", trackingNumber=" + trackingNumber
-				+ ", isPresale=" + isPresale + ", shippingAddress=" + shippingAddress + ", amountItems=" + amountItems
-				+ ", note=" + note + ", evaluation=" + evaluation + ", listArticles=" + listArticles
-				+ ", listArticlesValue=" + listArticlesValue + ", serviceFeeValue=" + serviceFeeValue + ", totalValue="
-				+ totalValue + "]";
+		return "Order [orderId=" + orderId + ", isBuyer=" + isBuyer + ", "
+				+ (seller != null ? "seller=" + seller + ", " : "") + (buyer != null ? "buyer=" + buyer + ", " : "")
+				+ (orderState != null ? "orderState=" + orderState + ", " : "")
+				+ (dateBought != null ? "dateBought=" + dateBought + ", " : "")
+				+ (datePaid != null ? "datePaid=" + datePaid + ", " : "")
+				+ (dateSent != null ? "dateSent=" + dateSent + ", " : "")
+				+ (dateReceived != null ? "dateReceived=" + dateReceived + ", " : "")
+				+ (dateCanceled != null ? "dateCanceled=" + dateCanceled + ", " : "")
+				+ (cancellationReason != null ? "cancellationReason=" + cancellationReason + ", " : "")
+				+ (mergedOrderId != null ? "mergedOrderId=" + mergedOrderId + ", " : "")
+				+ (shippingMethod != null ? "shippingMethod=" + shippingMethod + ", " : "")
+				+ (trackingNumber != null ? "trackingNumber=" + trackingNumber + ", " : "") + "isPresale=" + isPresale
+				+ ", " + (shippingAddress != null ? "shippingAddress=" + shippingAddress + ", " : "") + "amountItems="
+				+ amountItems + ", " + (note != null ? "note=" + note + ", " : "")
+				+ (evaluation != null ? "evaluation=" + evaluation + ", " : "")
+				+ (listArticles != null ? "listArticles=" + listArticles + ", " : "")
+				+ (listArticlesValue != null ? "listArticlesValue=" + listArticlesValue + ", " : "")
+				+ (serviceFeeValue != null ? "serviceFeeValue=" + serviceFeeValue + ", " : "")
+				+ (totalValue != null ? "totalValue=" + totalValue : "") + "]";
 	}
+
 }

@@ -17,7 +17,7 @@ import de.ics.cardmarket4j.entity.Article;
 import de.ics.cardmarket4j.entity.enumeration.Game;
 import de.ics.cardmarket4j.entity.enumeration.HTTPMethod;
 import de.ics.cardmarket4j.structs.IsCardMarketCard;
-import de.ics.cardmarket4j.utils.CardMarketUtils;
+import de.ics.cardmarket4j.util.CardMarketUtils;
 
 public class StockService extends AbstractService {
 	private static Logger LOGGER = LoggerFactory.getLogger("StockService");

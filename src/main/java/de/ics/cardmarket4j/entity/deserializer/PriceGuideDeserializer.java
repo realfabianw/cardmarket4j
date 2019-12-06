@@ -10,7 +10,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import de.ics.cardmarket4j.entity.PriceGuide;
-import de.ics.cardmarket4j.utils.JsonIO;
+import de.ics.cardmarket4j.util.JsonIO;
 
 public class PriceGuideDeserializer implements JsonDeserializer<PriceGuide> {
 

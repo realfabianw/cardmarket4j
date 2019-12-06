@@ -9,7 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import de.ics.cardmarket4j.entity.BankAccount;
-import de.ics.cardmarket4j.utils.JsonIO;
+import de.ics.cardmarket4j.util.JsonIO;
 
 public class BankAccountDeserializer implements JsonDeserializer<BankAccount> {
 

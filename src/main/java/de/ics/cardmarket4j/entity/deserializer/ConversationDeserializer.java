@@ -13,7 +13,7 @@ import com.google.gson.JsonParseException;
 import de.ics.cardmarket4j.entity.Conversation;
 import de.ics.cardmarket4j.entity.Message;
 import de.ics.cardmarket4j.entity.User;
-import de.ics.cardmarket4j.utils.JsonIO;
+import de.ics.cardmarket4j.util.JsonIO;
 
 public class ConversationDeserializer implements JsonDeserializer<Conversation> {
 

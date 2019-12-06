@@ -11,7 +11,7 @@ import de.ics.cardmarket4j.CardMarketService;
 import de.ics.cardmarket4j.entity.Account;
 import de.ics.cardmarket4j.entity.Conversation;
 import de.ics.cardmarket4j.entity.enumeration.HTTPMethod;
-import de.ics.cardmarket4j.utils.JsonIO;
+import de.ics.cardmarket4j.util.JsonIO;
 
 /**
  * AccountService provides a connection to several account related functions.

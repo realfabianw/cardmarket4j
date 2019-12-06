@@ -1,10 +1,6 @@
-package de.ics.cardmarket4j.structs;
+package de.ics.cardmarket4j.entity;
 
 import java.math.BigDecimal;
-
-import com.google.gson.JsonObject;
-
-import de.ics.cardmarket4j.utils.JsonIO;
 
 /**
  * 
@@ -13,25 +9,13 @@ import de.ics.cardmarket4j.utils.JsonIO;
  *
  */
 public class ShippingMethod {
-	private String jsonString;
 	private int shippingMethodId;
 	private String name;
 	private BigDecimal price;
 	private boolean isLetter;
 	private boolean isInsured;
 
-	public ShippingMethod(JsonObject jObject) {
-		this.jsonString = jObject.toString();
-		this.shippingMethodId = JsonIO.parseInteger(jObject, "idShippingMethod");
-		this.name = JsonIO.parseString(jObject, "name");
-		this.price = JsonIO.parseBigDecimal(jObject, "price");
-		this.isLetter = JsonIO.parseBoolean(jObject, "isLetter");
-		this.isInsured = JsonIO.parseBoolean(jObject, "isInsured");
-	}
-
-	public ShippingMethod(String jsonString, int shippingMethodId, String name, BigDecimal price, boolean isLetter,
-			boolean isInsured) {
-		this.jsonString = jsonString;
+	public ShippingMethod(int shippingMethodId, String name, BigDecimal price, boolean isLetter, boolean isInsured) {
 		this.shippingMethodId = shippingMethodId;
 		this.name = name;
 		this.price = price;
@@ -52,11 +36,6 @@ public class ShippingMethod {
 			return false;
 		if (isLetter != other.isLetter)
 			return false;
-		if (jsonString == null) {
-			if (other.jsonString != null)
-				return false;
-		} else if (!jsonString.equals(other.jsonString))
-			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -70,10 +49,6 @@ public class ShippingMethod {
 		if (shippingMethodId != other.shippingMethodId)
 			return false;
 		return true;
-	}
-
-	public String getJsonString() {
-		return jsonString;
 	}
 
 	public String getName() {
@@ -94,7 +69,6 @@ public class ShippingMethod {
 		int result = 1;
 		result = prime * result + (isInsured ? 1231 : 1237);
 		result = prime * result + (isLetter ? 1231 : 1237);
-		result = prime * result + ((jsonString == null) ? 0 : jsonString.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((price == null) ? 0 : price.hashCode());
 		result = prime * result + shippingMethodId;
@@ -111,10 +85,6 @@ public class ShippingMethod {
 
 	public void setInsured(boolean isInsured) {
 		this.isInsured = isInsured;
-	}
-
-	public void setJsonString(String jsonString) {
-		this.jsonString = jsonString;
 	}
 
 	public void setLetter(boolean isLetter) {
@@ -135,7 +105,8 @@ public class ShippingMethod {
 
 	@Override
 	public String toString() {
-		return "ShippingMethod [jsonString=" + jsonString + ", shippingMethodId=" + shippingMethodId + ", name=" + name
-				+ ", price=" + price + ", isLetter=" + isLetter + ", isInsured=" + isInsured + "]";
+		return "ShippingMethod [shippingMethodId=" + shippingMethodId + ", "
+				+ (name != null ? "name=" + name + ", " : "") + (price != null ? "price=" + price + ", " : "")
+				+ "isLetter=" + isLetter + ", isInsured=" + isInsured + "]";
 	}
 }

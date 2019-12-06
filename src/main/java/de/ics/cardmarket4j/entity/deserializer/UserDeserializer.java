@@ -15,7 +15,7 @@ import de.ics.cardmarket4j.entity.User;
 import de.ics.cardmarket4j.entity.enumeration.Reputation;
 import de.ics.cardmarket4j.entity.enumeration.RiskGroup;
 import de.ics.cardmarket4j.entity.enumeration.UserType;
-import de.ics.cardmarket4j.utils.JsonIO;
+import de.ics.cardmarket4j.util.JsonIO;
 
 public class UserDeserializer implements JsonDeserializer<User> {
 

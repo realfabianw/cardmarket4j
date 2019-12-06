@@ -16,8 +16,8 @@ import de.ics.cardmarket4j.entity.Article;
 import de.ics.cardmarket4j.entity.Product;
 import de.ics.cardmarket4j.entity.User;
 import de.ics.cardmarket4j.entity.enumeration.Condition;
-import de.ics.cardmarket4j.utils.CardMarketUtils;
-import de.ics.cardmarket4j.utils.JsonIO;
+import de.ics.cardmarket4j.util.CardMarketUtils;
+import de.ics.cardmarket4j.util.JsonIO;
 
 public class ArticleDeserializer implements JsonDeserializer<Article> {
 

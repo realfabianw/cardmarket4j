@@ -15,7 +15,7 @@ import de.ics.cardmarket4j.entity.BankAccount;
 import de.ics.cardmarket4j.entity.User;
 import de.ics.cardmarket4j.entity.enumeration.DeliverySpeed;
 import de.ics.cardmarket4j.entity.enumeration.SellerActivationStatus;
-import de.ics.cardmarket4j.utils.JsonIO;
+import de.ics.cardmarket4j.util.JsonIO;
 
 public class AccountDeserializer implements JsonDeserializer<Account> {
 

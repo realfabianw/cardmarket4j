@@ -23,7 +23,7 @@ import de.ics.cardmarket4j.service.AuthenticationService;
 import de.ics.cardmarket4j.service.MarketplaceService;
 import de.ics.cardmarket4j.service.OrderService;
 import de.ics.cardmarket4j.service.StockService;
-import de.ics.cardmarket4j.utils.HTTPUtils;
+import de.ics.cardmarket4j.util.HTTPUtils;
 
 public class CardMarketService {
 	private static final String URI = "https://api.cardmarket.com/ws/v2.0/output.json/";

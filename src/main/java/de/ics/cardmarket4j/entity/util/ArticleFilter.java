@@ -5,7 +5,7 @@ import com.neovisionaries.i18n.LanguageCode;
 import de.ics.cardmarket4j.entity.enumeration.Condition;
 import de.ics.cardmarket4j.entity.enumeration.Reputation;
 import de.ics.cardmarket4j.entity.enumeration.UserType;
-import de.ics.cardmarket4j.utils.CardMarketUtils;
+import de.ics.cardmarket4j.util.CardMarketUtils;
 
 /**
  * This class represents the filter function for articles on cardmarket. Filters

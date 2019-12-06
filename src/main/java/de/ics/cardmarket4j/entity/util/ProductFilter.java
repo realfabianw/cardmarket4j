@@ -3,7 +3,7 @@ package de.ics.cardmarket4j.entity.util;
 import com.neovisionaries.i18n.LanguageCode;
 
 import de.ics.cardmarket4j.entity.enumeration.Game;
-import de.ics.cardmarket4j.utils.CardMarketUtils;
+import de.ics.cardmarket4j.util.CardMarketUtils;
 
 /**
  * This class represents the filter function for products on cardmarket. Filters

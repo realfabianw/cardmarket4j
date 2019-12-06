@@ -7,8 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.ics.cardmarket4j.CardMarketService;
-import de.ics.cardmarket4j.entity.Article;
-import de.ics.cardmarket4j.entity.util.ArticleFilter;
+import de.ics.cardmarket4j.entity.Order;
+import de.ics.cardmarket4j.entity.enumeration.OrderState;
+import de.ics.cardmarket4j.entity.enumeration.OrderType;
 
 public class Main {
 	private static Logger LOGGER = LoggerFactory.getLogger("Main");
@@ -19,12 +20,18 @@ public class Main {
 
 		// LEA Lightning Bolt 5689
 		// Lightning Bolt Playmat 397929
-		ArticleFilter aF = new ArticleFilter();
-		aF.setMaxResults(1);
-		List<Article> listArticles = market.getMarketplaceService().getArticles(5689, aF);
+//		ArticleFilter aF = new ArticleFilter();
+//		aF.setMaxResults(1);
+//		List<Article> listArticles = market.getMarketplaceService().getArticles(5689, aF);
+//
+//		for (Article a : listArticles) {
+//			LOGGER.info(a.toString());
+//		}
 
-		for (Article a : listArticles) {
-			LOGGER.info(a.toString());
+		List<Order> listOrders = market.getOrderService().getOrders(OrderType.SALE, OrderState.RECEIVED, 1);
+
+		for (Order o : listOrders) {
+			LOGGER.info(o.toString());
 		}
 
 //		LOGGER.info("Specific Products");

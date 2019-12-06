@@ -15,8 +15,8 @@ import com.neovisionaries.i18n.LanguageCode;
 
 import de.ics.cardmarket4j.entity.Expansion;
 import de.ics.cardmarket4j.entity.enumeration.Game;
-import de.ics.cardmarket4j.utils.CardMarketUtils;
-import de.ics.cardmarket4j.utils.JsonIO;
+import de.ics.cardmarket4j.util.CardMarketUtils;
+import de.ics.cardmarket4j.util.JsonIO;
 
 public class ExpansionDeserializer implements JsonDeserializer<Expansion> {
 

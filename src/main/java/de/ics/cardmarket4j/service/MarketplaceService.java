@@ -15,7 +15,7 @@ import de.ics.cardmarket4j.entity.Product;
 import de.ics.cardmarket4j.entity.enumeration.HTTPMethod;
 import de.ics.cardmarket4j.entity.util.ArticleFilter;
 import de.ics.cardmarket4j.entity.util.ProductFilter;
-import de.ics.cardmarket4j.utils.JsonIO;
+import de.ics.cardmarket4j.util.JsonIO;
 
 /**
  * MarketplaceService provides a connection to several marketplace related

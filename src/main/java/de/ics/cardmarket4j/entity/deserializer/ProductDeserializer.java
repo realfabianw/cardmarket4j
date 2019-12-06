@@ -17,8 +17,8 @@ import de.ics.cardmarket4j.entity.Expansion;
 import de.ics.cardmarket4j.entity.PriceGuide;
 import de.ics.cardmarket4j.entity.Product;
 import de.ics.cardmarket4j.entity.enumeration.Game;
-import de.ics.cardmarket4j.utils.CardMarketUtils;
-import de.ics.cardmarket4j.utils.JsonIO;
+import de.ics.cardmarket4j.util.CardMarketUtils;
+import de.ics.cardmarket4j.util.JsonIO;
 
 public class ProductDeserializer implements JsonDeserializer<Product> {
 
@@ -27,16 +27,17 @@ public class ProductDeserializer implements JsonDeserializer<Product> {
 			throws JsonParseException {
 		JsonObject jObject = json.getAsJsonObject();
 
-		int productId = JsonIO.parseInteger(jObject, "idProduct");
-		int metaproductId = JsonIO.parseInteger(jObject, "idMetaproduct");
-		int totalReprints = JsonIO.parseInteger(jObject, "countReprints");
+		Integer productId = JsonIO.parseInteger(jObject, "idProduct");
+		Integer metaproductId = JsonIO.parseInteger(jObject, "idMetaproduct");
+		Integer totalReprints = JsonIO.parseInteger(jObject, "countReprints");
 		String name = JsonIO.parseString(jObject, "enName");
 		Map<LanguageCode, String> mapLocalizedNames = new HashMap<>();
-
-		for (JsonElement jElement : jObject.get("localization").getAsJsonArray()) {
-			JsonObject jLoc = jElement.getAsJsonObject();
-			mapLocalizedNames.put(CardMarketUtils.fromLanguageId(JsonIO.parseInteger(jLoc, "idLanguage")),
-					JsonIO.parseString(jLoc, "name"));
+		if (jObject.keySet().contains("localization")) {
+			for (JsonElement jElement : jObject.get("localization").getAsJsonArray()) {
+				JsonObject jLoc = jElement.getAsJsonObject();
+				mapLocalizedNames.put(CardMarketUtils.fromLanguageId(JsonIO.parseInteger(jLoc, "idLanguage")),
+						JsonIO.parseString(jLoc, "name"));
+			}
 		}
 
 		Integer categoryId = null;
@@ -67,8 +68,10 @@ public class ProductDeserializer implements JsonDeserializer<Product> {
 		String expansionName = (JsonIO.parseString(jObject, "expansionName") != null
 				? JsonIO.parseString(jObject, "expansionName")
 				: JsonIO.parseString(jObject, "expansion"));
-
-		Expansion expansion = JsonIO.getGson().fromJson(jObject.get("expansion"), Expansion.class);
+		Expansion expansion = null;
+		if (jObject.get("expansion").isJsonObject()) {
+			expansion = JsonIO.getGson().fromJson(jObject.get("expansion"), Expansion.class);
+		}
 
 		PriceGuide priceGuide = JsonIO.getGson().fromJson(jObject.get("priceGuide"), PriceGuide.class);
 
