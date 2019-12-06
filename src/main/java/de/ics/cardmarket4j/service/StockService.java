@@ -87,7 +87,6 @@ public class StockService extends AbstractService {
 			xml.append("</article>");
 		}
 		xml.append("</request>");
-		LOGGER.trace("XML: {}", xml);
 		JsonElement response = request("stock", HTTPMethod.PUT, xml.toString());
 
 		List<Article> listArticle = new ArrayList<>();
@@ -221,7 +220,6 @@ public class StockService extends AbstractService {
 			xml.append("</article>");
 		}
 		xml.append("</request>");
-		LOGGER.trace("XML: {}", xml);
 		JsonElement response = request("stock", HTTPMethod.DELETE, xml.toString());
 
 		List<Article> listArticle = new ArrayList<>();
