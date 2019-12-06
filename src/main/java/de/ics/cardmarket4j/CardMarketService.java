@@ -27,7 +27,9 @@ import de.ics.cardmarket4j.util.HTTPUtils;
 
 public class CardMarketService {
 	private static final String URI = "https://api.cardmarket.com/ws/v2.0/output.json/";
+	private static final String URI_SANDBOX = "https://sandbox.cardmarket.com/ws/v2.0/output.json/";
 	private static Logger LOGGER = LoggerFactory.getLogger("CardMarketService");
+	private boolean sandBoxMode;
 	private final AuthenticationService authenticationService;
 	private final AccountService accountService;
 	private final MarketplaceService marketplaceService;
@@ -73,9 +75,13 @@ public class CardMarketService {
 		return stockService;
 	}
 
+	public boolean isSandBoxMode() {
+		return sandBoxMode;
+	}
+
 	Pair<Integer, JsonElement> request(String URL, HTTPMethod httpMethod) throws IOException {
 		try {
-			String uri = URI + URL.replaceAll("\\s", "%20");
+			String uri = (sandBoxMode ? URI_SANDBOX : URI) + URL.replaceAll("\\s", "%20");
 			HttpURLConnection connection = (HttpURLConnection) new URL(uri).openConnection();
 
 			String oAuthSignature = authenticationService.createOAuthSignature(uri, httpMethod);
@@ -117,7 +123,7 @@ public class CardMarketService {
 
 	Pair<Integer, JsonElement> request(String URL, HTTPMethod httpMethod, String requestBody) throws IOException {
 		try {
-			String uri = URI + URL.replaceAll("\\s", "%20");
+			String uri = (sandBoxMode ? URI_SANDBOX : URI) + URL.replaceAll("\\s", "%20");
 			HttpURLConnection connection = (HttpURLConnection) new URL(uri).openConnection();
 
 			String oAuthSignature = authenticationService.createOAuthSignature(uri, httpMethod);
@@ -160,5 +166,9 @@ public class CardMarketService {
 			System.exit(-1);
 			return null;
 		}
+	}
+
+	public void setSandBoxMode(boolean sandBoxMode) {
+		this.sandBoxMode = sandBoxMode;
 	}
 }
