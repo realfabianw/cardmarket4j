@@ -10,6 +10,7 @@ import com.google.gson.JsonObject;
 
 import de.ics.cardmarket4j.entity.Account;
 import de.ics.cardmarket4j.entity.Address;
+import de.ics.cardmarket4j.entity.Article;
 import de.ics.cardmarket4j.entity.BankAccount;
 import de.ics.cardmarket4j.entity.Conversation;
 import de.ics.cardmarket4j.entity.Expansion;
@@ -19,6 +20,7 @@ import de.ics.cardmarket4j.entity.Product;
 import de.ics.cardmarket4j.entity.User;
 import de.ics.cardmarket4j.entity.deserializer.AccountDeserializer;
 import de.ics.cardmarket4j.entity.deserializer.AddressDeserializer;
+import de.ics.cardmarket4j.entity.deserializer.ArticleDeserializer;
 import de.ics.cardmarket4j.entity.deserializer.BankAccountDeserializer;
 import de.ics.cardmarket4j.entity.deserializer.ConversationDeserializer;
 import de.ics.cardmarket4j.entity.deserializer.ExpansionDeserializer;
@@ -43,6 +45,7 @@ public class JsonIO {
 			GsonBuilder gsonBuilder = new GsonBuilder();
 			gsonBuilder.registerTypeAdapter(Account.class, new AccountDeserializer());
 			gsonBuilder.registerTypeAdapter(Address.class, new AddressDeserializer());
+			gsonBuilder.registerTypeAdapter(Article.class, new ArticleDeserializer());
 			gsonBuilder.registerTypeAdapter(BankAccount.class, new BankAccountDeserializer());
 			gsonBuilder.registerTypeAdapter(Conversation.class, new ConversationDeserializer());
 			gsonBuilder.registerTypeAdapter(Expansion.class, new ExpansionDeserializer());
@@ -100,7 +103,12 @@ public class JsonIO {
 
 	public static String parseString(JsonObject jObject, String fieldName) {
 		try {
-			return jObject.get(fieldName).getAsString();
+			String string = jObject.get(fieldName).getAsString();
+			if (string.isEmpty()) {
+				return null;
+			} else {
+				return string;
+			}
 		} catch (Exception e) {
 			return null;
 		}

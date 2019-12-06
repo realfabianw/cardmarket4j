@@ -16,14 +16,9 @@ import java.util.TreeMap;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import de.ics.cardmarket4j.entity.enumeration.HTTPMethod;
 
 public class AuthenticationService {
-	private static Logger LOGGER = LoggerFactory.getLogger("AuthenticationService");
-
 	private static String join(Collection<?> s, String delimiter) {
 		StringBuilder builder = new StringBuilder();
 		Iterator<?> iter = s.iterator();

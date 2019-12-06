@@ -10,6 +10,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import de.ics.cardmarket4j.entity.Address;
+import de.ics.cardmarket4j.entity.Article;
 import de.ics.cardmarket4j.entity.User;
 import de.ics.cardmarket4j.entity.enumeration.OrderState;
 import de.ics.cardmarket4j.utils.JsonIO;

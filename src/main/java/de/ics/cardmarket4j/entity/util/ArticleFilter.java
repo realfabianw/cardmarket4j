@@ -1,4 +1,4 @@
-package de.ics.cardmarket4j.structs;
+package de.ics.cardmarket4j.entity.util;
 
 import com.neovisionaries.i18n.LanguageCode;
 
@@ -17,6 +17,7 @@ import de.ics.cardmarket4j.utils.CardMarketUtils;
  */
 public class ArticleFilter {
 	private UserType userType;
+	private Integer start;
 	private Integer maxResults;
 	private Reputation minReputation;
 	private LanguageCode language;
@@ -66,6 +67,11 @@ public class ArticleFilter {
 				return false;
 		} else if (!signed.equals(other.signed))
 			return false;
+		if (start == null) {
+			if (other.start != null)
+				return false;
+		} else if (!start.equals(other.start))
+			return false;
 		if (userType != other.userType)
 			return false;
 		return true;
@@ -101,16 +107,16 @@ public class ArticleFilter {
 
 	public String getQuery() {
 		StringBuilder sb = new StringBuilder("?");
-		if (maxResults != null) {
+		if (start != null || maxResults != null) {
 			if (sb.charAt(sb.length() - 1) != '?') {
 				sb.append("&");
 			}
-			sb.append("maxResults=" + maxResults);
-		} else {
+			sb.append("start=" + (start != null ? start : 0));
+
 			if (sb.charAt(sb.length() - 1) != '?') {
 				sb.append("&");
 			}
-			sb.append("maxResults=" + 999);
+			sb.append("maxResults=" + (maxResults != null ? maxResults : 1000));
 		}
 		if (userType != null) {
 			if (sb.charAt(sb.length() - 1) != '?') {
@@ -167,6 +173,10 @@ public class ArticleFilter {
 		return signed;
 	}
 
+	public Integer getStart() {
+		return start;
+	}
+
 	public UserType getUserType() {
 		return userType;
 	}
@@ -183,6 +193,7 @@ public class ArticleFilter {
 		result = prime * result + ((minCondition == null) ? 0 : minCondition.hashCode());
 		result = prime * result + ((minReputation == null) ? 0 : minReputation.hashCode());
 		result = prime * result + ((signed == null) ? 0 : signed.hashCode());
+		result = prime * result + ((start == null) ? 0 : start.hashCode());
 		result = prime * result + ((userType == null) ? 0 : userType.hashCode());
 		return result;
 	}
@@ -219,14 +230,24 @@ public class ArticleFilter {
 		this.signed = signed;
 	}
 
+	public void setStart(Integer start) {
+		this.start = start;
+	}
+
 	public void setUserType(UserType userType) {
 		this.userType = userType;
 	}
 
 	@Override
 	public String toString() {
-		return "ArticleFilter [userType=" + userType + ", maxResults=" + maxResults + ", minReputation=" + minReputation
-				+ ", language=" + language + ", minCondition=" + minCondition + ", foil=" + foil + ", signed=" + signed
-				+ ", altered=" + altered + ", minAvailable=" + minAvailable + "]";
+		return "ArticleFilter [" + (userType != null ? "userType=" + userType + ", " : "")
+				+ (start != null ? "start=" + start + ", " : "")
+				+ (maxResults != null ? "maxResults=" + maxResults + ", " : "")
+				+ (minReputation != null ? "minReputation=" + minReputation + ", " : "")
+				+ (language != null ? "language=" + language + ", " : "")
+				+ (minCondition != null ? "minCondition=" + minCondition + ", " : "")
+				+ (foil != null ? "foil=" + foil + ", " : "") + (signed != null ? "signed=" + signed + ", " : "")
+				+ (altered != null ? "altered=" + altered + ", " : "")
+				+ (minAvailable != null ? "minAvailable=" + minAvailable : "") + "]";
 	}
 }

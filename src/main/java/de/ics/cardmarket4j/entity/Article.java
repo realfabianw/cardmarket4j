@@ -1,17 +1,11 @@
-package de.ics.cardmarket4j.structs;
+package de.ics.cardmarket4j.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
-import com.google.gson.JsonObject;
 import com.neovisionaries.i18n.LanguageCode;
 
-import de.ics.cardmarket4j.entity.Product;
-import de.ics.cardmarket4j.entity.User;
 import de.ics.cardmarket4j.entity.enumeration.Condition;
-import de.ics.cardmarket4j.utils.CardMarketUtils;
-import de.ics.cardmarket4j.utils.JsonIO;
 
 /**
  * 
@@ -19,8 +13,7 @@ import de.ics.cardmarket4j.utils.JsonIO;
  * @author QUE
  *
  */
-public class Article implements IsCardMarketCard {
-	private String jsonString;
+public class Article {
 	private int articleId;
 	private int productId;
 	private LanguageCode languageCode;
@@ -38,48 +31,9 @@ public class Article implements IsCardMarketCard {
 	private boolean playset;
 	private boolean firstEdition;
 
-	public Article(JsonObject jObject) {
-		this.jsonString = jObject.toString();
-		this.articleId = JsonIO.parseInteger(jObject, "idArticle");
-		this.productId = JsonIO.parseInteger(jObject, "idProduct");
-		try {
-			this.languageCode = CardMarketUtils
-					.fromLanguageId(JsonIO.parseInteger(jObject.get("language").getAsJsonObject(), "idLanguage"));
-		} catch (NullPointerException e) {
-			// Some API-Calls dont return this (Successfull Deletion of Article - Return)
-		}
-		this.comment = JsonIO.parseString(jObject, "comments");
-		this.price = JsonIO.parseBigDecimal(jObject, "price");
-		this.quantity = JsonIO.parseInteger(jObject, "count");
-		this.inShoppingCart = JsonIO.parseBoolean(jObject, "inShoppingCart");
-		try {
-			this.product = new Product(productId, jObject.get("product").getAsJsonObject());
-		} catch (NullPointerException e) {
-
-		}
-		try {
-			this.seller = JsonIO.getGson().fromJson(jObject.get("seller"), User.class);
-		} catch (NullPointerException e) {
-
-		}
-		this.lastEdited = JsonIO.parseLocalDateTime(jObject, "lastEdited", DateTimeFormatter.ISO_DATE_TIME);
-		try {
-			this.condition = Condition.parseId(JsonIO.parseString(jObject, "condition"));
-		} catch (IllegalArgumentException e) {
-			// Some API-Calls dont return a this (Successfull Deletion of Article - Return)
-		}
-		this.foil = JsonIO.parseBoolean(jObject, "isFoil");
-		this.signed = JsonIO.parseBoolean(jObject, "isSigned");
-		this.altered = JsonIO.parseBoolean(jObject, "isAltered");
-		this.playset = JsonIO.parseBoolean(jObject, "isPlayset");
-		this.firstEdition = JsonIO.parseBoolean(jObject, "isFirstEd");
-	}
-
-	public Article(String jsonString, int articleId, int productId, LanguageCode languageCode, String comment,
-			BigDecimal price, int quantity, boolean inShoppingCart, Product product, User seller,
-			LocalDateTime lastEdited, Condition condition, boolean foil, boolean signed, boolean altered,
-			boolean playset, boolean firstEdition) {
-		this.jsonString = jsonString;
+	public Article(int articleId, int productId, LanguageCode languageCode, String comment, BigDecimal price,
+			int quantity, boolean inShoppingCart, Product product, User seller, LocalDateTime lastEdited,
+			Condition condition, boolean foil, boolean signed, boolean altered, boolean playset, boolean firstEdition) {
 		this.articleId = articleId;
 		this.productId = productId;
 		this.languageCode = languageCode;
@@ -124,11 +78,6 @@ public class Article implements IsCardMarketCard {
 			return false;
 		if (inShoppingCart != other.inShoppingCart)
 			return false;
-		if (jsonString == null) {
-			if (other.jsonString != null)
-				return false;
-		} else if (!jsonString.equals(other.jsonString))
-			return false;
 		if (languageCode != other.languageCode)
 			return false;
 		if (lastEdited == null) {
@@ -162,26 +111,18 @@ public class Article implements IsCardMarketCard {
 		return true;
 	}
 
-	@Override
 	public int getArticleId() {
 		return articleId;
 	}
 
-	@Override
 	public String getComment() {
 		return comment;
 	}
 
-	@Override
 	public Condition getCondition() {
 		return condition;
 	}
 
-	public String getJsonString() {
-		return jsonString;
-	}
-
-	@Override
 	public LanguageCode getLanguageCode() {
 		return languageCode;
 	}
@@ -190,7 +131,6 @@ public class Article implements IsCardMarketCard {
 		return lastEdited;
 	}
 
-	@Override
 	public BigDecimal getPrice() {
 		return price;
 	}
@@ -199,12 +139,10 @@ public class Article implements IsCardMarketCard {
 		return product;
 	}
 
-	@Override
 	public int getProductId() {
 		return productId;
 	}
 
-	@Override
 	public int getQuantity() {
 		return quantity;
 	}
@@ -224,7 +162,6 @@ public class Article implements IsCardMarketCard {
 		result = prime * result + (firstEdition ? 1231 : 1237);
 		result = prime * result + (foil ? 1231 : 1237);
 		result = prime * result + (inShoppingCart ? 1231 : 1237);
-		result = prime * result + ((jsonString == null) ? 0 : jsonString.hashCode());
 		result = prime * result + ((languageCode == null) ? 0 : languageCode.hashCode());
 		result = prime * result + ((lastEdited == null) ? 0 : lastEdited.hashCode());
 		result = prime * result + (playset ? 1231 : 1237);
@@ -237,7 +174,6 @@ public class Article implements IsCardMarketCard {
 		return result;
 	}
 
-	@Override
 	public boolean isAltered() {
 		return altered;
 	}
@@ -246,7 +182,6 @@ public class Article implements IsCardMarketCard {
 		return firstEdition;
 	}
 
-	@Override
 	public boolean isFoil() {
 		return foil;
 	}
@@ -259,7 +194,6 @@ public class Article implements IsCardMarketCard {
 		return playset;
 	}
 
-	@Override
 	public boolean isSigned() {
 		return signed;
 	}
@@ -292,12 +226,8 @@ public class Article implements IsCardMarketCard {
 		this.inShoppingCart = inShoppingCart;
 	}
 
-	public void setJsonString(String jsonString) {
-		this.jsonString = jsonString;
-	}
-
-	public void setLanguageCode(LanguageCode language) {
-		this.languageCode = language;
+	public void setLanguageCode(LanguageCode languageCode) {
+		this.languageCode = languageCode;
 	}
 
 	public void setLastEdited(LocalDateTime lastEdited) {
@@ -334,8 +264,8 @@ public class Article implements IsCardMarketCard {
 
 	@Override
 	public String toString() {
-		return "Article [" + (jsonString != null ? "jsonString=" + jsonString + ", " : "") + "articleId=" + articleId
-				+ ", productId=" + productId + ", " + (languageCode != null ? "language=" + languageCode + ", " : "")
+		return "Article [articleId=" + articleId + ", productId=" + productId + ", "
+				+ (languageCode != null ? "languageCode=" + languageCode + ", " : "")
 				+ (comment != null ? "comment=" + comment + ", " : "") + (price != null ? "price=" + price + ", " : "")
 				+ "quantity=" + quantity + ", inShoppingCart=" + inShoppingCart + ", "
 				+ (product != null ? "product=" + product + ", " : "")

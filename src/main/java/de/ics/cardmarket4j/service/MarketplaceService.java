@@ -6,19 +6,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.javatuples.Pair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gson.JsonElement;
 
 import de.ics.cardmarket4j.AbstractService;
 import de.ics.cardmarket4j.CardMarketService;
+import de.ics.cardmarket4j.entity.Article;
 import de.ics.cardmarket4j.entity.Product;
 import de.ics.cardmarket4j.entity.enumeration.HTTPMethod;
+import de.ics.cardmarket4j.entity.util.ArticleFilter;
 import de.ics.cardmarket4j.entity.util.ProductFilter;
-import de.ics.cardmarket4j.structs.Article;
-import de.ics.cardmarket4j.structs.ArticleFilter;
 import de.ics.cardmarket4j.utils.JsonIO;
 
 /**
@@ -31,8 +27,6 @@ import de.ics.cardmarket4j.utils.JsonIO;
  *
  */
 public class MarketplaceService extends AbstractService {
-	private static Logger LOGGER = LoggerFactory.getLogger("MarketplaceService");
-
 	public MarketplaceService(CardMarketService cardMarket) {
 		super(cardMarket);
 
@@ -46,12 +40,13 @@ public class MarketplaceService extends AbstractService {
 	 * @param filter
 	 * @return {@code List<Article> listArticle}
 	 * @throws IOException
+	 * @version 0.7
 	 */
 	public List<Article> getArticles(int productId) throws IOException {
 		List<Article> listArticle = new ArrayList<>();
-		Pair<Integer, JsonElement> response = request("articles/" + productId, HTTPMethod.GET);
-		for (JsonElement jEle : response.getValue1().getAsJsonObject().get("article").getAsJsonArray()) {
-			listArticle.add(new Article(jEle.getAsJsonObject()));
+		JsonElement response = request("articles/" + productId, HTTPMethod.GET);
+		for (JsonElement jEle : response.getAsJsonObject().get("article").getAsJsonArray()) {
+			listArticle.add(JsonIO.getGson().fromJson(jEle, Article.class));
 		}
 		return listArticle;
 	}
@@ -64,12 +59,13 @@ public class MarketplaceService extends AbstractService {
 	 * @param filter
 	 * @return {@code List<Article> listArticle}
 	 * @throws IOException
+	 * @version 0.7
 	 */
 	public List<Article> getArticles(int productId, ArticleFilter filter) throws IOException {
 		List<Article> listArticle = new ArrayList<>();
-		Pair<Integer, JsonElement> response = request("articles/" + productId + filter.getQuery(), HTTPMethod.GET);
-		for (JsonElement jEle : response.getValue1().getAsJsonObject().get("article").getAsJsonArray()) {
-			listArticle.add(new Article(jEle.getAsJsonObject()));
+		JsonElement response = request("articles/" + productId + filter.getQuery(), HTTPMethod.GET);
+		for (JsonElement jEle : response.getAsJsonObject().get("article").getAsJsonArray()) {
+			listArticle.add(JsonIO.getGson().fromJson(jEle, Article.class));
 		}
 		return listArticle;
 	}
