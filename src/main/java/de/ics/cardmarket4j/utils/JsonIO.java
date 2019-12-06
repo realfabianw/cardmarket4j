@@ -80,11 +80,11 @@ public class JsonIO {
 		}
 	}
 
-	public static int parseInteger(JsonObject jObject, String fieldName) {
+	public static Integer parseInteger(JsonObject jObject, String fieldName) {
 		try {
 			return jObject.get(fieldName).getAsInt();
 		} catch (Exception e) {
-			return 0;
+			return null;
 		}
 	}
 

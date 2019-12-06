@@ -1,17 +1,11 @@
 package de.ics.cardmarket4j.entity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.neovisionaries.i18n.LanguageCode;
 
 import de.ics.cardmarket4j.entity.enumeration.Game;
-import de.ics.cardmarket4j.utils.CardMarketUtils;
-import de.ics.cardmarket4j.utils.JsonIO;
 
 /**
  * @see https://www.mkmapi.eu/ws/documentation/API_2.0:Entities:Product
@@ -24,8 +18,8 @@ public class Product {
 	private int totalReprints;
 	private String name;
 	private Map<LanguageCode, String> mapLocalizedNames;
-	private int categoryId;
-	private int categoryName;
+	private Integer categoryId;
+	private Integer categoryName;
 	private String selfUrl;
 	private String imageUrl;
 	private Game game;
@@ -36,135 +30,8 @@ public class Product {
 	private PriceGuide priceGuide;
 	private List<Integer> listReprintProductIds;
 
-	public Product(int productId, JsonObject jObject) {
-		this.productId = productId;
-		this.metaproductId = JsonIO.parseInteger(jObject, "idMetaproduct");
-		this.totalReprints = JsonIO.parseInteger(jObject, "countReprints");
-		this.name = JsonIO.parseString(jObject, "enName");
-		this.mapLocalizedNames = new HashMap<>();
-		try {
-			for (JsonElement jElement : jObject.get("localization").getAsJsonArray()) {
-				JsonObject jLoc = jElement.getAsJsonObject();
-				mapLocalizedNames.put(CardMarketUtils.fromLanguageId(JsonIO.parseInteger(jLoc, "idLanguage")),
-						JsonIO.parseString(jLoc, "name"));
-			}
-		} catch (NullPointerException e) {
-
-		}
-		try {
-			this.categoryId = JsonIO.parseInteger(jObject.get("category").getAsJsonObject(), "idCategory");
-		} catch (NullPointerException e) {
-
-		}
-		this.categoryName = JsonIO.parseInteger(jObject, "categoryName");
-		this.selfUrl = JsonIO.parseString(jObject, "website");
-		this.imageUrl = JsonIO.parseString(jObject, "image");
-		if (imageUrl.charAt(0) == '.') {
-			this.imageUrl = "https://www.cardmarket.com" + imageUrl.substring(1);
-		}
-		try {
-			this.game = Game.parseValue(JsonIO.parseString(jObject, "gameName"));
-		} catch (IllegalArgumentException e) {
-			// Constructor is called from Article Instance
-			this.game = Game.parseId(JsonIO.parseInteger(jObject, "idGame"));
-		}
-		try {
-			this.expansionCollectionNumber = JsonIO.parseString(jObject, "number");
-			if (this.expansionCollectionNumber == null) {
-				// TODO dirty fix. JsonIO muss Exceptions werfen anstatt null zu returnen
-				this.expansionCollectionNumber = JsonIO.parseString(jObject, "nr");
-			}
-		} catch (NullPointerException e) {
-			// Constructor is called from Article Instance
-			this.expansionCollectionNumber = JsonIO.parseString(jObject, "nr");
-		}
-		this.rarity = JsonIO.parseString(jObject, "rarity");
-		this.expansionName = (JsonIO.parseString(jObject, "expansionName") != null
-				? JsonIO.parseString(jObject, "expansionName")
-				: JsonIO.parseString(jObject, "expansion"));
-		try {
-			this.expansion = new Expansion(jObject.get("expansion").getAsJsonObject());
-		} catch (IllegalStateException | NullPointerException e) {
-			// Constructor is called from Article Instance
-		}
-		try {
-			this.priceGuide = new PriceGuide(jObject.get("priceGuide").getAsJsonObject());
-		} catch (NullPointerException e) {
-			// Constructor is called from Article Instance
-		}
-		this.listReprintProductIds = new ArrayList<>();
-		try {
-			for (JsonElement jElement : jObject.get("reprint").getAsJsonArray()) {
-				JsonObject jReprint = jElement.getAsJsonObject();
-				listReprintProductIds.add(JsonIO.parseInteger(jReprint, "idProduct"));
-			}
-		} catch (NullPointerException e) {
-			// Constructor is called from Article Instance
-		}
-	}
-
-	public Product(JsonObject jObject) {
-		this.productId = JsonIO.parseInteger(jObject, "idProduct");
-		this.metaproductId = JsonIO.parseInteger(jObject, "idMetaproduct");
-		this.totalReprints = JsonIO.parseInteger(jObject, "countReprints");
-		this.name = JsonIO.parseString(jObject, "enName");
-		this.mapLocalizedNames = new HashMap<>();
-		try {
-			for (JsonElement jElement : jObject.get("localization").getAsJsonArray()) {
-				JsonObject jLoc = jElement.getAsJsonObject();
-				mapLocalizedNames.put(CardMarketUtils.fromLanguageId(JsonIO.parseInteger(jLoc, "idLanguage")),
-						JsonIO.parseString(jLoc, "name"));
-			}
-		} catch (NullPointerException e) {
-
-		}
-		try {
-			this.categoryId = JsonIO.parseInteger(jObject.get("category").getAsJsonObject(), "idCategory");
-		} catch (NullPointerException e) {
-
-		}
-		this.categoryName = JsonIO.parseInteger(jObject, "categoryName");
-		this.selfUrl = JsonIO.parseString(jObject, "website");
-		this.imageUrl = JsonIO.parseString(jObject, "image");
-		try {
-			this.game = Game.parseValue(JsonIO.parseString(jObject, "gameName"));
-		} catch (IllegalArgumentException e) {
-			// Constructor is called from Article Instance
-			this.game = Game.parseId(JsonIO.parseInteger(jObject, "idGame"));
-		}
-		try {
-			this.expansionCollectionNumber = JsonIO.parseString(jObject, "number");
-		} catch (NullPointerException e) {
-			// Constructor is called from Article Instance
-			this.expansionCollectionNumber = JsonIO.parseString(jObject, "nr");
-		}
-		this.rarity = JsonIO.parseString(jObject, "rarity");
-		this.expansionName = (JsonIO.parseString(jObject, "expansionName") != null
-				? JsonIO.parseString(jObject, "expansionName")
-				: JsonIO.parseString(jObject, "expansion"));
-		try {
-			this.expansion = new Expansion(jObject.get("expansion").getAsJsonObject());
-		} catch (IllegalStateException | NullPointerException e) {
-			// Constructor is called from Article Instance
-		}
-		try {
-			this.priceGuide = new PriceGuide(jObject.get("priceGuide").getAsJsonObject());
-		} catch (NullPointerException e) {
-			// Constructor is called from Article Instance
-		}
-		this.listReprintProductIds = new ArrayList<>();
-		try {
-			for (JsonElement jElement : jObject.get("reprint").getAsJsonArray()) {
-				JsonObject jReprint = jElement.getAsJsonObject();
-				listReprintProductIds.add(JsonIO.parseInteger(jReprint, "idProduct"));
-			}
-		} catch (NullPointerException e) {
-			// Constructor is called from Article Instance
-		}
-	}
-
 	public Product(int productId, int metaproductId, int totalReprints, String name,
-			Map<LanguageCode, String> mapLocalizedNames, int categoryId, int categoryName, String selfUrl,
+			Map<LanguageCode, String> mapLocalizedNames, Integer categoryId, Integer categoryName, String selfUrl,
 			String imageUrl, Game game, String expansionCollectionNumber, String rarity, String expansionName,
 			Expansion expansion, PriceGuide priceGuide, List<Integer> listReprintProductIds) {
 		this.productId = productId;
@@ -185,13 +52,91 @@ public class Product {
 		this.listReprintProductIds = listReprintProductIds;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Product other = (Product) obj;
+		if (categoryId == null) {
+			if (other.categoryId != null)
+				return false;
+		} else if (!categoryId.equals(other.categoryId))
+			return false;
+		if (categoryName == null) {
+			if (other.categoryName != null)
+				return false;
+		} else if (!categoryName.equals(other.categoryName))
+			return false;
+		if (expansion == null) {
+			if (other.expansion != null)
+				return false;
+		} else if (!expansion.equals(other.expansion))
+			return false;
+		if (expansionCollectionNumber == null) {
+			if (other.expansionCollectionNumber != null)
+				return false;
+		} else if (!expansionCollectionNumber.equals(other.expansionCollectionNumber))
+			return false;
+		if (expansionName == null) {
+			if (other.expansionName != null)
+				return false;
+		} else if (!expansionName.equals(other.expansionName))
+			return false;
+		if (game != other.game)
+			return false;
+		if (imageUrl == null) {
+			if (other.imageUrl != null)
+				return false;
+		} else if (!imageUrl.equals(other.imageUrl))
+			return false;
+		if (listReprintProductIds == null) {
+			if (other.listReprintProductIds != null)
+				return false;
+		} else if (!listReprintProductIds.equals(other.listReprintProductIds))
+			return false;
+		if (mapLocalizedNames == null) {
+			if (other.mapLocalizedNames != null)
+				return false;
+		} else if (!mapLocalizedNames.equals(other.mapLocalizedNames))
+			return false;
+		if (metaproductId != other.metaproductId)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (priceGuide == null) {
+			if (other.priceGuide != null)
+				return false;
+		} else if (!priceGuide.equals(other.priceGuide))
+			return false;
+		if (productId != other.productId)
+			return false;
+		if (rarity == null) {
+			if (other.rarity != null)
+				return false;
+		} else if (!rarity.equals(other.rarity))
+			return false;
+		if (selfUrl == null) {
+			if (other.selfUrl != null)
+				return false;
+		} else if (!selfUrl.equals(other.selfUrl))
+			return false;
+		if (totalReprints != other.totalReprints)
+			return false;
+		return true;
+	}
 
-
-	public int getCategoryId() {
+	public Integer getCategoryId() {
 		return categoryId;
 	}
 
-	public int getCategoryName() {
+	public Integer getCategoryName() {
 		return categoryName;
 	}
 
@@ -251,11 +196,34 @@ public class Product {
 		return totalReprints;
 	}
 
-	public void setCategoryId(int categoryId) {
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((categoryId == null) ? 0 : categoryId.hashCode());
+		result = prime * result + ((categoryName == null) ? 0 : categoryName.hashCode());
+		result = prime * result + ((expansion == null) ? 0 : expansion.hashCode());
+		result = prime * result + ((expansionCollectionNumber == null) ? 0 : expansionCollectionNumber.hashCode());
+		result = prime * result + ((expansionName == null) ? 0 : expansionName.hashCode());
+		result = prime * result + ((game == null) ? 0 : game.hashCode());
+		result = prime * result + ((imageUrl == null) ? 0 : imageUrl.hashCode());
+		result = prime * result + ((listReprintProductIds == null) ? 0 : listReprintProductIds.hashCode());
+		result = prime * result + ((mapLocalizedNames == null) ? 0 : mapLocalizedNames.hashCode());
+		result = prime * result + metaproductId;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((priceGuide == null) ? 0 : priceGuide.hashCode());
+		result = prime * result + productId;
+		result = prime * result + ((rarity == null) ? 0 : rarity.hashCode());
+		result = prime * result + ((selfUrl == null) ? 0 : selfUrl.hashCode());
+		result = prime * result + totalReprints;
+		return result;
+	}
+
+	public void setCategoryId(Integer categoryId) {
 		this.categoryId = categoryId;
 	}
 
-	public void setCategoryName(int categoryName) {
+	public void setCategoryName(Integer categoryName) {
 		this.categoryName = categoryName;
 	}
 
@@ -316,33 +284,12 @@ public class Product {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + productId;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Product other = (Product) obj;
-		if (productId != other.productId)
-			return false;
-		return true;
-	}
-
-	@Override
 	public String toString() {
 		return "Product [productId=" + productId + ", metaproductId=" + metaproductId + ", totalReprints="
 				+ totalReprints + ", " + (name != null ? "name=" + name + ", " : "")
-				+ (mapLocalizedNames != null ? "mapLocalizedNames=" + mapLocalizedNames + ", " : "") + "categoryId="
-				+ categoryId + ", categoryName=" + categoryName + ", "
+				+ (mapLocalizedNames != null ? "mapLocalizedNames=" + mapLocalizedNames + ", " : "")
+				+ (categoryId != null ? "categoryId=" + categoryId + ", " : "")
+				+ (categoryName != null ? "categoryName=" + categoryName + ", " : "")
 				+ (selfUrl != null ? "selfUrl=" + selfUrl + ", " : "")
 				+ (imageUrl != null ? "imageUrl=" + imageUrl + ", " : "") + (game != null ? "game=" + game + ", " : "")
 				+ (expansionCollectionNumber != null ? "expansionCollectionNumber=" + expansionCollectionNumber + ", "

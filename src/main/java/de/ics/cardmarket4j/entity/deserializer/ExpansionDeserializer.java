@@ -28,14 +28,17 @@ public class ExpansionDeserializer implements JsonDeserializer<Expansion> {
 		int expansionId = JsonIO.parseInteger(jObject, "idExpansion");
 		String name = JsonIO.parseString(jObject, "enName");
 		Map<LanguageCode, String> mapLocalizedNames = new HashMap<>();
-		for (JsonElement jElement : jObject.get("localization").getAsJsonArray()) {
-			JsonObject jLoc = jElement.getAsJsonObject();
-			mapLocalizedNames.put(CardMarketUtils.fromLanguageId(JsonIO.parseInteger(jLoc, "idLanguage")),
-					JsonIO.parseString(jLoc, "name"));
+		if (jObject.keySet().contains("localization")) {
+			for (JsonElement jElement : jObject.get("localization").getAsJsonArray()) {
+				JsonObject jLoc = jElement.getAsJsonObject();
+				mapLocalizedNames.put(CardMarketUtils.fromLanguageId(JsonIO.parseInteger(jLoc, "idLanguage")),
+						JsonIO.parseString(jLoc, "name"));
+			}
 		}
 		String code = JsonIO.parseString(jObject, "abbreviation");
-		int iconCode = JsonIO.parseInteger(jObject, "icon");
+		Integer iconCode = JsonIO.parseInteger(jObject, "icon");
 		LocalDateTime releaseDate = JsonIO.parseLocalDateTime(jObject, "releaseDate", DateTimeFormatter.ISO_DATE_TIME);
+
 		Game game = Game.parseId(JsonIO.parseInteger(jObject, "idGame"));
 
 		return new Expansion(expansionId, name, mapLocalizedNames, code, iconCode, releaseDate, game);

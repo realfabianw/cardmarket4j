@@ -18,6 +18,7 @@ import de.ics.cardmarket4j.entity.Product;
 import de.ics.cardmarket4j.entity.enumeration.HTTPMethod;
 import de.ics.cardmarket4j.structs.Article;
 import de.ics.cardmarket4j.structs.ArticleFilter;
+import de.ics.cardmarket4j.utils.JsonIO;
 
 /**
  * MarketplaceService provides a connection to several marketplace related
@@ -80,13 +81,14 @@ public class MarketplaceService extends AbstractService {
 	 * @param searchQuery
 	 * @return {@code Set<Product> setProduct}
 	 * @throws IOException
+	 * @version 0.7
 	 */
 	public Set<Product> getProduct(String searchQuery) throws IOException {
 		Set<Product> setProducts = new HashSet<>();
 		String query = "search=" + searchQuery;
 		JsonElement response = request("products/find?" + query, HTTPMethod.GET);
 		for (JsonElement jEle : response.getAsJsonObject().get("product").getAsJsonArray()) {
-			setProducts.add(new Product(jEle.getAsJsonObject()));
+			setProducts.add(JsonIO.getGson().fromJson(jEle, Product.class));
 		}
 		return setProducts;
 	}
@@ -99,9 +101,10 @@ public class MarketplaceService extends AbstractService {
 	 * @param productId
 	 * @return {@code Product product}
 	 * @throws IOException
+	 * @version 0.7
 	 */
 	public Product getProductDetails(int productId) throws IOException {
 		JsonElement response = request("products/" + productId, HTTPMethod.GET);
-		return new Product(response.getAsJsonObject().get("product").getAsJsonObject());
+		return JsonIO.getGson().fromJson(response.getAsJsonObject().get("product"), Product.class);
 	}
 }

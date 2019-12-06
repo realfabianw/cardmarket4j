@@ -17,12 +17,12 @@ public class Main {
 				"YHEpS1HRHkIjixZFJAHfdqHVw3r3ZS7C", "VtADsKQR7OUTN77QP8IX2DkKetxo5kU9");
 
 		LOGGER.info("List of Products");
-		
+
 		Set<Product> setProducts = market.getMarketplaceService().getProduct("Lightning Bolt");
 		for (Product p : setProducts) {
 			LOGGER.info(p.toString());
 		}
-		
+
 		LOGGER.info("Specific Products");
 		LOGGER.info(market.getMarketplaceService().getProductDetails(5689).toString());
 		LOGGER.info(market.getMarketplaceService().getProductDetails(397929).toString());

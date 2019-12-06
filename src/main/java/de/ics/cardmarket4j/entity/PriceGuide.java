@@ -2,10 +2,6 @@ package de.ics.cardmarket4j.entity;
 
 import java.math.BigDecimal;
 
-import com.google.gson.JsonObject;
-
-import de.ics.cardmarket4j.utils.JsonIO;
-
 /**
  * @see https://www.mkmapi.eu/ws/documentation/API_2.0:Entities:Product
  * @author QUE

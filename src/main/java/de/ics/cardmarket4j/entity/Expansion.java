@@ -17,12 +17,12 @@ public class Expansion {
 	private String name;
 	private Map<LanguageCode, String> mapLocalizedNames;
 	private String code;
-	private int iconCode;
+	private Integer iconCode;
 	private LocalDateTime releaseDate;
 	private Game game;
 
 	public Expansion(int expansionId, String name, Map<LanguageCode, String> mapLocalizedNames, String code,
-			int iconCode, LocalDateTime releaseDate, Game game) {
+			Integer iconCode, LocalDateTime releaseDate, Game game) {
 		this.expansionId = expansionId;
 		this.name = name;
 		this.mapLocalizedNames = mapLocalizedNames;
@@ -50,7 +50,10 @@ public class Expansion {
 			return false;
 		if (game != other.game)
 			return false;
-		if (iconCode != other.iconCode)
+		if (iconCode == null) {
+			if (other.iconCode != null)
+				return false;
+		} else if (!iconCode.equals(other.iconCode))
 			return false;
 		if (mapLocalizedNames == null) {
 			if (other.mapLocalizedNames != null)
@@ -82,7 +85,7 @@ public class Expansion {
 		return game;
 	}
 
-	public int getIconCode() {
+	public Integer getIconCode() {
 		return iconCode;
 	}
 
@@ -105,7 +108,7 @@ public class Expansion {
 		result = prime * result + ((code == null) ? 0 : code.hashCode());
 		result = prime * result + expansionId;
 		result = prime * result + ((game == null) ? 0 : game.hashCode());
-		result = prime * result + iconCode;
+		result = prime * result + ((iconCode == null) ? 0 : iconCode.hashCode());
 		result = prime * result + ((mapLocalizedNames == null) ? 0 : mapLocalizedNames.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((releaseDate == null) ? 0 : releaseDate.hashCode());
@@ -124,7 +127,7 @@ public class Expansion {
 		this.game = game;
 	}
 
-	public void setIconCode(int iconCode) {
+	public void setIconCode(Integer iconCode) {
 		this.iconCode = iconCode;
 	}
 
@@ -144,7 +147,7 @@ public class Expansion {
 	public String toString() {
 		return "Expansion [expansionId=" + expansionId + ", " + (name != null ? "name=" + name + ", " : "")
 				+ (mapLocalizedNames != null ? "mapLocalizedNames=" + mapLocalizedNames + ", " : "")
-				+ (code != null ? "code=" + code + ", " : "") + "iconCode=" + iconCode + ", "
+				+ (code != null ? "code=" + code + ", " : "") + (iconCode != null ? "iconCode=" + iconCode + ", " : "")
 				+ (releaseDate != null ? "releaseDate=" + releaseDate + ", " : "")
 				+ (game != null ? "game=" + game : "") + "]";
 	}

@@ -6,13 +6,17 @@ public enum Game {
 	SWD(15, "Star Wars: Destiny"), WS(10, "Weiß Schwarz"), DGB(11, "Dragonborne"), MLP(12, "My Little Pony"),
 	SPOILS(5, "The Spoils"), ACCESSORIES(99, "accessories");
 
-	public static Game parseId(int id) {
-		for (Game e : Game.values()) {
-			if (e.getId() == id) {
-				return e;
+	public static Game parseId(Integer id) {
+		try {
+			for (Game e : Game.values()) {
+				if (e.getId() == id) {
+					return e;
+				}
 			}
+			throw new IllegalArgumentException("Couldn't find an enum matching this value: " + id);
+		} catch (NullPointerException e) {
+			return null;
 		}
-		throw new IllegalArgumentException("Couldn't find an enum matching this value: " + id);
 	}
 
 	public static Game parseValue(String value) {

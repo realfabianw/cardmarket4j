@@ -12,20 +12,20 @@ import com.google.gson.JsonParseException;
 import de.ics.cardmarket4j.entity.PriceGuide;
 import de.ics.cardmarket4j.utils.JsonIO;
 
-public class PriceGuideDeserializer  implements JsonDeserializer<PriceGuide>{
+public class PriceGuideDeserializer implements JsonDeserializer<PriceGuide> {
 
 	@Override
 	public PriceGuide deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 			throws JsonParseException {
 		JsonObject jObject = json.getAsJsonObject();
-		
+
 		BigDecimal sell = JsonIO.parseBigDecimal(jObject, "SELL");
 		BigDecimal low = JsonIO.parseBigDecimal(jObject, "LOW");
 		BigDecimal lowExPlus = JsonIO.parseBigDecimal(jObject, "LOWEX+");
 		BigDecimal lowFoil = JsonIO.parseBigDecimal(jObject, "LOWFOIL");
 		BigDecimal avg = JsonIO.parseBigDecimal(jObject, "AVG");
 		BigDecimal trend = JsonIO.parseBigDecimal(jObject, "TREND");
-		
+
 		return new PriceGuide(sell, low, lowExPlus, lowFoil, avg, trend);
 	}
 
