@@ -14,7 +14,6 @@ import de.ics.cardmarket4j.CardMarketService;
 import de.ics.cardmarket4j.entity.Article;
 import de.ics.cardmarket4j.entity.enumeration.Game;
 import de.ics.cardmarket4j.entity.enumeration.HTTPMethod;
-import de.ics.cardmarket4j.structs.IsCardMarketCard;
 import de.ics.cardmarket4j.util.CardMarketUtils;
 import de.ics.cardmarket4j.util.JsonIO;
 

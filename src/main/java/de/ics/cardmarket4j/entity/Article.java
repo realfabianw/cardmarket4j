@@ -13,7 +13,7 @@ import de.ics.cardmarket4j.entity.enumeration.Condition;
  * @author QUE
  *
  */
-public class Article {
+public class Article implements CardMarketArticle {
 	private int articleId;
 	private int productId;
 	private LanguageCode languageCode;
@@ -111,18 +111,22 @@ public class Article {
 		return true;
 	}
 
+	@Override
 	public int getArticleId() {
 		return articleId;
 	}
 
+	@Override
 	public String getComment() {
 		return comment;
 	}
 
+	@Override
 	public Condition getCondition() {
 		return condition;
 	}
 
+	@Override
 	public LanguageCode getLanguageCode() {
 		return languageCode;
 	}
@@ -131,6 +135,7 @@ public class Article {
 		return lastEdited;
 	}
 
+	@Override
 	public BigDecimal getPrice() {
 		return price;
 	}
@@ -139,10 +144,12 @@ public class Article {
 		return product;
 	}
 
+	@Override
 	public int getProductId() {
 		return productId;
 	}
 
+	@Override
 	public int getQuantity() {
 		return quantity;
 	}
@@ -174,14 +181,17 @@ public class Article {
 		return result;
 	}
 
+	@Override
 	public boolean isAltered() {
 		return altered;
 	}
 
+	@Override
 	public boolean isFirstEdition() {
 		return firstEdition;
 	}
 
+	@Override
 	public boolean isFoil() {
 		return foil;
 	}
@@ -190,10 +200,12 @@ public class Article {
 		return inShoppingCart;
 	}
 
+	@Override
 	public boolean isPlayset() {
 		return playset;
 	}
 
+	@Override
 	public boolean isSigned() {
 		return signed;
 	}
