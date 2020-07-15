@@ -9,7 +9,7 @@ All methods are accessed through the `CardMarketService` class.
   * Get Messages
   * Set Vacation Status
 * AuthenticationService
-  * Authenticate your connection using OAuth2
+  * Authenticate your connection using OAuth
 * MarketplaceService
   * Get Products based on productId or ProductFilter
   * Get Articles based on productId or ArticleFilter
