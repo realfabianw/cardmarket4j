@@ -49,7 +49,7 @@ public class OrderService extends AbstractService {
 			JsonElement response = request(
 					"orders/" + orderType.getDisplayValue() + "/" + orderState.getDisplayValue() + "/" + index,
 					HTTPMethod.GET);
-			responseCode = getLastResponse().getValue0();
+			responseCode = getLastResponse().getResponseCode();
 			page++;
 			index += 100;
 			if (responseCode == 200 || responseCode == 206) {

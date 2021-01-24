@@ -10,12 +10,8 @@ import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
-import org.javatuples.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 
 import de.cardmarket4j.entity.enumeration.HTTPMethod;
 import de.cardmarket4j.service.AccountService;
@@ -23,6 +19,7 @@ import de.cardmarket4j.service.AuthenticationService;
 import de.cardmarket4j.service.MarketplaceService;
 import de.cardmarket4j.service.OrderService;
 import de.cardmarket4j.service.StockService;
+import de.cardmarket4j.util.HTTPResponse;
 import de.cardmarket4j.util.HTTPUtils;
 
 public class CardMarketService {
@@ -35,7 +32,7 @@ public class CardMarketService {
 	private final MarketplaceService marketplaceService;
 	private final StockService stockService;
 	private final OrderService orderService;
-	private Pair<Integer, JsonElement> lastResponse;
+	private HTTPResponse lastResponse;
 	private int requestCount;
 	private int requestLimit;
 
@@ -51,7 +48,7 @@ public class CardMarketService {
 		return accountService;
 	}
 
-	public Pair<Integer, JsonElement> getLastResponse() {
+	public HTTPResponse getLastResponse() {
 		return lastResponse;
 	}
 
@@ -79,7 +76,7 @@ public class CardMarketService {
 		return sandBoxMode;
 	}
 
-	Pair<Integer, JsonElement> request(String URL, HTTPMethod httpMethod) throws IOException {
+	HTTPResponse request(String URL, HTTPMethod httpMethod) throws IOException {
 		try {
 			String uri = (sandBoxMode ? URI_SANDBOX : URI) + URL.replaceAll("\\s", "%20");
 			HttpURLConnection connection = (HttpURLConnection) new URL(uri).openConnection();
@@ -109,10 +106,7 @@ public class CardMarketService {
 			rd.close();
 
 			String responseString = sb.toString();
-			LOGGER.trace("Response Body:\t{}", responseString);
-			JsonElement jResponse = JsonParser.parseString(responseString);
-			LOGGER.debug("Response:\t{} {}", responseCode, jResponse);
-			lastResponse = new Pair<>(responseCode, jResponse);
+			lastResponse = new HTTPResponse(responseCode, responseString);
 			return lastResponse;
 		} catch (MalformedURLException | InvalidKeyException | NoSuchAlgorithmException | NullPointerException e) {
 			LOGGER.error("An critical error occured", e);
@@ -121,7 +115,7 @@ public class CardMarketService {
 		}
 	}
 
-	Pair<Integer, JsonElement> request(String URL, HTTPMethod httpMethod, String requestBody) throws IOException {
+	HTTPResponse request(String URL, HTTPMethod httpMethod, String requestBody) throws IOException {
 		try {
 			String uri = (sandBoxMode ? URI_SANDBOX : URI) + URL.replaceAll("\\s", "%20");
 			HttpURLConnection connection = (HttpURLConnection) new URL(uri).openConnection();
@@ -157,10 +151,7 @@ public class CardMarketService {
 			rd.close();
 
 			String responseString = sb.toString();
-			LOGGER.trace("Response Body:\t{}", responseString);
-			JsonElement jResponse = JsonParser.parseString(responseString);
-			LOGGER.debug("Response:\t{} {}", responseCode, jResponse);
-			return new Pair<>(responseCode, jResponse);
+			return new HTTPResponse(responseCode, responseString);
 		} catch (MalformedURLException | InvalidKeyException | NoSuchAlgorithmException | NullPointerException e) {
 			LOGGER.error("An critical error occured", e);
 			System.exit(-1);

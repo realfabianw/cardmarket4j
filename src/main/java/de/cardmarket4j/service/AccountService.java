@@ -83,7 +83,7 @@ public class AccountService extends AbstractService {
 	public boolean setVacationStatus(boolean vacation) throws IOException {
 		String vacationParameter = vacation == true ? "true" : "false";
 		JsonElement response = request("account/vacation?onVacation=" + vacationParameter, HTTPMethod.PUT);
-		if (getLastResponse().getValue0() == 200) {
+		if (getLastResponse().getResponseCode() == 200) {
 			return true;
 		} else {
 			return false;

@@ -9,13 +9,17 @@ import java.time.LocalDateTime;
  *
  */
 public class Message {
-	private int messageId;
+	/**
+	 * According to the documentation messageId should be a Integer but it turned
+	 * out to be a String.
+	 */
+	private String messageId;
 	private boolean sending;
 	private boolean unread;
 	private LocalDateTime date;
 	private String text;
 
-	public Message(int messageId, boolean sending, boolean unread, LocalDateTime date, String text) {
+	public Message(String messageId, boolean sending, boolean unread, LocalDateTime date, String text) {
 		this.messageId = messageId;
 		this.sending = sending;
 		this.unread = unread;
@@ -37,7 +41,10 @@ public class Message {
 				return false;
 		} else if (!date.equals(other.date))
 			return false;
-		if (messageId != other.messageId)
+		if (messageId == null) {
+			if (other.messageId != null)
+				return false;
+		} else if (!messageId.equals(other.messageId))
 			return false;
 		if (sending != other.sending)
 			return false;
@@ -55,7 +62,7 @@ public class Message {
 		return date;
 	}
 
-	public int getMessageId() {
+	public String getMessageId() {
 		return messageId;
 	}
 
@@ -68,7 +75,7 @@ public class Message {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((date == null) ? 0 : date.hashCode());
-		result = prime * result + messageId;
+		result = prime * result + ((messageId == null) ? 0 : messageId.hashCode());
 		result = prime * result + (sending ? 1231 : 1237);
 		result = prime * result + ((text == null) ? 0 : text.hashCode());
 		result = prime * result + (unread ? 1231 : 1237);
@@ -87,7 +94,7 @@ public class Message {
 		this.date = date;
 	}
 
-	public void setMessageId(int messageId) {
+	public void setMessageId(String messageId) {
 		this.messageId = messageId;
 	}
 
@@ -105,8 +112,9 @@ public class Message {
 
 	@Override
 	public String toString() {
-		return "Message [messageId=" + messageId + ", sending=" + sending + ", unread=" + unread + ", "
-				+ (date != null ? "date=" + date + ", " : "") + (text != null ? "text=" + text : "") + "]";
+		return "Message [" + (messageId != null ? "messageId=" + messageId + ", " : "") + "sending=" + sending
+				+ ", unread=" + unread + ", " + (date != null ? "date=" + date + ", " : "")
+				+ (text != null ? "text=" + text : "") + "]";
 	}
 
 }

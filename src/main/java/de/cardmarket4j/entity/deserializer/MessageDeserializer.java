@@ -20,7 +20,7 @@ public class MessageDeserializer implements JsonDeserializer<Message> {
 			throws JsonParseException {
 		JsonObject jObject = json.getAsJsonObject();
 
-		int messageId = JsonIO.parseInteger(jObject, "idMessage");
+		String messageId = JsonIO.parseString(jObject, "idMessage");
 		boolean sending = JsonIO.parseBoolean(jObject, "isSending");
 		boolean unread = JsonIO.parseBoolean(jObject, "unread");
 		String dateString = JsonIO.parseString(jObject, "date");

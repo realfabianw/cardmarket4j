@@ -2,13 +2,13 @@ package de.cardmarket4j;
 
 import java.io.IOException;
 
-import org.javatuples.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonElement;
 
 import de.cardmarket4j.entity.enumeration.HTTPMethod;
+import de.cardmarket4j.util.HTTPResponse;
 
 public abstract class AbstractService {
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass().getSimpleName());
@@ -18,15 +18,15 @@ public abstract class AbstractService {
 		this.cardMarket = cardMarket;
 	}
 
-	protected Pair<Integer, JsonElement> getLastResponse() {
+	protected HTTPResponse getLastResponse() {
 		return cardMarket.getLastResponse();
 	}
 
 	protected JsonElement request(String URL, HTTPMethod httpMethod) throws IOException {
-		return cardMarket.request(URL, httpMethod).getValue1();
+		return cardMarket.request(URL, httpMethod).getResponseJsonElement();
 	}
 
 	protected JsonElement request(String URL, HTTPMethod httpMethod, String requestBody) throws IOException {
-		return cardMarket.request(URL, httpMethod, requestBody).getValue1();
+		return cardMarket.request(URL, httpMethod, requestBody).getResponseJsonElement();
 	}
 }
