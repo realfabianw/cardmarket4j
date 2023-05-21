@@ -128,11 +128,8 @@ public class User {
 		if (userType != other.userType)
 			return false;
 		if (vat == null) {
-			if (other.vat != null)
-				return false;
-		} else if (!vat.equals(other.vat))
-			return false;
-		return true;
+			return other.vat == null;
+		} else return vat.equals(other.vat);
 	}
 
 	public Address getAddress() {

@@ -44,11 +44,8 @@ public class BankAccount {
 		} else if (!iban.equals(other.iban))
 			return false;
 		if (registeredOwner == null) {
-			if (other.registeredOwner != null)
-				return false;
-		} else if (!registeredOwner.equals(other.registeredOwner))
-			return false;
-		return true;
+			return other.registeredOwner == null;
+		} else return registeredOwner.equals(other.registeredOwner);
 	}
 
 	public String getBankName() {

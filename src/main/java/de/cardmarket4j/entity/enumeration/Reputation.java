@@ -26,7 +26,7 @@ public enum Reputation {
 	private final String displayValue;
 	private final int id;
 
-	private Reputation(int id, String displayValue) {
+	Reputation(int id, String displayValue) {
 		this.displayValue = displayValue;
 		this.id = id;
 	}

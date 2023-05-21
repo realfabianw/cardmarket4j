@@ -6,6 +6,7 @@
 *.project
 *.json
 *.xlsx
+.idea
 
 ###
 ### Java

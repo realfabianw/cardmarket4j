@@ -107,11 +107,8 @@ public class Account extends User {
 		} else if (!totalBalance.equals(other.totalBalance))
 			return false;
 		if (unpaidAmount == null) {
-			if (other.unpaidAmount != null)
-				return false;
-		} else if (!unpaidAmount.equals(other.unpaidAmount))
-			return false;
-		return true;
+			return other.unpaidAmount == null;
+		} else return unpaidAmount.equals(other.unpaidAmount);
 	}
 
 	public int getAmountItemsInShoppingCard() {

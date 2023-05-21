@@ -25,7 +25,7 @@ public enum DeliverySpeed {
 	private final String displayValue;
 	private final int id;
 
-	private DeliverySpeed(int id, String displayValue) {
+	DeliverySpeed(int id, String displayValue) {
 		this.displayValue = displayValue;
 		this.id = id;
 	}

@@ -46,9 +46,7 @@ public class ShippingMethod {
 				return false;
 		} else if (!price.equals(other.price))
 			return false;
-		if (shippingMethodId != other.shippingMethodId)
-			return false;
-		return true;
+		return shippingMethodId == other.shippingMethodId;
 	}
 
 	public String getName() {

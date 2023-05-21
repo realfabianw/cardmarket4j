@@ -7,7 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 public class HTTPResponse {
-	private static Logger LOGGER = LoggerFactory.getLogger("HTTPResponse");
+	private static final Logger LOGGER = LoggerFactory.getLogger("HTTPResponse");
 	private final int responseCode;
 	private final String responseString;
 	private final JsonElement responseJsonElement;
@@ -32,11 +32,8 @@ public class HTTPResponse {
 		if (responseCode != other.responseCode)
 			return false;
 		if (responseString == null) {
-			if (other.responseString != null)
-				return false;
-		} else if (!responseString.equals(other.responseString))
-			return false;
-		return true;
+			return other.responseString == null;
+		} else return responseString.equals(other.responseString);
 	}
 
 	public int getResponseCode() {

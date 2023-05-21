@@ -38,9 +38,7 @@ public class Conversation {
 				return false;
 		} else if (!partner.equals(other.partner))
 			return false;
-		if (unreadMessages != other.unreadMessages)
-			return false;
-		return true;
+		return unreadMessages == other.unreadMessages;
 	}
 
 	public List<Message> getListMessages() {

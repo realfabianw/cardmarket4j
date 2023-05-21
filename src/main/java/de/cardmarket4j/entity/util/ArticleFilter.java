@@ -72,9 +72,7 @@ public class ArticleFilter {
 				return false;
 		} else if (!start.equals(other.start))
 			return false;
-		if (userType != other.userType)
-			return false;
-		return true;
+		return userType == other.userType;
 	}
 
 	public Boolean getAltered() {
