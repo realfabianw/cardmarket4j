@@ -24,7 +24,7 @@ public enum RiskGroup {
 	private final String displayValue;
 	private final int id;
 
-	private RiskGroup(int id, String displayValue) {
+	RiskGroup(int id, String displayValue) {
 		this.displayValue = displayValue;
 		this.id = id;
 	}

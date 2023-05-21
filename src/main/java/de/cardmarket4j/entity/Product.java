@@ -134,11 +134,8 @@ public class Product {
 		} else if (!selfUrl.equals(other.selfUrl))
 			return false;
 		if (totalReprints == null) {
-			if (other.totalReprints != null)
-				return false;
-		} else if (!totalReprints.equals(other.totalReprints))
-			return false;
-		return true;
+			return other.totalReprints == null;
+		} else return totalReprints.equals(other.totalReprints);
 	}
 
 	public Integer getCategoryId() {

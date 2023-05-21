@@ -24,7 +24,7 @@ public enum UserType {
 	private final String displayValue;
 	private final int id;
 
-	private UserType(int id, String displayValue) {
+	UserType(int id, String displayValue) {
 		this.id = id;
 		this.displayValue = displayValue;
 	}

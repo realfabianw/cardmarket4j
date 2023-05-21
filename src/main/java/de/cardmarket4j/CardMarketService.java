@@ -10,28 +10,25 @@ import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
+import de.cardmarket4j.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.cardmarket4j.entity.enumeration.HTTPMethod;
-import de.cardmarket4j.service.AccountService;
-import de.cardmarket4j.service.AuthenticationService;
-import de.cardmarket4j.service.MarketplaceService;
-import de.cardmarket4j.service.OrderService;
-import de.cardmarket4j.service.StockService;
 import de.cardmarket4j.util.HTTPResponse;
 import de.cardmarket4j.util.HTTPUtils;
 
 public class CardMarketService {
 	private static final String URI = "https://api.cardmarket.com/ws/v2.0/output.json/";
 	private static final String URI_SANDBOX = "https://sandbox.cardmarket.com/ws/v2.0/output.json/";
-	private static Logger LOGGER = LoggerFactory.getLogger("CardMarketService");
+	private static final Logger LOGGER = LoggerFactory.getLogger("CardMarketService");
 	private boolean sandBoxMode;
 	private final AuthenticationService authenticationService;
 	private final AccountService accountService;
 	private final MarketplaceService marketplaceService;
 	private final StockService stockService;
 	private final OrderService orderService;
+	private final WantslistService wantslistService;
 	private HTTPResponse lastResponse;
 	private int requestCount;
 	private int requestLimit;
@@ -42,6 +39,7 @@ public class CardMarketService {
 		this.marketplaceService = new MarketplaceService(this);
 		this.stockService = new StockService(this);
 		this.orderService = new OrderService(this);
+		this.wantslistService = new WantslistService(this);
 	}
 
 	public AccountService getAccountService() {
@@ -76,6 +74,8 @@ public class CardMarketService {
 		return sandBoxMode;
 	}
 
+	public WantslistService getWantslistService() { return wantslistService; }
+
 	HTTPResponse request(String URL, HTTPMethod httpMethod) throws IOException {
 		try {
 			String uri = (sandBoxMode ? URI_SANDBOX : URI) + URL.replaceAll("\\s", "%20");
@@ -85,7 +85,7 @@ public class CardMarketService {
 			connection.addRequestProperty("Authorization", oAuthSignature);
 			connection.setRequestMethod(httpMethod.toString());
 
-			LOGGER.debug("Request:\t{} {}", httpMethod.toString(), uri);
+			LOGGER.debug("Request:\t{} {}", httpMethod, uri);
 			LOGGER.trace("Authorization:\t{}", oAuthSignature);
 			connection.connect();
 
@@ -125,7 +125,7 @@ public class CardMarketService {
 			connection.setDoOutput(true);
 			connection.setRequestMethod(httpMethod.toString());
 
-			LOGGER.debug("Request:\t{} {}", httpMethod.toString(), uri);
+			LOGGER.debug("Request:\t{} {}", httpMethod, uri);
 			LOGGER.trace("Authorization:\t{}", oAuthSignature);
 			connection.connect();
 

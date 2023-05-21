@@ -50,9 +50,7 @@ public class Evaluation {
 				return false;
 		} else if (!setComplaints.equals(other.setComplaints))
 			return false;
-		if (totalGrade != other.totalGrade)
-			return false;
-		return true;
+		return totalGrade == other.totalGrade;
 	}
 
 	public String getComment() {

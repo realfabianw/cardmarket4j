@@ -57,11 +57,8 @@ public class Address {
 		} else if (!street.equals(other.street))
 			return false;
 		if (zip == null) {
-			if (other.zip != null)
-				return false;
-		} else if (!zip.equals(other.zip))
-			return false;
-		return true;
+			return other.zip == null;
+		} else return zip.equals(other.zip);
 	}
 
 	public String getCity() {

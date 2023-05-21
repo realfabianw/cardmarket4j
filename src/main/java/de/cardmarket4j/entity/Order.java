@@ -172,11 +172,8 @@ public class Order {
 		} else if (!totalValue.equals(other.totalValue))
 			return false;
 		if (trackingNumber == null) {
-			if (other.trackingNumber != null)
-				return false;
-		} else if (!trackingNumber.equals(other.trackingNumber))
-			return false;
-		return true;
+			return other.trackingNumber == null;
+		} else return trackingNumber.equals(other.trackingNumber);
 	}
 
 	public int getAmountItems() {

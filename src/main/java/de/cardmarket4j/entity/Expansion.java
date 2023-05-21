@@ -66,11 +66,8 @@ public class Expansion {
 		} else if (!name.equals(other.name))
 			return false;
 		if (releaseDate == null) {
-			if (other.releaseDate != null)
-				return false;
-		} else if (!releaseDate.equals(other.releaseDate))
-			return false;
-		return true;
+			return other.releaseDate == null;
+		} else return releaseDate.equals(other.releaseDate);
 	}
 
 	public String getCode() {

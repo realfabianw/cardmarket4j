@@ -60,11 +60,8 @@ public class PriceGuide {
 		} else if (!sell.equals(other.sell))
 			return false;
 		if (trend == null) {
-			if (other.trend != null)
-				return false;
-		} else if (!trend.equals(other.trend))
-			return false;
-		return true;
+			return other.trend == null;
+		} else return trend.equals(other.trend);
 	}
 
 	public BigDecimal getAvg() {

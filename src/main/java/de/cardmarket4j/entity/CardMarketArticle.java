@@ -7,27 +7,27 @@ import com.neovisionaries.i18n.LanguageCode;
 import de.cardmarket4j.entity.enumeration.Condition;
 
 public interface CardMarketArticle {
-	public int getArticleId();
+	int getArticleId();
 
-	public String getComment();
+	String getComment();
 
-	public Condition getCondition();
+	Condition getCondition();
 
-	public LanguageCode getLanguageCode();
+	LanguageCode getLanguageCode();
 
-	public BigDecimal getPrice();
+	BigDecimal getPrice();
 
-	public int getProductId();
+	int getProductId();
 
-	public int getQuantity();
+	int getQuantity();
 
-	public boolean isAltered();
+	boolean isAltered();
 
-	public boolean isFirstEdition();
+	boolean isFirstEdition();
 
-	public boolean isFoil();
+	boolean isFoil();
 
-	public boolean isPlayset();
+	boolean isPlayset();
 
-	public boolean isSigned();
+	boolean isSigned();
 }

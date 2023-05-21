@@ -3,6 +3,7 @@ package de.cardmarket4j.service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.gson.JsonElement;
@@ -31,7 +32,7 @@ public class StockService extends AbstractService {
 	 * @version 0.7
 	 */
 	public List<Article> decreaseArticleQuantity(CardMarketArticle article) throws IOException {
-		return decreaseListArticleQuantity(Arrays.asList(article));
+		return decreaseListArticleQuantity(Collections.singletonList(article));
 	}
 
 	/**
@@ -67,7 +68,7 @@ public class StockService extends AbstractService {
 	}
 
 	public List<Article> editArticle(CardMarketArticle article) throws IOException {
-		return editListArticles(Arrays.asList(article));
+		return editListArticles(Collections.singletonList(article));
 	}
 
 	public List<Article> editListArticles(List<CardMarketArticle> listArticles) throws IOException {
@@ -145,7 +146,7 @@ public class StockService extends AbstractService {
 	 * @version 0.7
 	 */
 	public List<Article> increaseArticleQuantity(CardMarketArticle article) throws IOException {
-		return increaseListArticleQuantity(Arrays.asList(article));
+		return increaseListArticleQuantity(Collections.singletonList(article));
 	}
 
 	/**
@@ -177,7 +178,7 @@ public class StockService extends AbstractService {
 	}
 
 	public List<Article> insertArticle(CardMarketArticle article) throws IOException {
-		return insertListArticles(Arrays.asList(article));
+		return insertListArticles(Collections.singletonList(article));
 	}
 
 	public List<Article> insertListArticles(List<CardMarketArticle> listArticles) throws IOException {
@@ -207,7 +208,7 @@ public class StockService extends AbstractService {
 	}
 
 	public List<Article> removeArticle(CardMarketArticle article) throws IOException {
-		return removeListArticles(Arrays.asList(article));
+		return removeListArticles(Collections.singletonList(article));
 	}
 
 	public List<Article> removeListArticles(List<CardMarketArticle> listArticles) throws IOException {

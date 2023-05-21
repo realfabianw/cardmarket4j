@@ -106,9 +106,7 @@ public class Article implements CardMarketArticle {
 				return false;
 		} else if (!seller.equals(other.seller))
 			return false;
-		if (signed != other.signed)
-			return false;
-		return true;
+		return signed == other.signed;
 	}
 
 	@Override

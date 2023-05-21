@@ -53,9 +53,7 @@ public class Message {
 				return false;
 		} else if (!text.equals(other.text))
 			return false;
-		if (unread != other.unread)
-			return false;
-		return true;
+		return unread == other.unread;
 	}
 
 	public LocalDateTime getDate() {
