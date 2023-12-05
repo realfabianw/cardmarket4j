@@ -9,7 +9,7 @@
 
 	<properties>
 		<version.gson>(2.8.5, 2.9.0]</version.gson>
-		<version.logback>1.2.3</version.logback>
+		<version.logback>1.2.13</version.logback>
 		<version.nv-i18n>1.24</version.nv-i18n>
 
 
